@@ -203,24 +203,17 @@ public class ResumeService {
 
         //2. 이력서 작성
         Resume resume = saveDTO.toEntity(sessionUser);
-        resumeJPARepo.save(resume);
+        Resume savedResume = resumeJPARepo.save(resume);
         System.out.println("------------------" + resume.getId());
 
         // 3. 스킬 작성
-        saveDTO.getSkill().stream()
-                .map((skillName) -> {
-                    return Skill.builder()
-                            .name(skillName)
-                            .role(sessionUser.getRole())
-                            .resume(resume)
-                            .build();
+        saveDTO.getSkillList().stream()
+                .map((skill) -> {
+                    return skill.toEntity(savedResume);
                 })
-
                 .forEach((skill) -> {
                     skillJPARepo.save(skill);
-
                 });
-
     }
 
     //이력서 삭제

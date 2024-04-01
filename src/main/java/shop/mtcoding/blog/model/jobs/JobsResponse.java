@@ -71,8 +71,9 @@ public class JobsResponse {
         private String career;
         private String area;
         private LocalDate deadline;
-        private UserDTO user;
-        private List<SkillDTO> skills = new ArrayList<>();
+        private String imgFileName;
+        private String compName;
+        private List<SkillDTO> skills;
 
         @Builder
         public ListDTO(Jobs jobs, User user, List<Skill> skills) {
@@ -81,7 +82,8 @@ public class JobsResponse {
             this.career = jobs.getCareer();
             this.area = jobs.getArea();
             this.deadline = jobs.getDeadline();
-            this.user = new UserDTO(user);
+            this.imgFileName = user.getImgFileName();
+            this.compName = user.getCompName();
 
             this.skills = skills.stream()
                     .map(skill -> new SkillDTO(skill))

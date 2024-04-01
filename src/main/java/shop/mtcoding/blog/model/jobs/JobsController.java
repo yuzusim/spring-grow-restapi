@@ -4,12 +4,14 @@ package shop.mtcoding.blog.model.jobs;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import shop.mtcoding.blog._core.errors.exception.Exception401;
+import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog.model.resume.ResumeResponse;
 import shop.mtcoding.blog.model.resume.ResumeService;
 import shop.mtcoding.blog.model.user.User;
@@ -44,19 +46,9 @@ public class JobsController {
     }
 
     @GetMapping("/jobs/info")
-    public String jobsInfo (HttpServletRequest request,
-                            @RequestParam(required = false, defaultValue = "") String area,
-                            @RequestParam(required = false, defaultValue = "") String skill,
-                            @RequestParam(required = false, defaultValue = "") String career) {
+    public ResponseEntity<?> jobsInfo () {
         List<JobsResponse.ListDTO> listDTOS = jobsService.listDTOS();
-        request.setAttribute("listDTOS", listDTOS);
-
-        request.setAttribute("selected", JobsResponse.searchDTO.builder()
-                                                        .area(area)
-                                                        .skill(skill)
-                                                        .career(career)
-                                                        .build());
-        return "/jobs/info";
+        return ResponseEntity.ok(new ApiUtil<>(listDTOS));
     }
 
     @GetMapping("/jobs/write-jobs-form")

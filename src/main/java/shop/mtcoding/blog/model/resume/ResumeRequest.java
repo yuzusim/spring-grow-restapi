@@ -30,7 +30,7 @@ public class ResumeRequest {
         private String career;
         private String introduce;
         private String portLink;
-        private List<String> skill;
+        private List<WriteSkillDTO> skillList;
 
         public Resume toEntity(User user){
             return Resume.builder()
@@ -43,6 +43,26 @@ public class ResumeRequest {
                     .user(user)
                     .build();
         }
+
+        @Data
+        public static class WriteSkillDTO {
+            private String name;
+            private Integer role;
+
+            public WriteSkillDTO(String name, Integer role) {
+                this.name = name;
+                this.role = role;
+            }
+
+            public Skill toEntity(Resume resume){
+               return Skill.builder()
+                       .name(name)
+                       .role(role)
+                       .resume(resume)
+                       .build();
+            }
+        }
+
     }
 
     @Data

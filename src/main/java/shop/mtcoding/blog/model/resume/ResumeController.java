@@ -84,12 +84,6 @@ public class ResumeController {
         return "redirect:/user/" + id + "/user-home";
     }
 
-    @PostMapping("/resume/save")
-    public String save(ResumeRequest.SaveDTO reqDTO) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        resumeService.save(reqDTO);
-        return "redirect:/user/" + sessionUser.getId() + "/user-home";
-    }
 
     @PostMapping("/resume/{id}/delete")
     public String delete(@PathVariable Integer id) {

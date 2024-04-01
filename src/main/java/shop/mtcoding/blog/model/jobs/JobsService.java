@@ -41,7 +41,7 @@ public class JobsService {
 
     }
 
-    public JobsResponse.DetailDTO DetailDTO (Integer jobsId,User sessionUser){
+    public JobsResponse.DetailDTO DetailDTO(Integer jobsId, User sessionUser) {
 
         Jobs jobs = jobsRepo.findById(jobsId)
                 .orElseThrow(() -> new Exception404("해당 공고를 찾을 수 없습니다."));
@@ -53,7 +53,7 @@ public class JobsService {
         JobsResponse.DetailDTO detailDTO = new JobsResponse.DetailDTO(jobs, user, skillList);
         Boolean isOwner = false;
 
-        if (sessionUser.getRole() == 2){
+        if (sessionUser.getRole() == 2) {
             isOwner = true;
         }
 
@@ -151,30 +151,30 @@ public class JobsService {
         });
     }
 
-    public JobsResponse.JobUpdateDTO updateForm(Integer id) {
+    public JobsResponse.JobUpdateDTO updateForm(Integer id, Integer SessionCompId) {
         Jobs jobs = jobsRepo.findById(id)
                 .orElseThrow(() -> new Exception404("이력서를 찾을 수 없습니다."));
 
-        User sessionComp = (User) session.getAttribute("sessionComp");
-        if (sessionComp.getId() != jobs.getUser().getId()) {
+
+        // 여기 바뀜
+        if (SessionCompId != jobs.getUser().getId()) {
             throw new Exception403("이력서를 수정할 권한이 없습니다");
         }
-        List<Skill> skill = skillRepo.findAllByJobsId(id);
+
+
+        // 찾아오게 바꿈
+        User user = userRepo.findById(jobs.getUser().getId())
+                .orElseThrow(() -> new Exception404("사용자를 찾을 수 없습니다."));
+
+        // 찾아오게 바꿈
+        List<Skill> skillList = skillRepo.findByJobsId(id);
+
         JobsResponse.JobUpdateDTO reqDTO = JobsResponse.JobUpdateDTO.builder()
-                .id(jobs.getId())
-                .user(jobs.getUser())
-                .compName(jobs.getUser().getCompName())
-                .phone(jobs.getUser().getPhone())
-                .businessNumber(jobs.getUser().getBusinessNumber())
-                .homepage(jobs.getUser().getHomepage())
-                .title(jobs.getTitle())
-                .edu(jobs.getEdu())
-                .career(jobs.getCareer())
-                .content(jobs.getContent())
-                .area(jobs.getArea())
-                .deadLine(jobs.getDeadline())
-                .task(jobs.getTask())
-                .skillChecked(new SkillResponse.SkillCheckedDTO(skill)).build();
+                .jobs(jobs)
+                .user(user)
+                .skills(skillList)
+                .build();
+
         return reqDTO;
     }
 }

@@ -41,18 +41,6 @@ public class Jobs {
     @Column(nullable = false)
     private String career;
 
-    @OneToMany(mappedBy = "jobs", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Skill> skillList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "jobs", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Apply> applyList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "jobs", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Scrap> scrapList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "jobs", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Offer> offerList = new ArrayList<>();
-
     @Column(nullable = false)
     private String content;
 
@@ -67,9 +55,20 @@ public class Jobs {
 
     @Transient
     private Boolean isOwner;
+    @OneToMany(mappedBy = "jobs", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Skill> skillList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "jobs", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Apply> applyList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "jobs", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Scrap> scrapList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "jobs", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Offer> offerList = new ArrayList<>();
 
     @Builder
-    public Jobs(Integer id, User user, String area, String title, String edu, String career, String content, LocalDate deadline, String task, Timestamp createdAt) {
+    public Jobs(Integer id, User user, String area, String title, String edu, String career, String content, LocalDate deadline, String task, Timestamp createdAt, Boolean isOwner, List<Skill> skillList, List<Apply> applyList, List<Scrap> scrapList, List<Offer> offerList) {
         this.id = id;
         this.user = user;
         this.area = area;
@@ -80,6 +79,11 @@ public class Jobs {
         this.deadline = deadline;
         this.task = task;
         this.createdAt = createdAt;
+        this.isOwner = isOwner;
+        this.skillList = skillList;
+        this.applyList = applyList;
+        this.scrapList = scrapList;
+        this.offerList = offerList;
     }
 }
 

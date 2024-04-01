@@ -11,6 +11,7 @@ import shop.mtcoding.blog._core.errors.exception.Exception401;
 import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog.model.resume.ResumeResponse;
 import shop.mtcoding.blog.model.resume.ResumeService;
+import shop.mtcoding.blog.model.skill.Skill;
 import shop.mtcoding.blog.model.user.User;
 
 import java.util.List;
@@ -63,25 +64,23 @@ public class JobsController {
 
     // 하다 도망친거 - 승진
     @PostMapping("/jobs/save")
-    public String save (JobsRequest.JobWriterDTO reqDTO) {
+    public @ResponseBody ResponseEntity<?> save (@RequestBody JobsRequest.JobsSaveDTO reqDTO) {
         User sessionComp = (User)session.getAttribute("sessionComp");
-        jobsService.save(reqDTO);
-
-        return "redirect:/comp/" + sessionComp.getId() + "/comp-home";
+        Jobs jobs = jobsService.save(sessionComp, reqDTO);
+        return ResponseEntity.ok(new ApiUtil(jobs));
     }
 
 
     @DeleteMapping("/jobs/{id}/delete")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         jobsService.delete(id);
-
         return ResponseEntity.ok(new ApiUtil(null));
     }
 
     @PostMapping("/jobs/{id}/update")
     public String update(@PathVariable Integer id, JobsRequest.UpdateDTO reqDTO) {
         User sessionComp = (User)session.getAttribute("sessionComp");
-        jobsService.update(id, reqDTO);
+        jobsService.update(id, reqDTO, sessionComp);
 
 
         return "redirect:/comp/" + sessionComp.getId() + "/comp-home";

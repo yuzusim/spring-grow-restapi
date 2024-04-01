@@ -24,6 +24,11 @@ public class JobsServiceTest {
     private UserJPARepository userRepo;
     @Autowired
     private SkillJPARepository skillRepo;
+    @Autowired
+    private JobsService jobsService;
+
+
+
 
 
     @Test

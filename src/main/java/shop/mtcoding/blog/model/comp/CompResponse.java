@@ -17,38 +17,49 @@ public class CompResponse {
 
     @Data
     public static class CompManageDTO {
-        private Integer id;
-        //jobs
-        private String title;
-        private String career;
-        private String edu;
-        private String area;
-        private Integer jobsId;
-        //skillList
-        private List<SkillDTO> skillList;
-
-        @Builder
-        public CompManageDTO(Jobs jobs, List<Skill> skillList) {
-            this.title = jobs.getTitle();
-            this.career = jobs.getCareer();
-            this.edu = jobs.getEdu();
-            this.area = jobs.getArea();
-            this.jobsId = jobs.getId();
-            this.skillList = skillList.stream().map(SkillDTO::new)
-                    .collect(Collectors.toList());
-        }
-    }
-
-    @Data
-    public static class MainCountDTO {
         private Integer jobsCount;
         private Integer applicantCount;
         private Integer noRespCount;
+        private List<JobsDTO> jobsDTOList;
 
-        public MainCountDTO(Integer jobsCount, Integer applicantCount, Integer noRespCount) {
+        @Builder
+        public CompManageDTO(Integer jobsCount,Integer applicantCount,Integer noRespCount, List<Jobs> jobsDTOList) {
             this.jobsCount = jobsCount;
             this.applicantCount = applicantCount;
             this.noRespCount = noRespCount;
+            this.jobsDTOList = jobsDTOList.stream().map(jobs -> {
+                return new JobsDTO(jobs, jobs.getSkillList());
+            }).toList();
+        }
+
+        @Data
+        public class JobsDTO {
+            private String title;
+            private String career;
+            private String edu;
+            private String area;
+            private Integer jobsId;
+            private List<SkillDTO> skillList;
+
+            public JobsDTO(Jobs jobs, List<Skill> skillList) {
+                this.title = jobs.getTitle();
+                this.career = jobs.getCareer();
+                this.edu = jobs.getEdu();
+                this.area = jobs.getArea();
+                this.jobsId = jobs.getId();
+                this.skillList = skillList.stream().map(SkillDTO::new).toList();
+            }
+        }
+
+        @Data
+        public class SkillDTO {
+            private Integer id;
+            private String name;
+
+            public SkillDTO(Skill skill) {
+                this.id = skill.getId();
+                this.name = skill.getName();
+            }
         }
     }
 

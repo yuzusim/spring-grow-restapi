@@ -3,28 +3,26 @@ package shop.mtcoding.blog.model.comp;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog.model.resume.ResumeService;
 import shop.mtcoding.blog.model.user.User;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class CompController {
     private final CompService compService;
     private final HttpSession session;
-    private final ResumeService resumeService;
 
-    @GetMapping("/comp/{id}/comp-manage")
-    public String compManage (@PathVariable Integer id, HttpServletRequest request) {
+    @GetMapping("/comp/comp-manage")
+    public ResponseEntity<?> compManage () {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        CompResponse.MainCountDTO mainCountDTO = compService.mainCountByUid(sessionUser.getId());
-        List<CompResponse.CompManageDTO> compManageDTOList = compService.compManage(sessionUser.getId());
-        request.setAttribute("mainCount", mainCountDTO);
-        request.setAttribute("compManageList",compManageDTOList );
-        return "/comp/comp-manage";
+        CompResponse.CompManageDTO  compManageDTO = compService.compManage(sessionUser.getId());
+        return ResponseEntity.ok(new ApiUtil<>(compManageDTO));
     }
 
 //    @PostMapping("/comp/{id}/update")

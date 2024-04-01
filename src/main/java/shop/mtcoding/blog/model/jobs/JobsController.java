@@ -6,10 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.errors.exception.Exception401;
 import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog.model.resume.ResumeResponse;
@@ -26,6 +23,7 @@ public class JobsController {
     private final ResumeService resumeService;
     private final HttpSession session;
 
+    // 채현
     @GetMapping("/jobs/jobs-detail/{jobsId}")
     public String jobsDetail(@PathVariable Integer jobsId, HttpServletRequest request){
         User sessionUser = (User)session.getAttribute("sessionUser");
@@ -45,12 +43,14 @@ public class JobsController {
         return "jobs/jobs-detail";
     }
 
+    // 끝
     @GetMapping("/jobs/info")
     public ResponseEntity<?> jobsInfo () {
         List<JobsResponse.ListDTO> listDTOS = jobsService.listDTOS();
         return ResponseEntity.ok(new ApiUtil<>(listDTOS));
     }
 
+    // 지워도 될듯?
     @GetMapping("/jobs/write-jobs-form")
     public String writeJobsForm(HttpServletRequest request) {
         User sessionComp = (User)session.getAttribute("sessionComp");
@@ -61,6 +61,7 @@ public class JobsController {
         return "/jobs/write-jobs-form";
     }
 
+    // 하다 도망친거 - 승진
     @PostMapping("/jobs/save")
     public String save (JobsRequest.JobWriterDTO reqDTO) {
         User sessionComp = (User)session.getAttribute("sessionComp");
@@ -69,12 +70,12 @@ public class JobsController {
         return "redirect:/comp/" + sessionComp.getId() + "/comp-home";
     }
 
-    @PostMapping("/jobs/{id}/delete")
-    public String delete(@PathVariable Integer id) {
-        User sessionComp = (User)session.getAttribute("sessionComp");
+
+    @DeleteMapping("/jobs/{id}/delete")
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
         jobsService.delete(id);
 
-        return "redirect:/comp/" + sessionComp.getId() + "/comp-home";
+        return ResponseEntity.ok(new ApiUtil(null));
     }
 
     @PostMapping("/jobs/{id}/update")
@@ -87,10 +88,9 @@ public class JobsController {
     }
 
     @GetMapping("/jobs/{jobsId}/update-jobs-form")
-    public String updateForm (@PathVariable Integer jobsId, HttpServletRequest request) {
-        JobsResponse.JobUpdateDTO job = jobsService.updateForm(jobsId);
-        request.setAttribute("job", job);
-
-        return "/jobs/update-jobs-form";
+    public  ResponseEntity<?> updateForm (@PathVariable Integer jobsId) {
+        User sessionComp = (User)session.getAttribute("sessionComp");
+        JobsResponse.JobUpdateDTO job = jobsService.updateForm(jobsId, sessionComp.getId());
+        return ResponseEntity.ok(new ApiUtil(job));
     }
 }

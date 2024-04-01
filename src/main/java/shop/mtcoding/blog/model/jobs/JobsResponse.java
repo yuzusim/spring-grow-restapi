@@ -71,8 +71,9 @@ public class JobsResponse {
         private String career;
         private String area;
         private LocalDate deadline;
-        private UserDTO user;
-        private List<SkillDTO> skills = new ArrayList<>();
+        private String imgFileName;
+        private String compName;
+        private List<SkillDTOs> skills;
 
         @Builder
         public ListDTO(Jobs jobs, User user, List<Skill> skills) {
@@ -81,11 +82,21 @@ public class JobsResponse {
             this.career = jobs.getCareer();
             this.area = jobs.getArea();
             this.deadline = jobs.getDeadline();
-            this.user = new UserDTO(user);
+            this.imgFileName = user.getImgFileName();
+            this.compName = user.getCompName();
 
             this.skills = skills.stream()
-                    .map(skill -> new SkillDTO(skill))
+                    .map(skill -> new SkillDTOs(skill))
                     .collect(Collectors.toList());
+        }
+
+        @Data
+        public static class SkillDTOs {
+            private String name;
+
+            public SkillDTOs(Skill skill) {
+                this.name = skill.getName();
+            }
         }
     }
 
@@ -180,7 +191,6 @@ public class JobsResponse {
     @Data
     public static class JobUpdateDTO {
         private Integer id;
-        private User user;
         private String compName;
         private String phone;
         private String businessNumber;
@@ -192,24 +202,34 @@ public class JobsResponse {
         private String area;
         private LocalDate deadLine;
         private String task;
-        private SkillResponse.SkillCheckedDTO skillChecked;
+        private List<SkillDTOs> skills;
 
         @Builder
-        public JobUpdateDTO(Integer id, User user, String compName, String phone, String businessNumber, String homepage, String title, String edu, String career, String content, String area, LocalDate deadLine, String task, SkillResponse.SkillCheckedDTO skillChecked) {
-            this.id = id;
-            this.user = user;
-            this.compName = compName;
-            this.phone = phone;
-            this.businessNumber = businessNumber;
-            this.homepage = homepage;
-            this.title = title;
-            this.edu = edu;
-            this.career = career;
-            this.content = content;
-            this.area = area;
-            this.deadLine = deadLine;
-            this.task = task;
-            this.skillChecked = skillChecked;
+        public JobUpdateDTO(Jobs jobs, User user, List<Skill> skills) {
+            this.id = jobs.getId();
+            this.compName = user.getCompName();
+            this.phone = user.getPhone();
+            this.businessNumber = user.getBusinessNumber();
+            this.homepage = user.getHomepage();
+            this.title = jobs.getTitle();
+            this.edu = jobs.getEdu();
+            this.career = jobs.getCareer();
+            this.content = jobs.getContent();
+            this.area = jobs.getArea();
+            this.deadLine = jobs.getDeadline();
+            this.task = jobs.getTask();
+            this.skills = skills.stream()
+                    .map(skill -> new SkillDTOs(skill))
+                    .collect(Collectors.toList());
+        }
+
+        @Data
+        public static class SkillDTOs {
+            private String name;
+
+            public SkillDTOs(Skill skill) {
+                this.name = skill.getName();
+            }
         }
     }
 

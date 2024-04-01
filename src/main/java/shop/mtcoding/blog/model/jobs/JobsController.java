@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import shop.mtcoding.blog._core.errors.exception.Exception401;
 import shop.mtcoding.blog.model.resume.ResumeResponse;
 import shop.mtcoding.blog.model.resume.ResumeService;
-import shop.mtcoding.blog.model.resume.user.User;
+import shop.mtcoding.blog.model.user.User;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @RequiredArgsConstructor

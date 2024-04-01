@@ -1,7 +1,7 @@
 package shop.mtcoding.blog.model.jobs;
 
 import lombok.Data;
-import shop.mtcoding.blog.model.resume.user.User;
+import shop.mtcoding.blog.model.user.User;
 
 import java.time.LocalDate;
 import java.util.List;

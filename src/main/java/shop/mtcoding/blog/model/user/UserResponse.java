@@ -1,4 +1,4 @@
-package shop.mtcoding.blog.model.resume.user;
+package shop.mtcoding.blog.model.user;
 
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +11,61 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserResponse {
+
+
+    @Data
+    public static class UserHomeDTO{
+        // count
+        private Integer applyCount;
+        private Integer waitCount;
+        private Integer resultCount;
+        //resumeList
+        private List<ResumeDTO> resumeList;
+        //skillList
+
+        @Builder
+        public UserHomeDTO(Integer applyCount, Integer waitCount, Integer resultCount, List<Resume> resumeList) {
+            this.applyCount = applyCount;
+            this.waitCount = waitCount;
+            this.resultCount = resultCount;
+            this.resumeList = resumeList.stream().map(ResumeDTO::new)
+                    .collect(Collectors.toList());
+        }
+
+        @Data
+        public class ResumeDTO {
+            private Integer id;
+            private String title;
+            private String edu;
+            private String career;
+            private String area;
+            private List<SkillDTO> skillList;
+
+            public ResumeDTO(Resume resume) {
+                this.id = resume.getId();
+                this.title = resume.getTitle();
+                this.edu = resume.getEdu();
+                this.career = resume.getCareer();
+                this.area = resume.getArea();
+                this.skillList = resume.getSkillList().stream().map(skill -> {
+                    return new SkillDTO(skill);
+                }).collect(Collectors.toList());;
+            }
+        }
+        @Data
+        public class SkillDTO{
+            private Integer id;
+            private String name;
+
+            public SkillDTO(Skill skill) {
+                this.id = skill.getId();
+                this.name = skill.getName();
+            }
+        }
+    }
+
+
+
 
     @Data
     public static class UserResumeSkillV2DTO{

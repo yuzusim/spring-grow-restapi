@@ -5,7 +5,7 @@ import lombok.Data;
 import shop.mtcoding.blog.model.jobs.Jobs;
 import shop.mtcoding.blog.model.resume.Resume;
 import shop.mtcoding.blog.model.skill.SkillRequest;
-import shop.mtcoding.blog.model.resume.user.User;
+import shop.mtcoding.blog.model.user.User;
 
 import java.util.List;
 

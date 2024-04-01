@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import shop.mtcoding.blog._core.errors.exception.Exception401;
-import shop.mtcoding.blog.model.resume.user.User;
-import shop.mtcoding.blog.model.resume.user.UserJPARepository;
+import shop.mtcoding.blog.model.user.User;
+import shop.mtcoding.blog.model.user.UserJPARepository;
 
 import java.io.IOException;
 import java.nio.file.Files;

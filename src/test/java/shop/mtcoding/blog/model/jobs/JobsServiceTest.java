@@ -9,8 +9,8 @@ import org.springframework.data.domain.Sort;
 import shop.mtcoding.blog._core.errors.exception.Exception404;
 import shop.mtcoding.blog.model.skill.Skill;
 import shop.mtcoding.blog.model.skill.SkillJPARepository;
-import shop.mtcoding.blog.model.resume.user.User;
-import shop.mtcoding.blog.model.resume.user.UserJPARepository;
+import shop.mtcoding.blog.model.user.User;
+import shop.mtcoding.blog.model.user.UserJPARepository;
 
 import java.util.ArrayList;
 import java.util.List;

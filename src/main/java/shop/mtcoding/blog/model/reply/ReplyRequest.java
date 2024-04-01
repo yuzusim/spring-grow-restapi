@@ -2,7 +2,7 @@ package shop.mtcoding.blog.model.reply;
 
 import lombok.Data;
 import shop.mtcoding.blog.model.board.Board;
-import shop.mtcoding.blog.model.resume.user.User;
+import shop.mtcoding.blog.model.user.User;
 
 public class ReplyRequest {
     @Data

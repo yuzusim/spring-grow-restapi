@@ -1,8 +1,9 @@
-package shop.mtcoding.blog.model.resume.user;
+package shop.mtcoding.blog.model.user;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.errors.exception.Exception401;
@@ -20,13 +21,25 @@ import java.util.List;
 
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class UserController {
     private final JobsService jobsService;
     private final UserService userService;
     private final HttpSession session;
     private final ResumeService resumeService;
     private final ApplyService applyService;
+
+
+    @GetMapping("/user/{id}/user-home")
+    public ResponseEntity<?> userHome (@PathVariable Integer id) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        UserResponse.UserHomeDTO userHomeDTO = userService.userHome(sessionUser.getId());
+
+        return ResponseEntity.ok(new ApiUtil<>(userHomeDTO));
+//        request.setAttribute("sessionUserId", sessionUser.getId());
+//        return "/user/user-home";
+    }
 
 
     //user의 지원 내역
@@ -152,21 +165,6 @@ public class UserController {
         return "/user/update-form";
     }
 
-    @GetMapping("/user/{id}/user-home")
-    public String userHome(@PathVariable Integer id, HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-
-        List<ResumeRequest.UserViewDTO> resumeList = userService.userHome(sessionUser.getId());
-        ApplyResponse.stateViewDTO applies = applyService.findAll(id);
-
-        
-        request.setAttribute("resumeList", resumeList);
-        System.out.println("resumeList:n " + resumeList);
-        request.setAttribute("sessionUserId", sessionUser.getId());
-        request.setAttribute("applyState",applies);
-        System.out.println("applies :"+applies);
-        return "/user/user-home";
-    }
 
 
     // 이미지업로드용

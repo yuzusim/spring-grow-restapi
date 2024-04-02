@@ -1,64 +1,76 @@
 package shop.mtcoding.blog.model.board;
 
 import lombok.Data;
+import shop.mtcoding.blog.model.reply.Reply;
 import shop.mtcoding.blog.model.user.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BoardResponse {
 
 
-    // 글 수정
+    // 글수정 완료
     @Data
     public static class UpdateDTO {
         private int id;
         private String title;
         private String content;
-        private UserDTO user;
 
-        @Data
-        public class UserDTO {
-            private int id;
-            private String username;
-
-            public UserDTO(User user) {
-                this.id = user.getId();
-                this.username = user.getMyName();
-            }
+        public UpdateDTO(Board board) {
+            this.id = board.getId();
+            this.title = board.getTitle();
+            this.content = board.getContent();
         }
     }
 
-    // 글 상세보기
+    // 게시글 상세보기 완료
     @Data
     public static class DetailDTO {
         private int id;
         private String title;
         private String content;
         private int userId;
-        private String username;    //게시글 작성자 이름
-        // private List<ReplyDTO> replies = new ArrayList<>();
+        private String username; // 게시글 작성자 이름
         private boolean isOwner;
+        private List<ReplyDTO> replies = new ArrayList<>();
 
-
-        public DetailDTO(Board board, User sessionUser) {
+        public DetailDTO(Board board, User sessionUserId, List<Reply> repliesList) {
             this.id = board.getId();
             this.title = board.getTitle();
             this.content = board.getContent();
             this.userId = board.getUser().getId();
-            this.username = board.getUser().getMyName();
+            this.username = board.getUser().getMyName(); // join 해서 가져왔음
             this.isOwner = false;
+            if (sessionUserId != null) {
+                if (sessionUserId.getId() == userId) isOwner = true;
+            }
 
-            // 보더의 주인여부 확인
-            this.isOwner = false;
-            if (sessionUser != null) {
-                if (sessionUser.getId() == board.getUser().getId()) {
-                    isOwner = true;
+            this.replies = repliesList.stream().map(reply -> new ReplyDTO(reply, sessionUserId.getId())).toList();
+        }
+
+        @Data
+        public class ReplyDTO {
+            private int id;
+            private String comment;
+            private int userId; // 댓글 작성자 아이디
+            private String username; // 댓글 작성자 이름
+            private boolean isOwner;
+
+            public ReplyDTO(Reply reply, Integer sessionUserId) {
+                this.id = reply.getId(); // lazy loading 발동
+                this.comment = reply.getComment();
+                this.userId = reply.getUser().getId();
+                this.username = reply.getUser().getMyName(); // lazy loading 발동 (in query)
+                this.isOwner = false;
+                if (sessionUserId != null) {
+                    if (sessionUserId == userId) isOwner = true;
                 }
             }
         }
     }
 
-    // 글쓰기
+    // 글쓰기 완료
     @Data
     public static class SaveDTO {
         private int id;
@@ -66,13 +78,13 @@ public class BoardResponse {
         private String content;
 
         public SaveDTO(Board board) {
-            this.id = id;
-            this.title = title;
-            this.content = content;
+            this.id = board.getId();
+            this.title = board.getTitle();
+            this.content = board.getContent();
         }
     }
 
-    // 글목록조회
+    // 글목록조회 완료
     @Data
     public static class BoardHomeDTO {
         private int id;
@@ -85,14 +97,11 @@ public class BoardResponse {
     }
 
 
-    @Data
-    public class UserDTO {
-        private int id;
-        private String username;
-
-        public UserDTO(User user) {
-            this.id = user.getId();
-            this.username = user.getMyName();
-        }
-    }
 }
+
+
+
+
+
+
+

@@ -81,26 +81,20 @@ public class UserController {
 
 
     @PostMapping("/user/login")
-    public String login(UserRequest.LoginDTO reqDTO) {
+    public  ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO reqDTO, HttpSession session) {
         User user = userService.login(reqDTO);
-        session.setAttribute("sessionUser", user);
 
-        int role;
-        if (user == null) {
-            throw new Exception401("일치하는 회원정보가 없습니다.");
-        } else {
-            role = user.getRole();
+        if (user != null) {
+            session.setAttribute("sessionUser", user);
+            int role = user.getRole();
             if (role == 1) {
-                session.setAttribute("sessionUser", user);
-                return "redirect:/";
             } else if (role == 2) {
                 session.setAttribute("sessionComp", user);
-                return  "redirect:/comp/comp-index";
             }
         }
-
-        return "redirect:/";
+        return ResponseEntity.ok(new ApiUtil(null));
     }
+
 
     @GetMapping("/logout")
     public String logout() {

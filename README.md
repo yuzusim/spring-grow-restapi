@@ -6,7 +6,6 @@ ___
 
 ### 1.테스트  [담당 : 성훈]
 - 요청 주소 (POST)
-
 http://localhost:8080/join
   
 - 요청 파라미터
@@ -19,7 +18,6 @@ application/json
 }
 ```
 - 응답 바디
-
 application/json
 
 ```

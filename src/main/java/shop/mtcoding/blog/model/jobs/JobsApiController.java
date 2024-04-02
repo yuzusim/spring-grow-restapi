@@ -12,18 +12,17 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class JobsApiController {
-
     private final HttpSession session;
     private final JobsService jobsService;
 
-    @GetMapping("/jobs/info")
+    @GetMapping("/api/jobs/info")
     public ResponseEntity<?> jobsInfo () {
         List<JobsResponse.ListDTO> listDTOS = jobsService.listDTOS();
         return ResponseEntity.ok(new ApiUtil<>(listDTOS));
     }
 
     // 하다 도망친거 - 승진
-    @PostMapping("/jobs/save")
+    @PostMapping("/api/jobs/save")
     public @ResponseBody ResponseEntity<?> save (@RequestBody JobsRequest.JobsSaveDTO reqDTO) {
         User sessionComp = (User)session.getAttribute("sessionComp");
         Jobs jobs = jobsService.save(sessionComp, reqDTO);
@@ -31,13 +30,13 @@ public class JobsApiController {
     }
 
 
-    @DeleteMapping("/jobs/{id}/delete")
+    @DeleteMapping("/api/jobs/{id}/delete")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         jobsService.delete(id);
         return ResponseEntity.ok(new ApiUtil(null));
     }
 
-    @GetMapping("/jobs/{jobsId}/update-jobs-form")
+    @GetMapping("/api/jobs/{jobsId}/update-jobs-form")
     public  ResponseEntity<?> updateForm (@PathVariable Integer jobsId) {
         User sessionComp = (User)session.getAttribute("sessionComp");
         JobsResponse.JobUpdateDTO job = jobsService.updateForm(jobsId, sessionComp.getId());

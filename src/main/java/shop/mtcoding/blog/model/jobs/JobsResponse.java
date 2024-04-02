@@ -3,6 +3,7 @@ package shop.mtcoding.blog.model.jobs;
 import lombok.Builder;
 import lombok.Data;
 import shop.mtcoding.blog.model.resume.Resume;
+import shop.mtcoding.blog.model.resume.ResumeResponse;
 import shop.mtcoding.blog.model.skill.Skill;
 import shop.mtcoding.blog.model.skill.SkillResponse;
 import shop.mtcoding.blog.model.user.User;
@@ -258,7 +259,45 @@ public class JobsResponse {
         private String career;
     }
 
+    @Data
+    public static class UpdateDTO {
+        private Integer id;
+        private String title;
+        private String edu;
+        private String career;
+        private String content;
+        private String area;
+        private LocalDate deadLine;
+        private String task;
+        private List<SkillDTO> skills;
 
+        public UpdateDTO(Jobs jobs, List<Skill> skills) {
+            this.id = jobs.getId();
+            this.title = jobs.getTitle();
+            this.edu = jobs.getEdu();
+            this.career = jobs.getCareer();
+            this.content = jobs.getContent();
+            this.area = jobs.getArea();
+            this.deadLine = jobs.getDeadline();
+            this.task = jobs.getTask();
+            this.skills = skills.stream()
+                    .map(skill -> new SkillDTO(skill))
+                    .collect(Collectors.toList());
+        }
+
+        @Data
+        public class SkillDTO {
+            private Integer id;
+            private String name;
+            private Integer role;
+
+            public SkillDTO(Skill skill) {
+                this.id = skill.getId();
+                this.name = skill.getName();
+                this.role = skill.getRole();
+            }
+        }
+    }
 }
 
 

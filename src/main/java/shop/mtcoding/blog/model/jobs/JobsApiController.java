@@ -50,9 +50,17 @@ public class JobsApiController {
     }
 
     @GetMapping("/jobs/{jobsId}/update-jobs-form")
-    public  ResponseEntity<?> updateForm (@PathVariable Integer jobsId) {
+    public ResponseEntity<?> updateForm (@PathVariable Integer jobsId) {
         User sessionComp = (User)session.getAttribute("sessionComp");
         JobsResponse.JobUpdateDTO job = jobsService.updateForm(jobsId, sessionComp.getId());
         return ResponseEntity.ok(new ApiUtil(job));
+    }
+
+    @PutMapping("/jobs/{id}/update")
+    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody JobsRequest.UpdateDTO reqDTO) {
+        User sessionComp = (User)session.getAttribute("sessionComp");
+        JobsResponse.UpdateDTO respDTO = jobsService.update(id, reqDTO, sessionComp);
+
+        return ResponseEntity.ok(new ApiUtil(respDTO));
     }
 }

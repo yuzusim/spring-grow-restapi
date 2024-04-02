@@ -45,17 +45,20 @@ public class ResumeRequest {
         }
 
         @Data
-        public static class WriteSkillDTO {
+        public class WriteSkillDTO {
+            private Integer id;
             private String name;
             private Integer role;
 
-            public WriteSkillDTO(String name, Integer role) {
+            public WriteSkillDTO(Integer id, String name, Integer role) {
+                this.id = id;
                 this.name = name;
                 this.role = role;
             }
 
             public Skill toEntity(Resume resume){
                return Skill.builder()
+                       .id(id)
                        .name(name)
                        .role(role)
                        .resume(resume)

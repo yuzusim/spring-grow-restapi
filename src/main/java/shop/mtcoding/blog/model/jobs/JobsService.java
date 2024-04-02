@@ -11,6 +11,7 @@ import shop.mtcoding.blog._core.errors.exception.Exception403;
 import shop.mtcoding.blog._core.errors.exception.Exception404;
 import shop.mtcoding.blog.model.skill.Skill;
 import shop.mtcoding.blog.model.skill.SkillJPARepository;
+import shop.mtcoding.blog.model.skill.SkillRequest;
 import shop.mtcoding.blog.model.skill.SkillResponse;
 import shop.mtcoding.blog.model.user.User;
 import shop.mtcoding.blog.model.user.UserJPARepository;
@@ -94,12 +95,12 @@ public class JobsService {
     }
 
     @Transactional
-    public void update(Integer id, JobsRequest.UpdateDTO reqDTO, User sessionComp) {
+    public JobsResponse.UpdateDTO update(Integer id, JobsRequest.UpdateDTO reqDTO, User sessionComp) {
         Jobs jobs = jobsRepo.findById(id)
                 .orElseThrow(() -> new Exception404("해당 공고를 찾을 수 없습니다."));
 
         if (sessionComp.getId() != jobs.getUser().getId()) {
-            throw new Exception403("이력서를 수정할 권한이 없습니다");
+            throw new Exception403("공고를 수정할 권한이 없습니다");
         }
 
         jobs.setTitle(reqDTO.getTitle());
@@ -110,19 +111,21 @@ public class JobsService {
         jobs.setDeadline(reqDTO.getDeadLine());
         jobs.setTask(reqDTO.getTask());
 
+        System.out.println(reqDTO.getArea());
+
         skillRepo.deleteByJobsId(id);
 
-        // 스킬뿌리기
-        reqDTO.getSkill().stream().map((skill) -> {
-            return Skill.builder()
-                    .name(skill)
-                    .role(sessionComp.getRole())
-                    .jobs(jobs)
-                    .build();
-        }).forEach(skill -> {
-            // 반복문으로 스킬 돌면서 뿌림
-            skillRepo.save(skill);
-        });
+        reqDTO.getSkill().stream()
+                .map((skill) -> {
+                    return skill.toEntity(jobs);
+                })
+                .forEach((skill) -> {
+                    skillRepo.save(skill);
+                });
+
+        List<Skill> skill = skillRepo.findByJobsId(jobs.getId());
+
+        return new JobsResponse.UpdateDTO(jobs, skill);
     }
 
     public JobsResponse.JobUpdateDTO updateForm(Integer id, Integer SessionCompId) {

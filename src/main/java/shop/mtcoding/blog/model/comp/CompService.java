@@ -267,7 +267,7 @@ public class CompService {
     }
 
     //기업 유저 회원 정보 업데이트용 조회 (update-form)
-    public CompResponse.CompUpdateDTO findById(Integer sessionUserId) {
+    public CompResponse.CompUpdateDTO findByIdUpdate(Integer sessionUserId) {
         User user = compJPARepo.findById(sessionUserId)
                 .orElseThrow(() -> new Exception401("로그인이 필요한 서비스입니다."));
         return new CompResponse.CompUpdateDTO(user);

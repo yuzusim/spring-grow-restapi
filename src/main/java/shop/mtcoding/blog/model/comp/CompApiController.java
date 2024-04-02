@@ -33,6 +33,7 @@ public class CompApiController {
         return ResponseEntity.ok(new ApiUtil<>(rusList));
     }
 
+    //update
     @PutMapping("/api/comps/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody CompRequest.UpdateDTO requestDTO) {
         User sessionComp = (User) session.getAttribute("sessionComp");
@@ -45,9 +46,7 @@ public class CompApiController {
     @GetMapping("/api/comps/{id}")
     public ResponseEntity<?> updateForm(@PathVariable int id) {
         User sessionComp = (User) session.getAttribute("sessionComp");
-        CompResponse.CompUpdateDTO respDTO = compService.findById(sessionComp.getId());
-//        request.setAttribute("user", newSessionUser);
-
+        CompResponse.CompUpdateDTO respDTO = compService.findByIdUpdate(sessionComp.getId());
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 

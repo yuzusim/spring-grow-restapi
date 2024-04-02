@@ -18,15 +18,12 @@ public class CompController {
     private final CompService compService;
     private final HttpSession session;
 
-    // 채현
     @GetMapping("/comp/comp-index")
     public String compIndex(HttpServletRequest request) {
         List<CompResponse.ResumeUserSkillDTO> rusList = compService.findAllRusList();
         request.setAttribute("rusList", rusList);
         return "comp/comp-index";
     }
-
-
 
     @PostMapping("/comp/join")
     public String compJoin(@RequestParam(name = "role") Integer role, CompRequest.CompJoinDTO reqDTO) {
@@ -51,8 +48,3 @@ public class CompController {
         return "/comp/jobs-info";
     }
 }
-
-
-
-
-

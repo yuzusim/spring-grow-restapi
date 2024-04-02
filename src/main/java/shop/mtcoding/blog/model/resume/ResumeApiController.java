@@ -16,6 +16,15 @@ public class ResumeApiController {
     private final HttpSession session;
     private final UserService userService;
 
+    @DeleteMapping("/api/resumes/{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
+     //  User sessionUser = (User) session.getAttribute("sessionUser");
+        resumeService.delete(id);
+
+        return ResponseEntity.ok(new ApiUtil<>(null));
+
+    }
+
     @PostMapping("/resume/save")
     public ResponseEntity<?> save(@RequestBody ResumeRequest.SaveDTO reqDTO){
         resumeService.save(reqDTO);

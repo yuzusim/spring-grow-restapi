@@ -3,6 +3,8 @@ package shop.mtcoding.blog.model.resume;
 import lombok.Builder;
 import lombok.Data;
 import shop.mtcoding.blog.model.apply.Apply;
+import shop.mtcoding.blog.model.jobs.Jobs;
+import shop.mtcoding.blog.model.jobs.JobsResponse;
 import shop.mtcoding.blog.model.skill.Skill;
 import shop.mtcoding.blog.model.skill.SkillResponse;
 import shop.mtcoding.blog.model.user.User;
@@ -85,6 +87,47 @@ public class ResumeResponse {
         @Builder
 
         public DetailDTO2(Integer id, String title, String edu, String introduce, String imgFileName, String myName, LocalDate birth, String phone, String email, String address, String area, String career, String portLink, Integer userId, List<Skill> skills) {
+            this.id = id;
+            this.title = title;
+            this.edu = edu;
+            this.introduce = introduce;
+            this.imgFileName = imgFileName;
+            this.myName = myName;
+            this.birth = birth;
+            this.phone = phone;
+            this.email = email;
+            this.address = address;
+            this.area = area;
+            this.career = career;
+            this.portLink = portLink;
+            this.userId = userId;
+            this.skills = skills.stream()
+                    .map(skill -> new SkillDTO2(skill))
+                    .collect(Collectors.toList());
+        }
+    }
+
+    @Data
+    public static class CompDetailDTO2 {
+        private Integer id;
+        private String title;
+        private String edu;
+        private String introduce;
+        private String imgFileName;
+        private String myName;
+        private LocalDate birth;
+        private String phone;
+        private String email;
+        private String address;
+        private String area;
+        private String career;
+        private String portLink;
+        private Integer userId;
+        private List<SkillDTO2> skills;
+
+        @Builder
+
+        public CompDetailDTO2(Integer id, String title, String edu, String introduce, String imgFileName, String myName, LocalDate birth, String phone, String email, String address, String area, String career, String portLink, Integer userId, List<Skill> skills) {
             this.id = id;
             this.title = title;
             this.edu = edu;
@@ -273,6 +316,44 @@ public class ResumeResponse {
             this.title = resume.getTitle();
             this.userId = resume.getUser().getId();
             this.isPass = apply.getIsPass();
+        }
+    }
+
+    @Data
+    public static class ResumeUpdateDTO {
+        private Integer id;
+        private String title;
+        private String area;
+        private String edu;
+        private String career;
+        private String introduce;
+        private String portLink;
+        private List<SkillDTO> skill;
+
+        public ResumeUpdateDTO(Resume resume, List<Skill> skills) {
+            this.id = resume.getId();
+            this.title = resume.getTitle();
+            this.area = resume.getArea();
+            this.edu = resume.getEdu();
+            this.career = resume.getCareer();
+            this.introduce = resume.getIntroduce();
+            this.portLink = resume.getPortLink();
+            this.skill = skills.stream()
+                    .map(skill -> new SkillDTO(skill))
+                    .collect(Collectors.toList());
+        }
+
+        @Data
+        public class SkillDTO {
+            private Integer id;
+            private String name;
+            private Integer role;
+
+            public SkillDTO(Skill skill) {
+                this.id = skill.getId();
+                this.name = skill.getName();
+                this.role = skill.getRole();
+            }
         }
     }
 }

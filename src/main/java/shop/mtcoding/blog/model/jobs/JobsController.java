@@ -21,7 +21,6 @@ public class JobsController {
     private final ResumeService resumeService;
     private final HttpSession session;
 
-    // 채현
 
 
     // 지워도 될듯?
@@ -33,16 +32,5 @@ public class JobsController {
         request.setAttribute("sessionC", sessionComp);
 
         return "/jobs/write-jobs-form";
-    }
-
-
-
-    @PostMapping("/jobs/{id}/update")
-    public String update(@PathVariable Integer id, JobsRequest.UpdateDTO reqDTO) {
-        User sessionComp = (User)session.getAttribute("sessionComp");
-        jobsService.update(id, reqDTO, sessionComp);
-
-
-        return "redirect:/comp/" + sessionComp.getId() + "/comp-home";
     }
 }

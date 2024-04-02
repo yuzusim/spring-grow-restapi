@@ -33,6 +33,7 @@ public class Jobs {
     @Column(nullable = false)
     private String area;
 
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)

@@ -1,6 +1,9 @@
 package shop.mtcoding.blog.model.jobs;
 
+import lombok.Builder;
 import lombok.Data;
+import shop.mtcoding.blog.model.resume.Resume;
+import shop.mtcoding.blog.model.resume.ResumeService;
 import shop.mtcoding.blog.model.skill.Skill;
 import shop.mtcoding.blog.model.user.User;
 
@@ -65,10 +68,6 @@ public class JobsRequest {
     @Data
     public static class UpdateDTO {
         private Integer id;
-        private String compName;
-        private String phone;
-        private String businessNumber;
-        private String homepage;
         private String title;
         private String edu;
         private String career;
@@ -76,6 +75,27 @@ public class JobsRequest {
         private String area;
         private LocalDate deadLine;
         private String task;
-        private List<String> skill;
+        private List<SkillDTO> skill;
+
+        @Data
+        public static class SkillDTO {
+            private Integer jobsId;
+            private String name;
+            private Integer role;
+
+            public SkillDTO(Integer jobsId, String name, Integer role) {
+                this.jobsId = jobsId;
+                this.name = name;
+                this.role = role;
+            }
+
+            public Skill toEntity(Jobs jobs) {
+                return Skill.builder()
+                        .name(name)
+                        .role(role)
+                        .jobs(jobs)
+                        .build();
+            }
+        }
     }
 }

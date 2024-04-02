@@ -1,12 +1,13 @@
 package shop.mtcoding.blog.model.comp;
 
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog.model.resume.ResumeResponse;
+import shop.mtcoding.blog.model.user.User;
 
 import java.util.List;
 
@@ -14,6 +15,14 @@ import java.util.List;
 @RestController
 public class CompApiController {
     private final CompService compService;
+    private final HttpSession session;
+
+    @GetMapping("/comp/comp-manage")
+    public ResponseEntity<?> compManage () {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        CompResponse.CompManageDTO  compManageDTO = compService.compManage(sessionUser.getId());
+        return ResponseEntity.ok(new ApiUtil<>(compManageDTO));
+    }
 
     @PostMapping("/api/find-all-jobs")
     public CompResponse.CompManageDTO compManageDTO (@RequestParam(name = "userId") Integer userId){

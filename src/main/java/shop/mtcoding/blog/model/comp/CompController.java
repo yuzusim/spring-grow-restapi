@@ -18,12 +18,7 @@ public class CompController {
     private final CompService compService;
     private final HttpSession session;
 
-    @GetMapping("/comp/comp-manage")
-    public ResponseEntity<?> compManage () {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        CompResponse.CompManageDTO  compManageDTO = compService.compManage(sessionUser.getId());
-        return ResponseEntity.ok(new ApiUtil<>(compManageDTO));
-    }
+
 
 //    @PostMapping("/comp/{id}/update")
 //    public String update(@PathVariable Integer id, CompRequest.UpdateDTO requestDTO) {
@@ -118,8 +113,6 @@ public class CompController {
 
         return "/comp/jobs-info";
     }
-
-
 }
 
 

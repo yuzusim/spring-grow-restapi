@@ -3,8 +3,10 @@ package shop.mtcoding.blog.model.resume;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog.model.user.User;
 import shop.mtcoding.blog.model.user.UserService;
 
@@ -15,18 +17,6 @@ public class ResumeController {
     private final ResumeService resumeService;
     private final HttpSession session;
     private final UserService userService;
-
-    @GetMapping("/resume/resume-detail/{id}")
-    public String resumeDetail(@PathVariable Integer id, @RequestParam(name = "jobsId") Integer jobsId, HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        User sessionComp = (User) session.getAttribute("sessionComp");
-        User newSessionUser = userService.findById(sessionUser.getId());
-        System.out.println(111111);
-        ResumeResponse.DetailDTO resume = resumeService.resumeDetail(id, jobsId, newSessionUser, sessionComp);
-        request.setAttribute("resume", resume);
-
-        return "resume/resume-detail";
-    }
 
     @GetMapping("/resume/resume-detail2/{id}")
     public String resumeDetail2(@PathVariable Integer id, HttpServletRequest request) {

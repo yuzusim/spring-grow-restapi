@@ -113,6 +113,7 @@ public class ResumeService {
     }
 
 
+
 //    public ResumeResponse.ResumeStateDTO findAllResumeJoinApplyByUserIdAndJobsId(Integer userId, Integer jobsId) {
 //        List<Resume> resumeList = resumeJPARepo.findAllByUserId(userId);
 //        List<Apply> applies = applyJPARepo.findAll();
@@ -274,5 +275,4 @@ public class ResumeService {
         //3. 삭제하기
         resumeJPARepo.deleteById(resume.getId());
     }
-
 }

@@ -2,6 +2,7 @@ package shop.mtcoding.blog.model.comp;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.blog._core.errors.exception.Exception401;
@@ -18,6 +19,7 @@ import shop.mtcoding.blog.model.skill.Skill;
 import shop.mtcoding.blog.model.skill.SkillJPARepository;
 import shop.mtcoding.blog.model.user.User;
 import shop.mtcoding.blog.model.user.UserJPARepository;
+import shop.mtcoding.blog.model.user.UserResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +81,6 @@ public class CompService {
     }
 
 
-
     public List<CompResponse.RusaDTO> findApplicants(Integer jobsId) {
         //공고에 지원한 이력서를 전부 찾는데, 그 중 지원안한 상태는 제외해서 조회
         List<Apply> applyList = applyJPARepo.findAllByJidAn1(jobsId);
@@ -102,7 +103,7 @@ public class CompService {
 
             return rusaDTOList.add(CompResponse.RusaDTO.builder()
                     .user(user).resume(resume).apply(apply).build());
-            }).collect(Collectors.toList());
+        }).collect(Collectors.toList());
 
         for (int i = 0; i < rusaDTOList.size(); i++) {
             rusaDTOList.get(i).setId(i + 1);
@@ -164,15 +165,18 @@ public class CompService {
         return listDTOS;
     }
 
-    public List<CompResponse.ComphomeDTO> findAllByUserId(Integer sessionUserId) {
-        List<Jobs> jobsList = jobsJPARepo.findAllByUserId(sessionUserId);
+    public List<CompResponse.ComphomeDTO> findAllByUserId(User sessionComp) {
+        List<Jobs> jobsList = jobsJPARepo.findAllByUserId(sessionComp.getId());
         List<CompResponse.ComphomeDTO> listDTOS = new ArrayList<>();
 
-        jobsList.stream().map(jobs -> {
-            return listDTOS.add(CompResponse.ComphomeDTO.builder()
-                    .jobs(jobs)
-                    .skillList(jobs.getSkillList()).build());
-        }).collect(Collectors.toList());
+        for (int i = 0; i < jobsList.size(); i++) {
+            List<Skill> skills = skillJPARepo.findByJobsId(jobsList.get(i).getId());
+            listDTOS.add(CompResponse.ComphomeDTO.builder()
+                    .jobs(jobsList.get(i))
+                    .skillList(skills)
+                    .build());
+        }
+
         for (int i = 0; i < listDTOS.size(); i++) {
             listDTOS.get(i).setId(i + 1);
         }
@@ -202,15 +206,22 @@ public class CompService {
 
     // 기업 로그인하면 보여줄 이력서 목록들
     public List<CompResponse.ResumeUserSkillDTO> findAllRusList() {
-        List<Resume> resumeList = resumeJPARepo.findAll();
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+
+        List<Resume> resumeList = resumeJPARepo.findAll(sort);
+
         List<CompResponse.ResumeUserSkillDTO> rusList = new ArrayList<>();
 
-        resumeList.stream().map(resume -> {
-            return rusList.add(CompResponse.ResumeUserSkillDTO.builder()
-                    .resume(resume)
-                    .user(resume.getUser())
-                    .skillList(resume.getSkillList()).build());
-        }).collect(Collectors.toList());
+        for (int i = 0; i < resumeList.size(); i++) {
+            User user = userJPARepo.findById(resumeList.get(i).getUser().getId())
+                    .orElseThrow(() -> new Exception401("사용자를 찾을 수 없습니다."));
+            List<Skill> skills = skillJPARepo.findAllByResumeId(resumeList.get(i).getId());
+            rusList.add(CompResponse.ResumeUserSkillDTO.builder()
+                    .resume(resumeList.get(i))
+                    .user(user)
+                    .skills(skills)
+                    .build());
+        }
 
         return rusList;
     }

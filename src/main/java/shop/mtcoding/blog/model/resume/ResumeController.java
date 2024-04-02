@@ -29,13 +29,13 @@ public class ResumeController {
         return "/resume/update-resume-form";
     }
 
-    @PostMapping("/resume/{id}/delete")
-    public String delete(@PathVariable Integer id) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        resumeService.delete(id);
-
-        return "redirect:/user/" + sessionUser.getId() + "/user-home";
-
-    }
+//    @PostMapping("/resume/{id}/delete")
+//    public String delete(@PathVariable Integer id) {
+//        User sessionUser = (User) session.getAttribute("sessionUser");
+//        resumeService.delete(id);
+//
+//        return "redirect:/user/" + sessionUser.getId() + "/user-home";
+//
+//    }
 
 }

@@ -45,11 +45,6 @@ public class JobsController {
     }
 
     // 끝
-    @GetMapping("/jobs/info")
-    public ResponseEntity<?> jobsInfo () {
-        List<JobsResponse.ListDTO> listDTOS = jobsService.listDTOS();
-        return ResponseEntity.ok(new ApiUtil<>(listDTOS));
-    }
 
     // 지워도 될듯?
     @GetMapping("/jobs/write-jobs-form")
@@ -62,20 +57,7 @@ public class JobsController {
         return "/jobs/write-jobs-form";
     }
 
-    // 하다 도망친거 - 승진
-    @PostMapping("/jobs/save")
-    public @ResponseBody ResponseEntity<?> save (@RequestBody JobsRequest.JobsSaveDTO reqDTO) {
-        User sessionComp = (User)session.getAttribute("sessionComp");
-        Jobs jobs = jobsService.save(sessionComp, reqDTO);
-        return ResponseEntity.ok(new ApiUtil(jobs));
-    }
 
-
-    @DeleteMapping("/jobs/{id}/delete")
-    public ResponseEntity<?> delete(@PathVariable Integer id) {
-        jobsService.delete(id);
-        return ResponseEntity.ok(new ApiUtil(null));
-    }
 
     @PostMapping("/jobs/{id}/update")
     public String update(@PathVariable Integer id, JobsRequest.UpdateDTO reqDTO) {
@@ -84,12 +66,5 @@ public class JobsController {
 
 
         return "redirect:/comp/" + sessionComp.getId() + "/comp-home";
-    }
-
-    @GetMapping("/jobs/{jobsId}/update-jobs-form")
-    public  ResponseEntity<?> updateForm (@PathVariable Integer jobsId) {
-        User sessionComp = (User)session.getAttribute("sessionComp");
-        JobsResponse.JobUpdateDTO job = jobsService.updateForm(jobsId, sessionComp.getId());
-        return ResponseEntity.ok(new ApiUtil(job));
     }
 }

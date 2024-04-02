@@ -26,21 +26,6 @@ public class UserController {
     private final JobsService jobsService;
     private final UserService userService;
     private final HttpSession session;
-    private final ResumeService resumeService;
-    private final ApplyService applyService;
-
-
-    @GetMapping("/user/{id}/user-home")
-    public ResponseEntity<?> userHome (@PathVariable Integer id) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-
-        UserResponse.UserHomeDTO userHomeDTO = userService.userHome(sessionUser.getId());
-
-        return ResponseEntity.ok(new ApiUtil<>(userHomeDTO));
-//        request.setAttribute("sessionUserId", sessionUser.getId());
-//        return "/user/user-home";
-    }
-
 
     //user의 지원 내역
     @GetMapping("/user/{id}/resume-home")
@@ -80,15 +65,7 @@ public class UserController {
         return "index";
     }
 
-    @GetMapping("/api/user/username-same-check")
-    public @ResponseBody ApiUtil<?> usernameSameCheck(String email) {
-        User user = userService.findByEmail(email);
-        if (user == null) {
-            return new ApiUtil<>(true);
-        } else {
-            return new ApiUtil<>(false);
-        }
-    }
+
 
     @PostMapping("/user/join")
     public String join(@RequestParam(name = "role") Integer role, UserRequest.JoinDTO reqDTO) {

@@ -70,6 +70,14 @@ public class ApplyResponse {
             this.userId = user.getId();
 
         }
+
+        public ApplyUserViewDTO(Apply apply) {
+            this.id = apply.getId();
+            this.resumeId = apply.getResume().getId();
+            this.jobsId = apply.getJobs().getId();
+            this.isPass = apply.getIsPass();
+            this.userId = apply.getResume().getUser().getId();
+        }
     }
 
 }

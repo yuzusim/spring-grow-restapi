@@ -1,17 +1,18 @@
 package shop.mtcoding.blog.model.jobs;
 
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.mtcoding.blog._core.errors.exception.Exception401;
 import shop.mtcoding.blog._core.errors.exception.Exception403;
 import shop.mtcoding.blog._core.errors.exception.Exception404;
+import shop.mtcoding.blog.model.apply.Apply;
+import shop.mtcoding.blog.model.apply.ApplyJPARepository;
+import shop.mtcoding.blog.model.resume.Resume;
+import shop.mtcoding.blog.model.resume.ResumeJPARepository;
 import shop.mtcoding.blog.model.skill.Skill;
 import shop.mtcoding.blog.model.skill.SkillJPARepository;
-import shop.mtcoding.blog.model.skill.SkillResponse;
 import shop.mtcoding.blog.model.user.User;
 import shop.mtcoding.blog.model.user.UserJPARepository;
 
@@ -24,7 +25,8 @@ public class JobsService {
     private final JobsJPARepository jobsRepo;
     private final UserJPARepository userRepo;
     private final SkillJPARepository skillRepo;
-
+    private final ResumeJPARepository resumeRepo;
+    private final ApplyJPARepository applyRepo;
     public List<Jobs> searchKeyword(String keyword) {
 
         List<Jobs> jobsList;
@@ -40,11 +42,29 @@ public class JobsService {
 
     }
 
-    public JobsResponse.JobsDetailDTO jobsDetailDTO(Integer userJobsId, User sessionUser) {
+    @Transactional
+    public JobsResponse.JobResumeDetailDTO jobsDetailDTO(Integer userJobsId, User sessionUser) {
         Jobs jobs = jobsRepo.findByIdJoinUserWithSkill(userJobsId);
+        jobs.setIsOwner(jobs.getUser().getId() == sessionUser.getId());
+        List<Resume> notApplyResumeList = resumeRepo.findAllDetailResumeByUserId(sessionUser.getId());  // 공고에 지원하지않은 이력서리스트
+        List<Apply> applyList = applyRepo.findAllUserByApply(sessionUser.getId()); // 세션유저가 지원한 시청리스트
 
+        JobsResponse.JobDetailDTO2.UserDTO user = new JobsResponse.JobDetailDTO2.UserDTO(jobs.getUser());
+        List<JobsResponse.JobDetailDTO2.SkillDTO> skillList = jobs.getSkillList().stream().map(JobsResponse.JobDetailDTO2.SkillDTO::new).toList();
+        JobsResponse.JobDetailDTO2 job = new JobsResponse.JobDetailDTO2(jobs, user, skillList);
 
-        return new JobsResponse.JobsDetailDTO(jobs, sessionUser);
+        List<JobsResponse.NotResume> notResumeList = applyList.stream().map(JobsResponse.NotResume::new).toList();
+
+        // 지원 안한 이력서(Resume)가 0이면 true
+        // 지원 내용 리스트가 0보다 크면 true
+        boolean isApply = false;
+        if(notApplyResumeList.size() < 1 &&  applyList.size() > 1){
+            isApply = true;
+        }
+
+        JobsResponse.ResumeDetailDTO resumeDetailDTO = new JobsResponse.ResumeDetailDTO(isApply, notResumeList);
+
+        return new JobsResponse.JobResumeDetailDTO(job, resumeDetailDTO);
     }
 
 //    public JobsResponse.DetailDTO detailDTO(Integer jobsId, User sessionUser) {

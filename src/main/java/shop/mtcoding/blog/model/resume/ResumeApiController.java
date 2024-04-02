@@ -16,6 +16,6 @@ public class ResumeApiController {
     public ResponseEntity<?> save(@RequestBody ResumeRequest.SaveDTO reqDTO){
         resumeService.save(reqDTO);
 
-        return ResponseEntity.ok(new ApiUtil<>(reqDTO));
+        return ResponseEntity.ok(new ApiUtil<>(null));
     }
 }

@@ -9,7 +9,8 @@ ___
 - 요청 주소 (POST)
 
 http://localhost:8080/join
-  요청 파라미터
+  
+- 요청 파라미터
 - application/json
 ```
 {

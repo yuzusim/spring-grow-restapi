@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import shop.mtcoding.blog.model.resume.user.User;
+import shop.mtcoding.blog.model.user.User;
 
 @Import(CompService.class)
 @DataJpaTest

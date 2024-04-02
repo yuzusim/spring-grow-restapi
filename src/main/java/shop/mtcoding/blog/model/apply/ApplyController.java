@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import shop.mtcoding.blog.model.resume.user.User;
+import shop.mtcoding.blog.model.user.User;
 
 @RequiredArgsConstructor
 @Controller

@@ -5,8 +5,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import shop.mtcoding.blog.model.resume.user.User;
-import shop.mtcoding.blog.model.resume.user.UserService;
+import shop.mtcoding.blog.model.user.User;
+import shop.mtcoding.blog.model.user.UserService;
 
 
 @RequiredArgsConstructor
@@ -84,12 +84,6 @@ public class ResumeController {
         return "redirect:/user/" + id + "/user-home";
     }
 
-    @PostMapping("/resume/save")
-    public String save(ResumeRequest.SaveDTO reqDTO) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        resumeService.save(reqDTO);
-        return "redirect:/user/" + sessionUser.getId() + "/user-home";
-    }
 
     @PostMapping("/resume/{id}/delete")
     public String delete(@PathVariable Integer id) {

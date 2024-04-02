@@ -17,4 +17,6 @@ public interface JobsJPARepository extends JpaRepository <Jobs, Integer> {
 
     @Query("SELECT COUNT(j) FROM Jobs j WHERE j.user.id = :userId")
     Integer countByUserId(@Param("userId") Integer userId);
+
+
 }

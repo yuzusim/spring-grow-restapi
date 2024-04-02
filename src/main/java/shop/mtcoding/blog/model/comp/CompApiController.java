@@ -16,7 +16,7 @@ public class CompApiController {
     private final CompService compService;
 
     @PostMapping("/api/find-all-jobs")
-    public List<CompResponse.CompManageDTO> compManageDTO (@RequestParam(name = "userId") Integer userId){
+    public CompResponse.CompManageDTO compManageDTO (@RequestParam(name = "userId") Integer userId){
         return compService.compManage(userId);
     }
 

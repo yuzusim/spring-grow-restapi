@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import shop.mtcoding.blog.model.jobs.Jobs;
-import shop.mtcoding.blog.model.resume.user.User;
+import shop.mtcoding.blog.model.user.User;
 
 import java.util.List;
 
@@ -16,4 +16,6 @@ public interface CompJPARepository extends JpaRepository <User, Integer>{
     @Query("select j from Jobs j where j.user.id = :userId")
     List<Jobs> findAllByUserId (@Param("userId")Integer userId);
 
+    @Query("select j from Jobs j join fetch j.skillList where j.user.id = :userId")
+    List<Jobs> findAllByUserIdWithSkill(@Param("userId") Integer userId);
 }

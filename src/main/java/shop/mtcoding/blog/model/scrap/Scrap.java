@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import shop.mtcoding.blog.model.jobs.Jobs;
 import shop.mtcoding.blog.model.resume.Resume;
-import shop.mtcoding.blog.model.resume.user.User;
+import shop.mtcoding.blog.model.user.User;
 
 import java.sql.Timestamp;
 

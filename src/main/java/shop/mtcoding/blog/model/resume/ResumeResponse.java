@@ -105,6 +105,47 @@ public class ResumeResponse {
         }
     }
 
+    @Data
+    public static class CompDetailDTO2 {
+        private Integer id;
+        private String title;
+        private String edu;
+        private String introduce;
+        private String imgFileName;
+        private String myName;
+        private LocalDate birth;
+        private String phone;
+        private String email;
+        private String address;
+        private String area;
+        private String career;
+        private String portLink;
+        private Integer userId;
+        private List<SkillDTO2> skills;
+
+        @Builder
+
+        public CompDetailDTO2(Integer id, String title, String edu, String introduce, String imgFileName, String myName, LocalDate birth, String phone, String email, String address, String area, String career, String portLink, Integer userId, List<Skill> skills) {
+            this.id = id;
+            this.title = title;
+            this.edu = edu;
+            this.introduce = introduce;
+            this.imgFileName = imgFileName;
+            this.myName = myName;
+            this.birth = birth;
+            this.phone = phone;
+            this.email = email;
+            this.address = address;
+            this.area = area;
+            this.career = career;
+            this.portLink = portLink;
+            this.userId = userId;
+            this.skills = skills.stream()
+                    .map(skill -> new SkillDTO2(skill))
+                    .collect(Collectors.toList());
+        }
+    }
+
     //이력서 상세보기 DTO
     @Data
     public static class DetailDTO {

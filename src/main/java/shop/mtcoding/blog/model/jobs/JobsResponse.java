@@ -2,7 +2,9 @@ package shop.mtcoding.blog.model.jobs;
 
 import lombok.Builder;
 import lombok.Data;
+import shop.mtcoding.blog.model.apply.Apply;
 import shop.mtcoding.blog.model.resume.Resume;
+import shop.mtcoding.blog.model.resume.ResumeResponse;
 import shop.mtcoding.blog.model.skill.Skill;
 import shop.mtcoding.blog.model.skill.SkillResponse;
 import shop.mtcoding.blog.model.user.User;
@@ -13,6 +15,85 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JobsResponse {
+
+    //공고 디테일
+    @Data
+    public static class JobsDetailDTO {
+        //jobs
+        private Integer id;
+        private String title;
+        private String area;
+        private String edu;
+        private String career;
+        private String content;
+        private boolean isOwner;
+
+        //user
+        private Integer userId;
+        private String compName;
+        private String phone;
+        private String address;
+        private String homepage;
+
+        //skill
+        private List<SkillDTO2> skills = new ArrayList<>();
+        @Builder
+        public JobsDetailDTO(Jobs jobs, User sessionUser) {
+            this.id = jobs.getId();
+            this.title = jobs.getTitle();
+            this.area = jobs.getArea();
+            this.edu = jobs.getEdu();
+            this.career = jobs.getCareer();
+            this.content = jobs.getContent();
+            this.userId = jobs.getUser().getId();
+            this.compName = jobs.getUser().getCompName();
+            this.phone = jobs.getUser().getPhone();
+            this.address = jobs.getUser().getAddress();
+            this.homepage = jobs.getUser().getHomepage();
+            this.skills = jobs.getSkillList().stream().map(skill ->
+                    new SkillDTO2(skill)).collect(Collectors.toList());
+
+            Boolean isOwner = false;
+            if (sessionUser.getRole() == 2) {
+                this.isOwner = true;
+            }
+        }
+
+        @Data
+        public class SkillDTO2 {
+            private Integer id;
+            private String name;
+
+            public SkillDTO2(Skill skill) {
+                this.id = skill.getId();
+                this.name = skill.getName();
+            }
+        }
+        ////////////////////////////////////////////////////////
+        @Data
+        public static class ResumeStateDTO {
+            private Boolean isApply;
+            private List<ResumeResponse.ResumeApplyDTO> applys;
+
+        }
+        @Data
+        public static class ResumeApplyDTO {
+            private Integer id;
+            private String title;
+            private Integer userId;
+            private String isPass;
+
+            @Builder
+            public ResumeApplyDTO(Resume resume, Apply apply) {
+                this.id = resume.getId();
+                this.title = resume.getTitle();
+                this.userId = resume.getUser().getId();
+                this.isPass = apply.getIsPass();
+            }
+        }
+
+    }
+
 
     @Data
     public static class DetailDTO {

@@ -10,7 +10,7 @@ ___
 http://localhost:8080/join
   
 - 요청 파라미터
-- application/json
+application/json
 ```
 {
   "username":"getinthere",

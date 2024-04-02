@@ -1,7 +1,7 @@
 # GROW [ 구인ㆍ구직 프로젝트 ]
 ![logo](https://github.com/chugue/project-grow/assets/153585866/f2ad7455-56f6-4895-8d65-94a5db14a179)
 
-___
+
 > ## RestAPI 기능 정리
 
 ### 1.테스트  [담당 : 성훈]
@@ -192,10 +192,6 @@ application/json
 }
 ```
 <hr>
-
-
-
-
 
 
 > ## 시연 영상 Youtube

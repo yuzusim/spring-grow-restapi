@@ -12,7 +12,7 @@ import shop.mtcoding.blog.model.user.User;
 @RequiredArgsConstructor
 @Service
 public class ReplyService {
-    private final BoardJPARepository boardJPARep;
+    private final BoardJPARepository boardJPARepo;
     private final ReplyJPARepository replyJPARepo;
 
     @Transactional
@@ -28,13 +28,13 @@ public class ReplyService {
 
     }
 
+    // 댓글쓰기
     @Transactional
-    public void save(ReplyRequest.SaveDTO reqDTO, User sessionUser) {
-        Board board = boardJPARep.findById(reqDTO.getBoardId())
+    public Reply save(ReplyRequest.SaveDTO reqDTO, User sessionUser) {
+        Board board = boardJPARepo.findById(reqDTO.getBoardId())
                 .orElseThrow(() -> new Exception404("없는 게시글에 댓글을 작성할 수 없어요"));
         Reply reply = reqDTO.toEntity(sessionUser, board);
-        replyJPARepo.save(reply);
+        return replyJPARepo.save(reply);
     }
-
 
 }

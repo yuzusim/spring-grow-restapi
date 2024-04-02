@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JobsResponse {
-
     //공고 디테일
     @Data
     public static class JobsDetailDTO {

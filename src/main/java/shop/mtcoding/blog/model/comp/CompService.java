@@ -220,24 +220,46 @@ public class CompService {
         User user = compJPARepo.findById(sessionUser.getId())
                 .orElseThrow(() -> new Exception401("로그인이 필요한 서비스입니다."));
 
-        user.setMyName(requestDTO.getMyName());
-        user.setPassword(requestDTO.getPassword());
-        user.setCompName(requestDTO.getCompName());
-        user.setPhone(requestDTO.getPhone());
-        user.setHomepage(requestDTO.getHomepage());
-        user.setBirth(requestDTO.getBirth());
-        user.setBusinessNumber(requestDTO.getBusinessNumber());
-        user.setAddress(requestDTO.getAddress());
+        if (requestDTO.getMyName() != null) {
+            user.setMyName(requestDTO.getMyName());
+        }
 
+        if (requestDTO.getPassword() != null) {
+            user.setPassword(requestDTO.getPassword());
+        }
+
+        if (requestDTO.getCompName() != null) {
+            user.setCompName(requestDTO.getCompName());
+        }
+
+        if (requestDTO.getPhone() != null) {
+            user.setPhone(requestDTO.getPhone());
+        }
+
+        if (requestDTO.getHomepage() != null) {
+            user.setHomepage(requestDTO.getHomepage());
+        }
+
+        if (requestDTO.getBirth() != null) {
+            user.setBirth(requestDTO.getBirth());
+        }
+
+        if (requestDTO.getBusinessNumber() != null) {
+            user.setBusinessNumber(requestDTO.getBusinessNumber());
+        }
+
+        if (requestDTO.getAddress() != null) {
+            user.setAddress(requestDTO.getAddress());
+        }
 
         return user;
     }
 
-    //유저 회원 정보 업데이트용 조회
-    public User findById(Integer sessionUserId) {
+    //기업 유저 회원 정보 업데이트용 조회 (update-form)
+    public CompResponse.CompUpdateDTO findById(Integer sessionUserId) {
         User user = compJPARepo.findById(sessionUserId)
                 .orElseThrow(() -> new Exception401("로그인이 필요한 서비스입니다."));
-        return user;
+        return new CompResponse.CompUpdateDTO(user);
 
     }
 

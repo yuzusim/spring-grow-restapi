@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import shop.mtcoding.blog._core.errors.exception.Exception401;
+import shop.mtcoding.blog.model.jobs.JobsService;
 import shop.mtcoding.blog.model.resume.Resume;
 import shop.mtcoding.blog.model.resume.ResumeJPARepository;
 import shop.mtcoding.blog.model.skill.Skill;
@@ -27,6 +28,9 @@ public class UserServiceTest {
     private SkillJPARepository skillRepo;
     @Autowired
     private UserJPARepository userJPARepo;
+    @Autowired
+    private JobsService jobsService;
+
 
 
 

@@ -4,18 +4,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import shop.mtcoding.blog._core.errors.exception.Exception401;
 import shop.mtcoding.blog._core.util.ApiUtil;
-import shop.mtcoding.blog.model.apply.ApplyResponse;
-import shop.mtcoding.blog.model.apply.ApplyService;
 import shop.mtcoding.blog.model.comp.CompRequest;
-import shop.mtcoding.blog.model.jobs.Jobs;
-import shop.mtcoding.blog.model.jobs.JobsResponse;
 import shop.mtcoding.blog.model.jobs.JobsService;
-import shop.mtcoding.blog.model.resume.ResumeRequest;
-import shop.mtcoding.blog.model.resume.ResumeService;
 
 import java.util.List;
 
@@ -26,6 +18,7 @@ public class UserController {
     private final JobsService jobsService;
     private final UserService userService;
     private final HttpSession session;
+
 
     //user의 지원 내역
     @GetMapping("/user/{id}/resume-home")
@@ -48,24 +41,6 @@ public class UserController {
         return "/user/join-form";
     }
 
-    @GetMapping("/")
-    public String index(HttpServletRequest request, @RequestParam (value = "keyword", defaultValue = "") String keyword) {
-
-        if (keyword.isBlank()) {
-            List<JobsResponse.ListDTO> listDTOS = jobsService.listDTOS();
-            request.setAttribute("listDTOS", listDTOS);
-
-        } else {
-            List<Jobs> jobsKeyword = jobsService.searchKeyword(keyword);
-            request.setAttribute("jobsKeyword", jobsKeyword);
-        }
-
-        request.setAttribute("keyword", keyword);
-
-        return "index";
-    }
-
-
 
     @PostMapping("/user/join")
     public String join(@RequestParam(name = "role") Integer role, UserRequest.JoinDTO reqDTO) {
@@ -75,15 +50,14 @@ public class UserController {
     }
 
     @DeleteMapping("/user/{id}")
-    public String delete (){
+    public String delete() {
         return "redirect:/";
     }
 
 
     @PostMapping("/user/login")
-    public  ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO reqDTO, HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO reqDTO, HttpSession session) {
         User user = userService.login(reqDTO);
-
         if (user != null) {
             session.setAttribute("sessionUser", user);
             int role = user.getRole();
@@ -127,6 +101,7 @@ public class UserController {
 
         return "redirect:/";
     }
+
     @GetMapping("/user/{id}/update-form")
     public String updateForm(@PathVariable int id, HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
@@ -137,16 +112,10 @@ public class UserController {
     }
 
 
-
     // 이미지업로드용
     @PostMapping("/user/profile-upload")
     public String profileUpload() {
 
         return "redirect:/user/profile-update-form";
     }
-    @GetMapping("/user/profile-update-form")
-    public String profileUpdateForm(HttpServletRequest request) {
-        return "/user/profile-update-form";
-    }
-
 }

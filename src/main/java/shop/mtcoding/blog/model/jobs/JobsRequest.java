@@ -1,6 +1,7 @@
 package shop.mtcoding.blog.model.jobs;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import shop.mtcoding.blog.model.skill.Skill;
 import shop.mtcoding.blog.model.user.User;
 
@@ -8,6 +9,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class JobsRequest {
+
+    @Data
+    public static class KeywordDTO{
+        private String keyword;
+    }
 
     @Data // 공고작성 DTO 2탄
     public static class JobsSaveDTO{

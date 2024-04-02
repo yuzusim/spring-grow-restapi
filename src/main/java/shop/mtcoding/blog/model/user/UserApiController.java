@@ -10,6 +10,10 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.util.ApiUtil;
+import shop.mtcoding.blog.model.jobs.Jobs;
+import shop.mtcoding.blog.model.jobs.JobsRequest;
+import shop.mtcoding.blog.model.jobs.JobsResponse;
+import shop.mtcoding.blog.model.jobs.JobsService;
 
 import java.util.List;
 
@@ -18,6 +22,27 @@ import java.util.List;
 public class UserApiController {
     private final UserService userService;
     private final HttpSession session;
+    private final JobsService jobsService;
+
+    @GetMapping("/api")
+    public ResponseEntity<?> index(HttpServletRequest request) {
+        List<JobsResponse.ListDTO> respList = jobsService.listDTOS();
+        request.setAttribute("listDTOS", respList);
+
+        return ResponseEntity.ok(new ApiUtil(respList));
+    }
+
+
+    @PostMapping("/api/search")
+    public ResponseEntity<?> indexKeyword(HttpServletRequest request, @RequestBody JobsRequest.KeywordDTO reqDTO) {
+
+        List<JobsResponse.IndexSearchDTO> respList = jobsService.searchKeyword(reqDTO.getKeyword());
+        request.setAttribute("jobsKeyword", respList);
+        request.setAttribute("keyword", reqDTO.getKeyword());
+        System.out.println("respList size : " + respList.size());
+
+        return ResponseEntity.ok(new ApiUtil<>(respList));
+    }
 
     @GetMapping("/user/{id}/user-home")
     public ResponseEntity<?> userHome (@PathVariable Integer id) {

@@ -27,12 +27,29 @@ public class JobsServiceTest {
     @Autowired
     private JobsService jobsService;
 
+    @Test
+    public void keyword_test() {
+        // given
+        String keyword = "백엔드";
+        // when
+        jobsService.searchKeyword(keyword);
+        // then
 
+    }
 
+    @Test
+    public void search_test() {
+        // given
+        String keyword = "네이버";
+        // when
+        jobsService.searchKeyword(keyword);
+        // then
+
+    }
 
 
     @Test
-    public void detailDTO_test(){
+    public void detailDTO_test() {
         // given
         int jobsId = 1;
         // when
@@ -48,7 +65,7 @@ public class JobsServiceTest {
     }
 
     @Test
-    public void listDTOS_test(){
+    public void listDTOS_test() {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         List<Jobs> jobsList = jobsRepo.findAll(sort);
 

@@ -15,6 +15,43 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JobsResponse {
+
+    @Data
+    public static class IndexSearchDTO{
+        private Integer id;
+        private String imgFileName;
+        private String compName;
+        private String title;
+        private String career;
+        private String area;
+        private LocalDate deadline;
+        private List<SkillDTO> skillList;
+
+        @Builder
+        public IndexSearchDTO(Jobs jobs, User user, List<Skill> skillList) {
+            this.id = jobs.getId();
+            this.imgFileName = user.getImgFileName();
+            this.compName = user.getCompName();
+            this.title = jobs.getTitle();
+            this.career = jobs.getCareer();
+            this.area = jobs.getArea();
+            this.deadline = jobs.getDeadline();
+            this.skillList = skillList.stream().map(SkillDTO::new).toList();
+        }
+
+        @Data
+        public class SkillDTO {
+            private Integer id;
+            private String name;
+
+            public SkillDTO(Skill skill) {
+                this.id = skill.getId();
+                this.name = skill.getName();
+            }
+        }
+    }
+
+
     //공고 디테일
     @Data
     public static class JobsDetailDTO {

@@ -12,6 +12,11 @@ import java.util.stream.Collectors;
 
 public class UserResponse {
 
+    @Data
+    public static class JobsKeywordDTO{
+
+    }
+
 
     @Data
     public static class UserHomeDTO{

@@ -17,6 +17,7 @@ import shop.mtcoding.blog.model.user.UserJPARepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -25,18 +26,21 @@ public class JobsService {
     private final UserJPARepository userRepo;
     private final SkillJPARepository skillRepo;
 
-    public List<Jobs> searchKeyword(String keyword) {
+    public List<JobsResponse.IndexSearchDTO> searchKeyword(String keyword) {
+        List<Jobs> jobsList = jobsRepo.findAllKeyword(keyword);
 
-        List<Jobs> jobsList;
+        List<JobsResponse.IndexSearchDTO> indexSearchDTOList = new ArrayList<>();
 
-        if (keyword.isBlank()) {
-            jobsList = jobsRepo.findAll();
+        System.out.println(keyword);
+        System.out.println("jobsList size : " + jobsList.size());
+        jobsList.stream().map(jobs -> {
+            return indexSearchDTOList.add(JobsResponse.IndexSearchDTO.builder()
+                    .jobs(jobs)
+                    .user(jobs.getUser())
+                    .skillList(jobs.getSkillList()).build());
+                }).collect(Collectors.toList());
 
-        } else {
-            jobsList = jobsRepo.findAllKeyword(keyword);
-        }
-
-        return jobsList;
+        return indexSearchDTOList;
 
     }
 

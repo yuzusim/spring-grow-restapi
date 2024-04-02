@@ -17,6 +17,25 @@ public class CompApiController {
     private final CompService compService;
     private final HttpSession session;
 
+    //update
+    @PutMapping("/api/comps/{id}")
+    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody CompRequest.UpdateDTO requestDTO) {
+        User sessionComp = (User) session.getAttribute("sessionComp");
+        User user = compService.updateById(sessionComp, requestDTO);
+        session.setAttribute("sessionComp", user);
+        return ResponseEntity.ok(new ApiUtil<>(requestDTO));
+    }
+
+    //update-form
+    @GetMapping("/api/comps/{id}")
+    public ResponseEntity<?> updateForm(@PathVariable int id) {
+        User sessionComp = (User) session.getAttribute("sessionComp");
+        CompResponse.CompUpdateDTO respDTO = compService.findByIdUpdate(sessionComp.getId());
+//        request.setAttribute("user", newSessionUser);
+
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
+    }
+
     @GetMapping("/comp/comp-manage")
     public ResponseEntity<?> compManage () {
         User sessionUser = (User) session.getAttribute("sessionUser");

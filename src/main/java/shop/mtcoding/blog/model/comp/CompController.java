@@ -28,24 +28,7 @@ public class CompController {
 //        return "redirect:/comp/" + id + "/comp-home";
 //    }
 
-    //update
-    @PutMapping("/api/comps/{id}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody CompRequest.UpdateDTO requestDTO) {
-        User sessionComp = (User) session.getAttribute("sessionComp");
-        User user = compService.updateById(sessionComp, requestDTO);
-        session.setAttribute("sessionComp", user);
-        return ResponseEntity.ok(new ApiUtil<>(requestDTO));
-    }
 
-    //update-form
-    @GetMapping("/api/comps/{id}")
-    public ResponseEntity<?> updateForm(@PathVariable int id) {
-        User sessionComp = (User) session.getAttribute("sessionComp");
-        CompResponse.CompUpdateDTO respDTO = compService.findById(sessionComp.getId());
-//        request.setAttribute("user", newSessionUser);
-
-        return ResponseEntity.ok(new ApiUtil<>(respDTO));
-    }
 
     @GetMapping("/comp/comp-index")
     public String compIndex(HttpServletRequest request) {

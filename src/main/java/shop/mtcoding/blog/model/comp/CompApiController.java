@@ -18,6 +18,14 @@ public class CompApiController {
     private final CompService compService;
     private final HttpSession session;
 
+    //기업 메인
+    @GetMapping("/comps/comp-index")
+    public ResponseEntity<?> compIndex() {
+        List<CompResponse.CompMainDTO> reqsDTO = compService.compMainList();
+//        request.setAttribute("rusList", rusList);
+        return ResponseEntity.ok(new ApiUtil<>(reqsDTO));
+    }
+
     @GetMapping("/comp/{id}/comp-home")
     public ResponseEntity<?> compHome(@PathVariable Integer id) {
         User sessionComp = (User) session.getAttribute("sessionComp");

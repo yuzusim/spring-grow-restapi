@@ -114,9 +114,7 @@ insert into skill_tb (resume_id, name, role) values
                                                  (10, 'JSP', 1),
                                                  (11, 'JavaScript', 1),
                                                  (11, 'JSP', 1),
-                                                 (12, 'Java', 1),
-                                                 (13, 'Spring', 1),
-                                                 (13, 'Jquery', 1);
+                                                 (12, 'Java', 1);
 
 -- 스킬 테이블 (기업)
 INSERT INTO skill_tb(jobs_id, name, role) VALUES(1, 'Java', 2);

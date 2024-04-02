@@ -5,16 +5,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.errors.exception.Exception401;
 import shop.mtcoding.blog.model.resume.ResumeResponse;
 import shop.mtcoding.blog.model.resume.ResumeService;
+
 import shop.mtcoding.blog.model.user.User;
 
-import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -24,6 +21,7 @@ public class JobsController {
     private final ResumeService resumeService;
     private final HttpSession session;
 
+    // 채현
     @GetMapping("/jobs/jobs-detail/{jobsId}")
     public String jobsDetail(@PathVariable Integer jobsId, HttpServletRequest request){
         User sessionUser = (User)session.getAttribute("sessionUser");
@@ -43,22 +41,9 @@ public class JobsController {
         return "jobs/jobs-detail";
     }
 
-    @GetMapping("/jobs/info")
-    public String jobsInfo (HttpServletRequest request,
-                            @RequestParam(required = false, defaultValue = "") String area,
-                            @RequestParam(required = false, defaultValue = "") String skill,
-                            @RequestParam(required = false, defaultValue = "") String career) {
-        List<JobsResponse.ListDTO> listDTOS = jobsService.listDTOS();
-        request.setAttribute("listDTOS", listDTOS);
+    // 끝
 
-        request.setAttribute("selected", JobsResponse.searchDTO.builder()
-                                                        .area(area)
-                                                        .skill(skill)
-                                                        .career(career)
-                                                        .build());
-        return "/jobs/info";
-    }
-
+    // 지워도 될듯?
     @GetMapping("/jobs/write-jobs-form")
     public String writeJobsForm(HttpServletRequest request) {
         User sessionComp = (User)session.getAttribute("sessionComp");
@@ -69,36 +54,14 @@ public class JobsController {
         return "/jobs/write-jobs-form";
     }
 
-    @PostMapping("/jobs/save")
-    public String save (JobsRequest.JobWriterDTO reqDTO) {
-        User sessionComp = (User)session.getAttribute("sessionComp");
-        jobsService.save(reqDTO);
 
-        return "redirect:/comp/" + sessionComp.getId() + "/comp-home";
-    }
-
-    @PostMapping("/jobs/{id}/delete")
-    public String delete(@PathVariable Integer id) {
-        User sessionComp = (User)session.getAttribute("sessionComp");
-        jobsService.delete(id);
-
-        return "redirect:/comp/" + sessionComp.getId() + "/comp-home";
-    }
 
     @PostMapping("/jobs/{id}/update")
     public String update(@PathVariable Integer id, JobsRequest.UpdateDTO reqDTO) {
         User sessionComp = (User)session.getAttribute("sessionComp");
-        jobsService.update(id, reqDTO);
+        jobsService.update(id, reqDTO, sessionComp);
 
 
         return "redirect:/comp/" + sessionComp.getId() + "/comp-home";
-    }
-
-    @GetMapping("/jobs/{jobsId}/update-jobs-form")
-    public String updateForm (@PathVariable Integer jobsId, HttpServletRequest request) {
-        JobsResponse.JobUpdateDTO job = jobsService.updateForm(jobsId);
-        request.setAttribute("job", job);
-
-        return "/jobs/update-jobs-form";
     }
 }

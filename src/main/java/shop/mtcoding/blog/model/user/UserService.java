@@ -31,6 +31,19 @@ public class UserService {
     private final JobsJPARepository jobsRepo;
     private final ApplyJPARepository applyRepo;
 
+    public UserResponse.UserHomeDTO userHome (Integer userId) {
+        Integer waitCount = userRepo.findByUserIdN1(userId);
+        Integer resultCount =userRepo.findByUserId34(userId);
+        Integer applyCount = userRepo.findAllbyUserId(userId);
+
+        List<Resume> resumeList = resumeRepo.findAllByUserId(userId);
+
+        UserResponse.UserHomeDTO userHomeDTO =
+                new UserResponse.UserHomeDTO(applyCount,waitCount,resultCount,resumeList);
+
+        return userHomeDTO;
+    }
+
 
     public List<UserResponse.UrsDTO> ursDTOS(Integer resumeId) {
         List<Apply> applyList = applyRepo.findAppliesByNot1ByResumeId(resumeId);
@@ -99,20 +112,20 @@ public class UserService {
 
     //유저 홈 리스트
 
-    public List<ResumeRequest.UserViewDTO> userHome(Integer sessionUserId) {
-        List<Resume> resumeList = resumeRepo.findAll();
-        User sessionUser = userRepo.findById(sessionUserId)
-                .orElseThrow(() -> new Exception404("사용자 정보를 찾을 수 없습니다."));
-        List<ResumeRequest.UserViewDTO> listDTO = resumeList.stream()
-                .filter(resume -> resume.getUser().getId() == sessionUser.getId()) // Filter resumes by ID = 1
-                .map(resume -> ResumeRequest.UserViewDTO.builder()
-                        .resume(resume)
-                        .skills(resume.getSkillList())
-                        .build())
-                .collect(Collectors.toList());
-
-        return listDTO;
-    }
+//    public List<ResumeRequest.UserViewDTO> userHome(Integer sessionUserId) {
+//        List<Resume> resumeList = resumeRepo.findAll();
+//        User sessionUser = userRepo.findById(sessionUserId)
+//                .orElseThrow(() -> new Exception404("사용자 정보를 찾을 수 없습니다."));
+//        List<ResumeRequest.UserViewDTO> listDTO = resumeList.stream()
+//                .filter(resume -> resume.getUser().getId() == sessionUser.getId()) // Filter resumes by ID = 1
+//                .map(resume -> ResumeRequest.UserViewDTO.builder()
+//                        .resume(resume)
+//                        .skills(resume.getSkillList())
+//                        .build())
+//                .collect(Collectors.toList());
+//
+//        return listDTO;
+//    }
 
 
     //유저 회원정보 폼 업데이트 메소드

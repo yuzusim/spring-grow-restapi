@@ -3,6 +3,7 @@ package shop.mtcoding.blog.model.user;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.errors.exception.Exception401;
@@ -20,14 +21,11 @@ import java.util.List;
 
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class UserController {
     private final JobsService jobsService;
     private final UserService userService;
     private final HttpSession session;
-    private final ResumeService resumeService;
-    private final ApplyService applyService;
-
 
     //user의 지원 내역
     @GetMapping("/user/{id}/resume-home")
@@ -67,15 +65,7 @@ public class UserController {
         return "index";
     }
 
-    @GetMapping("/api/user/username-same-check")
-    public @ResponseBody ApiUtil<?> usernameSameCheck(String email) {
-        User user = userService.findByEmail(email);
-        if (user == null) {
-            return new ApiUtil<>(true);
-        } else {
-            return new ApiUtil<>(false);
-        }
-    }
+
 
     @PostMapping("/user/join")
     public String join(@RequestParam(name = "role") Integer role, UserRequest.JoinDTO reqDTO) {
@@ -152,21 +142,6 @@ public class UserController {
         return "/user/update-form";
     }
 
-    @GetMapping("/user/{id}/user-home")
-    public String userHome(@PathVariable Integer id, HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-
-        List<ResumeRequest.UserViewDTO> resumeList = userService.userHome(sessionUser.getId());
-        ApplyResponse.stateViewDTO applies = applyService.findAll(id);
-
-        
-        request.setAttribute("resumeList", resumeList);
-        System.out.println("resumeList:n " + resumeList);
-        request.setAttribute("sessionUserId", sessionUser.getId());
-        request.setAttribute("applyState",applies);
-        System.out.println("applies :"+applies);
-        return "/user/user-home";
-    }
 
 
     // 이미지업로드용

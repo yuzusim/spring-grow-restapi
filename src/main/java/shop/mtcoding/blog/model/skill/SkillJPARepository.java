@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import shop.mtcoding.blog.model.jobs.Jobs;
 
 import java.util.List;
 
@@ -42,5 +43,8 @@ public interface SkillJPARepository extends JpaRepository<Skill, Integer> {
 
     @Query("select s from Jobs j join fetch User u on j.user.id = u.id join fetch Skill s on s.jobs.id = j.id where j.id = :jobsId")
     List<Skill> findAllByJoinJobsId(@Param("jobsId") Integer jobsId);
+
+    @Query("SELECT s FROM Skill s WHERE s.jobs.id = :jobsId")
+    List<Skill> findByJobsId(@Param("jobsId") Integer jobsId);
 }
 

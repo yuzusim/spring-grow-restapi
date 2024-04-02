@@ -16,19 +16,7 @@ public class BoardJPARepositoryTest {
     @Autowired
     private EntityManager em;
 
-    @Test
-    public void findByIdJoinUse_test() {
-        // given
-        int id = 1;
 
-        // when
-        Board board = boardJPARepo.findByIdJoinUser(id);
-
-        // then
-        System.out.println("findByIdJoinUse_test : "+board.getTitle());
-        System.out.println("findByIdJoinUse_test : "+board.getUser().getMyName());
-
-    }
 
     // findAll (sort)
     @Test

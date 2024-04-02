@@ -16,4 +16,6 @@ public interface CompJPARepository extends JpaRepository <User, Integer>{
     @Query("select j from Jobs j where j.user.id = :userId")
     List<Jobs> findAllByUserId (@Param("userId")Integer userId);
 
+    @Query("select j from Jobs j join fetch j.skillList where j.user.id = :userId")
+    List<Jobs> findAllByUserIdWithSkill(@Param("userId") Integer userId);
 }

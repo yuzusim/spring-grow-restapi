@@ -6,6 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import shop.mtcoding.blog._core.util.ApiUtil;
 
 import java.util.List;
 
@@ -13,6 +17,26 @@ import java.util.List;
 @RestController
 public class UserApiController {
     private final UserService userService;
+    private final HttpSession session;
+
+    @GetMapping("/user/{id}/user-home")
+    public ResponseEntity<?> userHome (@PathVariable Integer id) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        UserResponse.UserHomeDTO userHomeDTO = userService.userHome(sessionUser.getId());
+
+        return ResponseEntity.ok(new ApiUtil<>(userHomeDTO));
+    }
+
+    @GetMapping("/api/user/username-same-check")
+    public @ResponseBody ApiUtil<?> usernameSameCheck(String email) {
+        User user = userService.findByEmail(email);
+        if (user == null) {
+            return new ApiUtil<>(true);
+        } else {
+            return new ApiUtil<>(false);
+        }
+    }
 
     @PostMapping("/api/find-jobs-resume")
     public List<UserResponse.UrsDTO> findAllJobsByResumeId(@RequestParam(name = "resumeId") Integer resumeId, HttpServletRequest request){
@@ -25,5 +49,4 @@ public class UserApiController {
 
         return ursDTOList;
     }
-
 }

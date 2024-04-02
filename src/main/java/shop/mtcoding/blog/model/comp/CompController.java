@@ -3,29 +3,22 @@ package shop.mtcoding.blog.model.comp;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog.model.resume.ResumeService;
 import shop.mtcoding.blog.model.user.User;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class CompController {
     private final CompService compService;
     private final HttpSession session;
-    private final ResumeService resumeService;
 
-    @GetMapping("/comp/{id}/comp-manage")
-    public String compManage (@PathVariable Integer id, HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        CompResponse.MainCountDTO mainCountDTO = compService.mainCountByUid(sessionUser.getId());
-        List<CompResponse.CompManageDTO> compManageDTOList = compService.compManage(sessionUser.getId());
-        request.setAttribute("mainCount", mainCountDTO);
-        request.setAttribute("compManageList",compManageDTOList );
-        return "/comp/comp-manage";
-    }
+
 
 //    @PostMapping("/comp/{id}/update")
 //    public String update(@PathVariable Integer id, CompRequest.UpdateDTO requestDTO) {
@@ -120,8 +113,6 @@ public class CompController {
 
         return "/comp/jobs-info";
     }
-
-
 }
 
 

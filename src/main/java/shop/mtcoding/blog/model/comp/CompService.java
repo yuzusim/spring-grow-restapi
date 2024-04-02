@@ -69,29 +69,15 @@ public class CompService {
 
     }
 
-    public List<CompResponse.CompManageDTO> compManage(Integer userId) {
-        List<Jobs> jobsList = compJPARepo.findAllByUserId(userId);
-        List<CompResponse.CompManageDTO> compManageDTOList = new ArrayList<>();
-        jobsList.stream().map(jobs -> {
-            return compManageDTOList.add(CompResponse.CompManageDTO.builder()
-                    .jobs(jobs)
-                    .skillList(jobs.getSkillList())
-                    .build());
-        }).collect(Collectors.toList());
-        return compManageDTOList;
-    }
-
-
-    public CompResponse.MainCountDTO mainCountByUid(Integer userId) {
-        // 총 공고등록수
+    public CompResponse.CompManageDTO compManage(Integer userId) {
         Integer jobsCount = jobsJPARepo.countByUserId(userId);
-        // 총 지원자 현황 (not 1) - 사용자 수가 아닌 이력서 수
         List<Apply> applicantList = applyJPARepo.findAllByUidN1(userId);
-        // 총 미응답 현황 (isPass = 2) - 사용자 수가 아니라 이력서 수를 구해햐 함
         List<Apply> noRespList = applyJPARepo.findAllByUidI2(userId);
+        List<Jobs> jobsList = compJPARepo.findAllByUserIdWithSkill(userId);
 
-        return new CompResponse.MainCountDTO(jobsCount, applicantList.size(), noRespList.size());
+        return new CompResponse.CompManageDTO(jobsCount, applicantList.size(), noRespList.size(), jobsList);
     }
+
 
 
     public List<CompResponse.RusaDTO> findApplicants(Integer jobsId) {

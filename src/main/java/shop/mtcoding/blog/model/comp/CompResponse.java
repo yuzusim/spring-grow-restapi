@@ -191,7 +191,6 @@ public class CompResponse {
         //user
         private String myName;
         private Integer userId;
-        private Integer jobsId;
         private String imgFileName;
         private List<SkillDTO> skillList = new ArrayList<>();
 

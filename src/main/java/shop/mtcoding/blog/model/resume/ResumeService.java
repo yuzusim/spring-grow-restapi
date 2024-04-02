@@ -119,7 +119,7 @@ public class ResumeService {
 
         //sessionUser 의 지원한 공고 리스트
         List<ApplyResponse.ApplyUserViewDTO> listDTO = applies.stream()
-                .filter(apply -> apply.getResume().getUser().getId() == sessionUserId)
+                .filter(apply -> apply.getResume().getUser().getId() == userId)
                 .map(apply -> ApplyResponse.ApplyUserViewDTO.builder()
                         .id(apply.getId())
                         .user(apply.getResume().getUser())
@@ -274,5 +274,4 @@ public class ResumeService {
         //3. 삭제하기
         resumeJPARepo.deleteById(resume.getId());
     }
-
 }

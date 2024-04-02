@@ -202,7 +202,7 @@ public class CompService {
 
     // 기업 로그인하면 보여줄 이력서 목록들
     public List<CompResponse.ResumeUserSkillDTO> findAllRusList() {
-        List<Resume> resumeList = resumeJPARepo.findAll();
+        List<Resume> resumeList = resumeJPARepo.findAllJoinUserAndSkill();
         List<CompResponse.ResumeUserSkillDTO> rusList = new ArrayList<>();
 
         resumeList.stream().map(resume -> {

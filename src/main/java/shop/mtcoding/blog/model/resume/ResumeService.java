@@ -82,6 +82,7 @@ public class ResumeService {
         return resumeDetailDTO;
     }
 
+
     public ResumeResponse.CompDetailDTO2 CompResumeDetail2(Integer resumeId, User sessionUser) {
         Resume resume = resumeJPARepo.findByIdJoinUser(resumeId);
         boolean isOwner = resume.getUser().equals(sessionUser);

@@ -39,5 +39,9 @@ public interface ApplyJPARepository extends JpaRepository<Apply, Integer> {
     // 기업사용자의 모든 공고 지원한 모든 지원자 - 미응답 현황 구하기
     @Query("select a from Apply a where a.isPass in ('2') and a.jobs.user.id= :userId")
     List<Apply> findAllByUidI2(@Param("userId") Integer userId);
+
+    // 세션유저가 지원한 신청리스트
+    @Query("select a from Apply a where a.isPass not in ('1') and a.resume.user.id = :userId")
+    List<Apply> findAllUserByApply(@Param("userId") Integer userId);
 }
 

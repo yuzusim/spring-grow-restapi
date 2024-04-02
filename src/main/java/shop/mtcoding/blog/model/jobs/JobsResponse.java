@@ -6,7 +6,6 @@ import shop.mtcoding.blog.model.apply.Apply;
 import shop.mtcoding.blog.model.resume.Resume;
 import shop.mtcoding.blog.model.resume.ResumeResponse;
 import shop.mtcoding.blog.model.skill.Skill;
-import shop.mtcoding.blog.model.skill.SkillResponse;
 import shop.mtcoding.blog.model.user.User;
 
 import java.time.LocalDate;
@@ -388,6 +387,10 @@ public class JobsResponse {
         private String task;
         private List<SkillDTO> skills;
 
+
+
+
+
         public UpdateDTO(Jobs jobs, List<Skill> skills) {
             this.id = jobs.getId();
             this.title = jobs.getTitle();
@@ -415,6 +418,112 @@ public class JobsResponse {
             }
         }
     }
+
+    // API jobDetail 04.02//
+    @Data
+    public static class JobResumeDetailDTO {
+        private JobDetailDTO2 job;
+        private ResumeDetailDTO resume;
+
+        public JobResumeDetailDTO(JobDetailDTO2 job, ResumeDetailDTO resume) {
+            this.job = job;
+            this.resume = resume;
+        }
+    }
+
+    @Data
+    public static class JobDetailDTO2 {
+        private int id;
+        private String title;
+        private String area;
+        private String edu;
+        private String career;
+        private String content;
+        private boolean isOwner;
+        private UserDTO user;
+        private List<SkillDTO> skill;
+
+        public JobDetailDTO2(Jobs jobs, UserDTO user, List<SkillDTO> skill) {
+            this.id = jobs.getId();
+            this.title = jobs.getTitle();
+            this.area = jobs.getArea();
+            this.edu = jobs.getEdu();
+            this.career = jobs.getCareer();
+            this.content = jobs.getContent();
+            this.isOwner = jobs.getIsOwner();
+            this.user = user;
+            this.skill = skill;
+        }
+
+        @Data
+        public static class UserDTO {
+            private int userId;
+            private String compName;
+            private String phone;
+            private String address;
+            private String homepage;
+
+            public UserDTO(User user) {
+                this.userId = user.getId();
+                this.compName = user.getCompName();
+                this.phone = user.getPhone();
+                this.address = user.getAddress();
+                this.homepage = user.getHomepage();
+            }
+        }
+
+        @Data
+        public static class SkillDTO {
+            private String name;
+
+            public SkillDTO(Skill skill) {
+                this.name = skill.getName();
+            }
+        }
+
+    }
+
+    @Data
+    public static class ResumeDetailDTO {
+        private boolean isApply;
+        private List<NotResume> notApplys;
+
+        public ResumeDetailDTO(boolean isApply, List<NotResume> notApplys) {
+            this.isApply = isApply;
+            this.notApplys = notApplys;
+        }
+    }
+
+    @Data
+    public static class NotResume {
+        private int id;
+        private String title;
+        private int userId;
+        private String isPass;
+
+        public NotResume(Apply apply) {
+            this.id = apply.getId();
+            this.title = apply.getResume().getTitle();
+            this.userId = apply.getResume().getUser().getId();
+            this.isPass = "1";
+        }
+    }
 }
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
 
 

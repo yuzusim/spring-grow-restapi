@@ -156,7 +156,7 @@ public class JobsService {
         JobsResponse.JobUpdateDTO reqDTO = JobsResponse.JobUpdateDTO.builder()
                 .jobs(jobs)
                 .user(user)
-                .skills(skillList)
+                .skillChecked(new JobsResponse.JobUpdateDTO.SkillCheckedDTO(skillList))
                 .build();
 
         return reqDTO;

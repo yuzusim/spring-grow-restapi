@@ -16,7 +16,7 @@ import shop.mtcoding.blog.model.user.UserService;
 public class ResumeController {
     private final ResumeService resumeService;
     private final HttpSession session;
-
+  
     @GetMapping("/resume/{id}/update-resume-form")
     public String updateResumeForm(@PathVariable Integer id, HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
@@ -29,9 +29,6 @@ public class ResumeController {
         return "/resume/update-resume-form";
     }
 
-
-
-
     @PostMapping("/resume/{id}/delete")
     public String delete(@PathVariable Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
@@ -40,6 +37,5 @@ public class ResumeController {
         return "redirect:/user/" + sessionUser.getId() + "/user-home";
 
     }
-
 
 }

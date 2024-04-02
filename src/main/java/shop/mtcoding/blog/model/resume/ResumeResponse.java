@@ -3,6 +3,8 @@ package shop.mtcoding.blog.model.resume;
 import lombok.Builder;
 import lombok.Data;
 import shop.mtcoding.blog.model.apply.Apply;
+import shop.mtcoding.blog.model.jobs.Jobs;
+import shop.mtcoding.blog.model.jobs.JobsResponse;
 import shop.mtcoding.blog.model.skill.Skill;
 import shop.mtcoding.blog.model.skill.SkillResponse;
 import shop.mtcoding.blog.model.user.User;
@@ -296,7 +298,7 @@ public class ResumeResponse {
 
 
     @Data
-    public static class ResumeStateDTO{
+    public static class ResumeStateDTO {
         private Boolean isApply;
         private List<ResumeApplyDTO> applys;
 
@@ -318,6 +320,43 @@ public class ResumeResponse {
         }
     }
 
+    @Data
+    public static class ResumeUpdateDTO {
+        private Integer id;
+        private String title;
+        private String area;
+        private String edu;
+        private String career;
+        private String introduce;
+        private String portLink;
+        private List<SkillDTO> skill;
+
+        public ResumeUpdateDTO(Resume resume, List<Skill> skills) {
+            this.id = resume.getId();
+            this.title = resume.getTitle();
+            this.area = resume.getArea();
+            this.edu = resume.getEdu();
+            this.career = resume.getCareer();
+            this.introduce = resume.getIntroduce();
+            this.portLink = resume.getPortLink();
+            this.skill = skills.stream()
+                    .map(skill -> new SkillDTO(skill))
+                    .collect(Collectors.toList());
+        }
+
+        @Data
+        public class SkillDTO {
+            private Integer id;
+            private String name;
+            private Integer role;
+
+            public SkillDTO(Skill skill) {
+                this.id = skill.getId();
+                this.name = skill.getName();
+                this.role = skill.getRole();
+            }
+        }
+    }
 }
 
 

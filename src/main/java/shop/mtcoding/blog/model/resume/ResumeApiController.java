@@ -42,4 +42,13 @@ public class ResumeApiController {
 
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
+
+    @PutMapping("/resume/{id}/update")
+    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody ResumeRequest.UpdateDTO reqDTO) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        //해당 부분 redirect 해보고 틀렸으면 본인이 수정
+        ResumeResponse.ResumeUpdateDTO respDTO = resumeService.update(id, sessionUser.getId(), reqDTO);
+
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
+    }
 }

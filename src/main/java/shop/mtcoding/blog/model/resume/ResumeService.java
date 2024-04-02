@@ -189,8 +189,7 @@ public class ResumeService {
 
 
     @Transactional
-    public void update(Integer id, Integer sessionUserId, ResumeRequest.UpdateDTO reqDTO) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
+    public ResumeResponse.ResumeUpdateDTO update(Integer id, Integer sessionUserId, ResumeRequest.UpdateDTO reqDTO) {
         // 1. 조회 및 예외처리
         // 주어진 resumeId로 이력서를 찾습니다.
         Resume resume = resumeJPARepo.findById(id)
@@ -199,24 +198,35 @@ public class ResumeService {
         if (sessionUserId != resume.getUser().getId()) {
             throw new Exception403("이력서를 수정할 권한이 없습니다");
         }
+
         // 3. 이력서 수정하기
-        resume.setResumeUpdate(reqDTO); // 요청으로부터 받은 정보로 이력서를 업데이트합니다.
+        resume.setId(reqDTO.getId());
+        resume.setTitle(reqDTO.getTitle());
+        resume.setArea(reqDTO.getArea());
+        resume.setEdu(reqDTO.getEdu());
+        resume.setCareer(reqDTO.getCareer());
+        resume.setIntroduce(reqDTO.getIntroduce());
+        resume.setPortLink(reqDTO.getPortLink());
+
 
         skillRepo.deleteByresumeId(id);
 
         // 스킬뿌리기
-        reqDTO.getSkill().stream().map((skill) -> {
-            return Skill.builder()
-                    .name(skill)
-                    .role(sessionUser.getRole())
-                    .resume(resume)
-                    .build();
-        }).forEach(skill -> {
-            // 반복문으로 스킬 돌면서 뿌림
-            skillRepo.save(skill);
-        });
+        reqDTO.getSkill().stream()
+                .map((skill) -> {
+                    return skill.toEntity(resume);
+                })
+                .forEach((skill) -> {
+                    skillRepo.save(skill);
+                });
+
 
         System.out.println("수정된 데이터 : " + reqDTO);
+
+        List<Skill> skills = skillJPARepo.findByResumeId(resume.getId());
+
+        return new ResumeResponse.ResumeUpdateDTO(resume, skills);
+
     } // 더티체킹
 
 

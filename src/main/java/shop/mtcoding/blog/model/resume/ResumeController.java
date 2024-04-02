@@ -16,20 +16,6 @@ import shop.mtcoding.blog.model.user.UserService;
 public class ResumeController {
     private final ResumeService resumeService;
     private final HttpSession session;
-    private final UserService userService;
-
-
-    @GetMapping("/resume/{id}/manage-resume")
-    public String manageResume(@PathVariable Integer id) {
-
-        return "/resume/manage-resume";
-    }
-
-    @GetMapping("/resume/write-resume-form")
-    public String writeResumeForm(){
-
-        return "/resume/write-resume-form";
-    }
 
     @GetMapping("/resume/{id}/update-resume-form")
     public String updateResumeForm(@PathVariable Integer id, HttpServletRequest request) {
@@ -43,14 +29,7 @@ public class ResumeController {
         return "/resume/update-resume-form";
     }
 
-    @PostMapping("/resume/{id}/update")
-    public String update(@PathVariable Integer id, ResumeRequest.UpdateDTO reqDTO, HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        //해당 부분 redirect 해보고 틀렸으면 본인이 수정
-        resumeService.update(id, sessionUser.getId(), reqDTO);
 
-        return "redirect:/user/" + id + "/user-home";
-    }
 
 
     @PostMapping("/resume/{id}/delete")

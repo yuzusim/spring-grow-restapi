@@ -186,11 +186,6 @@
                                 disabled>지원완료
                         </button>
                     {{/resumeApplyDTOList.isApply}}
-                    {{#resumeApplyDTOList.isResume}}
-                        <button type="button" class="btn btn-outline-mint w-100"
-                                disabled>이력서가 없습니다.
-                        </button>
-                    {{/resumeApplyDTOList.isResume}}
                     {{^resumeApplyDTOList.isApply}}
                         <input type="hidden" name="jobsId" value="{{detailDTO.id}}">
                         <button type="submit" class="btn btn-outline-mint w-100">

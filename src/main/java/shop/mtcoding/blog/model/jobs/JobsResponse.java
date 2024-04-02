@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 
 public class JobsResponse {
 
+
+
     @Data
     public static class DetailDTO {
         private Integer id;

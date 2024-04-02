@@ -12,7 +12,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class JobsApiController {
-
     private final HttpSession session;
     private final JobsService jobsService;
 

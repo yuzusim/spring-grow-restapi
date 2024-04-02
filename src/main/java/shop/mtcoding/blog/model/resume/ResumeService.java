@@ -87,7 +87,7 @@ public class ResumeService {
         List<Resume> resumeList = resumeJPARepo.findAllByUserId(userId);
         List<Apply> applies =  applyJPARepo.findAll();
 
-        //sessionUser 의 지원한 공고 리스트
+        //sessionUser의 지원한 (not 1) 공고 리스트 user조인
         List<ApplyResponse.ApplyUserViewDTO> listDTO = applies.stream()
                 .filter(apply -> apply.getResume().getUser().getId() == userId)
                 .map(apply -> ApplyResponse.ApplyUserViewDTO.builder()

@@ -5,11 +5,13 @@ import lombok.Data;
 import shop.mtcoding.blog.model.apply.Apply;
 import shop.mtcoding.blog.model.jobs.Jobs;
 import shop.mtcoding.blog.model.resume.Resume;
+import shop.mtcoding.blog.model.resume.ResumeResponse;
 import shop.mtcoding.blog.model.skill.Skill;
 import shop.mtcoding.blog.model.user.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -104,9 +106,7 @@ public class CompResponse {
             this.task = jobs.getTask();
             this.career = jobs.getCareer();
             this.jobsId = jobs.getId();
-            this.skillList = skillList.stream().map(skill -> {
-                return new SkillDTO(skill);
-            }).collect(Collectors.toList());
+            this.skillList = skillList.stream().map(SkillDTO::new).toList();
         }
     }
 
@@ -192,10 +192,10 @@ public class CompResponse {
         private String myName;
         private Integer userId;
         private String imgFileName;
-        private List<SkillDTO> skillList = new ArrayList<>();
+        private List<ResumeSkillDTO> skillList = new ArrayList<>();
 
         @Builder
-        public ResumeUserSkillDTO(Resume resume, User user, List<Skill> skillList) {
+        public ResumeUserSkillDTO(Resume resume, User user, List<Skill> skills) {
             this.id = resume.getId();
             this.title = resume.getTitle();
             this.edu = resume.getEdu();
@@ -204,13 +204,45 @@ public class CompResponse {
             this.myName = user.getMyName();
             this.userId = user.getId();
             this.imgFileName = user.getImgFileName();
-            this.skillList = skillList.stream()
-                    .map(skill -> new SkillDTO(skill))
+            this.skillList = skills.stream()
+                    .map(skill -> new ResumeSkillDTO(skill))
                     .collect(Collectors.toList());
-            ;
+        }
+        @Data
+        public static class ResumeSkillDTO {
+            private Integer id;
+            private String name;
+            private String color;
+
+            public ResumeSkillDTO(Skill skill) {
+                this.id = skill.getId();
+                this.name = skill.getName();
+
+                // 혹시 언어 추가할게 있으면 else if랑 컬러, 같은 양식 맞춰서 추가가능
+                if (this.name.equals("Jquery")) {
+                    this.color = "badge badge-pill bg-primary";
+                } else if (this.name.equals("JavaScript")) {
+                    this.color = "badge badge-pill bg-secondary";
+                } else if (this.name.equals("Spring")) {
+                    this.color = "badge badge-pill bg-success";
+                } else if (this.name.equals("HTML/CSS")) {
+                    this.color = "badge badge-pill bg-danger";
+                } else if (this.name.equals("JSP")) {
+                    this.color = "badge badge-pill bg-warning";
+                } else if (this.name.equals("Java")) {
+                    this.color = "badge badge-pill bg-info";
+                } else if (this.name.equals("React")) {
+                    this.color = "badge badge-pill bg-dark";
+                } else if (this.name.equals("Vue.js")) {
+                    this.color = "badge badge-pill bg-Indigo";
+                } else if (this.name.equals("Oracle")) {
+                    this.color = "badge badge-pill bg-brown";
+                } else if (this.name.equals("MySql")) {
+                    this.color = "badge badge-pill bg-purple";
+                }
+            }
         }
     }
-
 
     @Data
     public static class SkillDTO {
@@ -244,11 +276,6 @@ public class CompResponse {
             } else if (this.name.equals("MySql")) {
                 this.color = "badge badge-pill bg-purple";
             }
-            // 추가 양식
-            // else if (this.name.equals("언어")){
-            //      this.color = "badge 컬러 " ;
-
         }
     }
-
 }

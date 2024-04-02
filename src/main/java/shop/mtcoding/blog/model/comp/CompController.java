@@ -18,6 +18,7 @@ public class CompController {
     private final CompService compService;
     private final HttpSession session;
 
+    // 채현
     @GetMapping("/comp/comp-index")
     public String compIndex(HttpServletRequest request) {
         List<CompResponse.ResumeUserSkillDTO> rusList = compService.findAllRusList();
@@ -26,15 +27,6 @@ public class CompController {
     }
 
 
-
-    @GetMapping("/comp/{id}/comp-home")
-    public String compHome(@PathVariable Integer id, @RequestParam(required = false, defaultValue = "0") Integer jobsId, HttpServletRequest request) {
-        User sessionComp = (User) session.getAttribute("sessionComp");
-        List<CompResponse.ComphomeDTO> comphomeDTOList = compService.findAllByUserId(sessionComp.getId());
-        request.setAttribute("jobsList", comphomeDTOList);
-
-        return "/comp/comp-home";
-    }
 
     @PostMapping("/comp/join")
     public String compJoin(@RequestParam(name = "role") Integer role, CompRequest.CompJoinDTO reqDTO) {

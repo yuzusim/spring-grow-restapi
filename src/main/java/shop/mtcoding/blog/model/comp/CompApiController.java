@@ -18,6 +18,14 @@ public class CompApiController {
     private final CompService compService;
     private final HttpSession session;
 
+    @GetMapping("/comp/{id}/comp-home")
+    public ResponseEntity<?> compHome(@PathVariable Integer id) {
+        User sessionComp = (User) session.getAttribute("sessionComp");
+        List<CompResponse.ComphomeDTO> comphomeDTOList = compService.findAllByUserId(sessionComp);
+
+        return ResponseEntity.ok(new ApiUtil<>(comphomeDTOList));
+    }
+
     @GetMapping("/api/comp/read-resume")
     public ResponseEntity<?> readResume(HttpServletRequest request) {
         List<CompResponse.ResumeUserSkillDTO> rusList = compService.findAllRusList();

@@ -22,6 +22,7 @@ public class BoardService {
     private final BoardJPARepository boardJPARepo;
     private final ReplyJPARepository replyJPARepo;
 
+    // 글삭제하기 완료
     @Transactional
     public void deleteById(Integer boardId, Integer sessionUserId) {
         Board board = boardJPARepo.findById(boardId)
@@ -31,19 +32,13 @@ public class BoardService {
         if (sessionUserId != board.getUser().getId()) {
             throw new Exception403("게시글을 수정할 권한이 없습니다.");
         }
-
+        
         boardJPARepo.deleteById(boardId);
     }
 
-    // 글수정
-    public Board updateForm(int boardId) {
-        Board board = boardJPARepo.findById(boardId)
-                .orElseThrow(() -> new Exception404("게시글을 찾을 수 없습니다"));
-        return board;
-    }
-
+    // 글수정 완료
     @Transactional
-    public Board update(int boardId, int sessionUserId, BoardRequest.UpdateDTO reqDTO) {
+    public BoardResponse.UpdateDTO update(int boardId, int sessionUserId, BoardRequest.UpdateDTO reqDTO) {
         // 1. 더티체킹 하기 위해 조회 및 예외처리
         Board board = boardJPARepo.findById(boardId)
                 .orElseThrow(() -> new Exception404("{게시글을 찾을 수 없습니다."));
@@ -57,9 +52,8 @@ public class BoardService {
         board.setTitle(reqDTO.getTitle());
         board.setContent(reqDTO.getContent());
 
-        return board;
+        return new BoardResponse.UpdateDTO(board);
     } // 더티체킹
-
 
     // 글목록조회 완료
     public List<BoardResponse.BoardHomeDTO> findAll() {
@@ -74,7 +68,7 @@ public class BoardService {
         return boardJPARepo.save(reqDTO.toEntity(sessionUser));
     }
 
-    // 글상세보기
+    // 글상세보기 완료
     public BoardResponse.DetailDTO findByIdJoinUser(int boardId, User sessionUserId) {
         Board board = boardJPARepo.findByIdJoinUser(boardId)
                 .orElseThrow(() -> new Exception404("게시글을 찾을 수 없습니다"));

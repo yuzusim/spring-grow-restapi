@@ -51,18 +51,6 @@ public class ResumeController {
         return "/comp/comp-resume-detail";
     }
 
-    @GetMapping("/resume/{id}/manage-resume")
-    public String manageResume(@PathVariable Integer id) {
-
-        return "/resume/manage-resume";
-    }
-
-    @GetMapping("/resume/write-resume-form")
-    public String writeResumeForm(){
-
-        return "/resume/write-resume-form";
-    }
-
     @GetMapping("/resume/{id}/update-resume-form")
     public String updateResumeForm(@PathVariable Integer id, HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");

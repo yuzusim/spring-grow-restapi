@@ -1,6 +1,7 @@
 package shop.mtcoding.blog.model.comp;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,38 @@ import java.util.List;
 public class CompApiController {
     private final CompService compService;
     private final HttpSession session;
+
+    @GetMapping("/comp/{id}/comp-home")
+    public ResponseEntity<?> compHome(@PathVariable Integer id) {
+        User sessionComp = (User) session.getAttribute("sessionComp");
+        List<CompResponse.ComphomeDTO> comphomeDTOList = compService.findAllByUserId(sessionComp);
+
+        return ResponseEntity.ok(new ApiUtil<>(comphomeDTOList));
+    }
+
+    @GetMapping("/api/comp/read-resume")
+    public ResponseEntity<?> readResume(HttpServletRequest request) {
+        List<CompResponse.ResumeUserSkillDTO> rusList = compService.findAllRusList();
+        request.setAttribute("rusList", rusList);
+        return ResponseEntity.ok(new ApiUtil<>(rusList));
+    }
+
+    //update
+    @PutMapping("/api/comps/{id}")
+    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody CompRequest.UpdateDTO requestDTO) {
+        User sessionComp = (User) session.getAttribute("sessionComp");
+        User user = compService.updateById(sessionComp, requestDTO);
+        session.setAttribute("sessionComp", user);
+        return ResponseEntity.ok(new ApiUtil<>(requestDTO));
+    }
+
+    //update-form
+    @GetMapping("/api/comps/{id}")
+    public ResponseEntity<?> updateForm(@PathVariable int id) {
+        User sessionComp = (User) session.getAttribute("sessionComp");
+        CompResponse.CompUpdateDTO respDTO = compService.findByIdUpdate(sessionComp.getId());
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
+    }
 
     @GetMapping("/comp/comp-manage")
     public ResponseEntity<?> compManage () {

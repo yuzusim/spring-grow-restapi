@@ -3,6 +3,8 @@ package shop.mtcoding.blog.model.resume;
 
 import lombok.Builder;
 import lombok.Data;
+import shop.mtcoding.blog.model.jobs.Jobs;
+import shop.mtcoding.blog.model.jobs.JobsRequest;
 import shop.mtcoding.blog.model.skill.Skill;
 import shop.mtcoding.blog.model.user.User;
 
@@ -11,15 +13,38 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ResumeRequest {
+
     @Data
-    public static class UpdateDTO{
+    public static class UpdateDTO {
+        private Integer id;
         private String title;
         private String area;
         private String edu;
         private String career;
         private String introduce;
         private String portLink;
-        private List<String> skill;
+        private List<SkillDTO> skill;
+
+        @Data
+        public static class SkillDTO {
+            private Integer resume;
+            private String name;
+            private Integer role;
+
+            public SkillDTO(Integer resume, String name, Integer role) {
+                this.resume = resume;
+                this.name = name;
+                this.role = role;
+            }
+
+            public Skill toEntity(Resume resume) {
+                return Skill.builder()
+                        .name(name)
+                        .role(role)
+                        .resume(resume)
+                        .build();
+            }
+        }
     }
 
     @Data
@@ -45,17 +70,20 @@ public class ResumeRequest {
         }
 
         @Data
-        public static class WriteSkillDTO {
+        public class WriteSkillDTO {
+            private Integer id;
             private String name;
             private Integer role;
 
-            public WriteSkillDTO(String name, Integer role) {
+            public WriteSkillDTO(Integer id, String name, Integer role) {
+                this.id = id;
                 this.name = name;
                 this.role = role;
             }
 
             public Skill toEntity(Resume resume){
                return Skill.builder()
+                       .id(id)
                        .name(name)
                        .role(role)
                        .resume(resume)

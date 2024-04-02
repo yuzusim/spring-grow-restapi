@@ -1,17 +1,22 @@
 package shop.mtcoding.blog.model.jobs;
 
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.mtcoding.blog._core.errors.exception.Exception401;
 import shop.mtcoding.blog._core.errors.exception.Exception403;
 import shop.mtcoding.blog._core.errors.exception.Exception404;
+import shop.mtcoding.blog.model.apply.Apply;
+import shop.mtcoding.blog.model.apply.ApplyJPARepository;
+import shop.mtcoding.blog.model.resume.Resume;
+import shop.mtcoding.blog.model.resume.ResumeJPARepository;
 import shop.mtcoding.blog.model.skill.Skill;
 import shop.mtcoding.blog.model.skill.SkillJPARepository;
+
+import shop.mtcoding.blog.model.skill.SkillRequest;
 import shop.mtcoding.blog.model.skill.SkillResponse;
+
 import shop.mtcoding.blog.model.user.User;
 import shop.mtcoding.blog.model.user.UserJPARepository;
 
@@ -25,10 +30,12 @@ public class JobsService {
     private final JobsJPARepository jobsRepo;
     private final UserJPARepository userRepo;
     private final SkillJPARepository skillRepo;
+    private final ResumeJPARepository resumeRepo;
+    private final ApplyJPARepository applyRepo;
+
 
     public List<JobsResponse.IndexSearchDTO> searchKeyword(String keyword) {
         List<Jobs> jobsList = jobsRepo.findAllKeyword(keyword);
-
         List<JobsResponse.IndexSearchDTO> indexSearchDTOList = new ArrayList<>();
 
         System.out.println(keyword);
@@ -44,11 +51,29 @@ public class JobsService {
 
     }
 
-    public JobsResponse.JobsDetailDTO jobsDetailDTO(Integer userJobsId, User sessionUser) {
+    @Transactional
+    public JobsResponse.JobResumeDetailDTO jobsDetailDTO(Integer userJobsId, User sessionUser) {
         Jobs jobs = jobsRepo.findByIdJoinUserWithSkill(userJobsId);
+        jobs.setIsOwner(jobs.getUser().getId() == sessionUser.getId());
+        List<Resume> notApplyResumeList = resumeRepo.findAllDetailResumeByUserId(sessionUser.getId());  // 공고에 지원하지않은 이력서리스트
+        List<Apply> applyList = applyRepo.findAllUserByApply(sessionUser.getId()); // 세션유저가 지원한 시청리스트
 
+        JobsResponse.JobDetailDTO2.UserDTO user = new JobsResponse.JobDetailDTO2.UserDTO(jobs.getUser());
+        List<JobsResponse.JobDetailDTO2.SkillDTO> skillList = jobs.getSkillList().stream().map(JobsResponse.JobDetailDTO2.SkillDTO::new).toList();
+        JobsResponse.JobDetailDTO2 job = new JobsResponse.JobDetailDTO2(jobs, user, skillList);
 
-        return new JobsResponse.JobsDetailDTO(jobs, sessionUser);
+        List<JobsResponse.NotResume> notResumeList = applyList.stream().map(JobsResponse.NotResume::new).toList();
+
+        // 지원 안한 이력서(Resume)가 0이면 true
+        // 지원 내용 리스트가 0보다 크면 true
+        boolean isApply = false;
+        if(notApplyResumeList.size() < 1 &&  applyList.size() > 1){
+            isApply = true;
+        }
+
+        JobsResponse.ResumeDetailDTO resumeDetailDTO = new JobsResponse.ResumeDetailDTO(isApply, notResumeList);
+
+        return new JobsResponse.JobResumeDetailDTO(job, resumeDetailDTO);
     }
 
 //    public JobsResponse.DetailDTO detailDTO(Integer jobsId, User sessionUser) {
@@ -105,12 +130,12 @@ public class JobsService {
     }
 
     @Transactional
-    public void update(Integer id, JobsRequest.UpdateDTO reqDTO, User sessionComp) {
+    public JobsResponse.UpdateDTO update(Integer id, JobsRequest.UpdateDTO reqDTO, User sessionComp) {
         Jobs jobs = jobsRepo.findById(id)
                 .orElseThrow(() -> new Exception404("해당 공고를 찾을 수 없습니다."));
 
         if (sessionComp.getId() != jobs.getUser().getId()) {
-            throw new Exception403("이력서를 수정할 권한이 없습니다");
+            throw new Exception403("공고를 수정할 권한이 없습니다");
         }
 
         jobs.setTitle(reqDTO.getTitle());
@@ -121,19 +146,21 @@ public class JobsService {
         jobs.setDeadline(reqDTO.getDeadLine());
         jobs.setTask(reqDTO.getTask());
 
+        System.out.println(reqDTO.getArea());
+
         skillRepo.deleteByJobsId(id);
 
-        // 스킬뿌리기
-        reqDTO.getSkill().stream().map((skill) -> {
-            return Skill.builder()
-                    .name(skill)
-                    .role(sessionComp.getRole())
-                    .jobs(jobs)
-                    .build();
-        }).forEach(skill -> {
-            // 반복문으로 스킬 돌면서 뿌림
-            skillRepo.save(skill);
-        });
+        reqDTO.getSkill().stream()
+                .map((skill) -> {
+                    return skill.toEntity(jobs);
+                })
+                .forEach((skill) -> {
+                    skillRepo.save(skill);
+                });
+
+        List<Skill> skill = skillRepo.findByJobsId(jobs.getId());
+
+        return new JobsResponse.UpdateDTO(jobs, skill);
     }
 
     public JobsResponse.JobUpdateDTO updateForm(Integer id, Integer SessionCompId) {
@@ -157,7 +184,7 @@ public class JobsService {
         JobsResponse.JobUpdateDTO reqDTO = JobsResponse.JobUpdateDTO.builder()
                 .jobs(jobs)
                 .user(user)
-                .skills(skillList)
+                .skillChecked(new JobsResponse.JobUpdateDTO.SkillCheckedDTO(skillList))
                 .build();
 
         return reqDTO;

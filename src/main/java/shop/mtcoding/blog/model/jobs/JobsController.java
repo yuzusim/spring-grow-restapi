@@ -21,28 +21,7 @@ public class JobsController {
     private final ResumeService resumeService;
     private final HttpSession session;
 
-    // 채현
-    @GetMapping("/jobs/jobs-detail/{jobsId}")
-    public String jobsDetail(@PathVariable Integer jobsId, HttpServletRequest request){
-        User sessionUser = (User)session.getAttribute("sessionUser");
 
-        if (sessionUser == null){
-            throw new Exception401("인증되지 않았습니다.");
-        }
-
-
-        //공고정보와 사용자정보를 가져오는 detailDTO
-        JobsResponse.JobsDetailDTO detailDTO = jobsService.jobsDetailDTO(jobsId,sessionUser);
-        System.out.println("detailDTO :"+detailDTO);
-
-        //사용자 이력서 보유내역과 지원상태를 가져오는 ResumeApplyDTO
-        ResumeResponse.ResumeStateDTO resumeApplyDTOList = resumeService.findAllResumeJoinApplyByUserIdAndJobsId(sessionUser.getId(), jobsId);
-        request.setAttribute("resumeApplyDTOList", resumeApplyDTOList);
-        request.setAttribute("detailDTO", detailDTO);
-        return "jobs/jobs-detail";
-    }
-
-    // 끝
 
     // 지워도 될듯?
     @GetMapping("/jobs/write-jobs-form")
@@ -53,16 +32,5 @@ public class JobsController {
         request.setAttribute("sessionC", sessionComp);
 
         return "/jobs/write-jobs-form";
-    }
-
-
-
-    @PostMapping("/jobs/{id}/update")
-    public String update(@PathVariable Integer id, JobsRequest.UpdateDTO reqDTO) {
-        User sessionComp = (User)session.getAttribute("sessionComp");
-        jobsService.update(id, reqDTO, sessionComp);
-
-
-        return "redirect:/comp/" + sessionComp.getId() + "/comp-home";
     }
 }

@@ -1,4 +1,4 @@
-package shop.mtcoding.blog.model.resume.user;
+package shop.mtcoding.blog.model.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

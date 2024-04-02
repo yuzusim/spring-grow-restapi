@@ -7,7 +7,7 @@ import shop.mtcoding.blog._core.errors.exception.Exception403;
 import shop.mtcoding.blog._core.errors.exception.Exception404;
 import shop.mtcoding.blog.model.board.Board;
 import shop.mtcoding.blog.model.board.BoardJPARepository;
-import shop.mtcoding.blog.model.resume.user.User;
+import shop.mtcoding.blog.model.user.User;
 
 @RequiredArgsConstructor
 @Service

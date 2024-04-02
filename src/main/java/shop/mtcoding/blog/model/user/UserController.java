@@ -1,4 +1,4 @@
-package shop.mtcoding.blog.model.resume.user;
+package shop.mtcoding.blog.model.user;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

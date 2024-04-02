@@ -3,6 +3,7 @@ package shop.mtcoding.blog.model.user;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import shop.mtcoding.blog._core.errors.exception.Exception401;
 import shop.mtcoding.blog._core.errors.exception.Exception404;
@@ -31,15 +32,15 @@ public class UserService {
     private final JobsJPARepository jobsRepo;
     private final ApplyJPARepository applyRepo;
 
-    public UserResponse.UserHomeDTO userHome (Integer userId) {
+    public UserResponse.UserHomeDTO userHome(Integer userId) {
         Integer waitCount = userRepo.findByUserIdN1(userId);
-        Integer resultCount =userRepo.findByUserId34(userId);
+        Integer resultCount = userRepo.findByUserId34(userId);
         Integer applyCount = userRepo.findAllbyUserId(userId);
 
         List<Resume> resumeList = resumeRepo.findAllByUserId(userId);
 
         UserResponse.UserHomeDTO userHomeDTO =
-                new UserResponse.UserHomeDTO(applyCount,waitCount,resultCount,resumeList);
+                new UserResponse.UserHomeDTO(applyCount, waitCount, resultCount, resumeList);
 
         return userHomeDTO;
     }
@@ -67,7 +68,7 @@ public class UserService {
                             .apply(apply)
                             .resume(resume)
                             .skillList(skills).build();
-                        }).collect(Collectors.toList());
+                }).collect(Collectors.toList());
 
         return ursDTOList;
 
@@ -101,8 +102,12 @@ public class UserService {
 
 
     public User login(UserRequest.LoginDTO reqDTO) {
-        return userRepo.findByIdAndPassword(reqDTO.getEmail(), reqDTO.getPassword())
-                .orElseThrow(() -> new Exception401("회원 정보가 없습니다."));
+        try {
+            return userRepo.findByIdAndPassword(reqDTO.getEmail(), reqDTO.getPassword())
+                    .orElseThrow(() -> new Exception401("회원 정보가 없습니다."));
+        } catch (EmptyResultDataAccessException e) {
+            throw new Exception401("아이디,비밀번호가 틀렸어요");
+        }
     }
 
     public User findByEmail(String email) {

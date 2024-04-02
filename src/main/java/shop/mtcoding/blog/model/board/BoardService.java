@@ -2,10 +2,16 @@ package shop.mtcoding.blog.model.board;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import shop.mtcoding.blog._core.errors.exception.Exception403;
 import shop.mtcoding.blog._core.errors.exception.Exception404;
+import shop.mtcoding.blog._core.util.ApiUtil;
+import shop.mtcoding.blog.model.reply.Reply;
+import shop.mtcoding.blog.model.reply.ReplyJPARepository;
 import shop.mtcoding.blog.model.user.User;
 
 import java.util.List;
@@ -14,6 +20,7 @@ import java.util.List;
 @Service
 public class BoardService {
     private final BoardJPARepository boardJPARepo;
+    private final ReplyJPARepository replyJPARepo;
 
     @Transactional
     public void deleteById(Integer boardId, Integer sessionUserId) {
@@ -63,39 +70,15 @@ public class BoardService {
 
     // 글쓰기 완료
     @Transactional
-    public Board save(BoardRequest.SaveDTO reqDTO, User sessionUser) {
+    public Board save(@RequestBody BoardRequest.SaveDTO reqDTO, User sessionUser) {
         return boardJPARepo.save(reqDTO.toEntity(sessionUser));
     }
 
     // 글상세보기
-    public Board findByIdJoinUser(Integer boardId, User sessionUser) {
+    public BoardResponse.DetailDTO findByIdJoinUser(int boardId, User sessionUserId) {
         Board board = boardJPARepo.findByIdJoinUser(boardId)
-                .orElseThrow(() -> new Exception404("{게시글을 찾을 수 없습니다."));
-
-        boolean isBoardOwner = false;
-        if (sessionUser != null) {
-            if (sessionUser.getId() == board.getUser().getId()) {
-                isBoardOwner = true;
-            }
-        }
-
-        board.setBoardOwner(isBoardOwner);
-
-        // 댓글은 forEach문 돌리기 (N이니까)
-        board.getReplies().forEach(reply -> {
-            boolean isReplyOwner = false;
-
-            // 댓글 주인 여부
-            if (sessionUser != null) {
-                if (reply.getUser().getId() == sessionUser.getId()) {
-                    isReplyOwner = true;
-                }
-            }
-            reply.setReplyOwner(isReplyOwner);
-        });
-
-        return board;
+                .orElseThrow(() -> new Exception404("게시글을 찾을 수 없습니다"));
+        List<Reply> replyList = replyJPARepo.findByUserId(boardId);
+        return new BoardResponse.DetailDTO(board, sessionUserId, replyList);
     }
-
-
 }

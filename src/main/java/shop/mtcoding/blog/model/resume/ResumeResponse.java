@@ -255,12 +255,11 @@ public class ResumeResponse {
 
 
     @Data
-    public static class ResumeStateDTO{
+    public static class ResumeStateDTO {
         private Boolean isApply;
         private List<ResumeApplyDTO> applys;
 
     }
-
     @Data
     public static class ResumeApplyDTO {
         private Integer id;
@@ -276,7 +275,7 @@ public class ResumeResponse {
             this.isPass = apply.getIsPass();
         }
     }
-
 }
+
 
 

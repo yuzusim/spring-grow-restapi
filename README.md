@@ -1,7 +1,198 @@
 # GROW [ 구인ㆍ구직 프로젝트 ]
 ![logo](https://github.com/chugue/project-grow/assets/153585866/f2ad7455-56f6-4895-8d65-94a5db14a179)
 
-___
+
+> ## RestAPI 기능 정리
+
+### 1.테스트  [담당 : 성훈]
+- 요청 주소 (POST)
+  
+http://localhost:8080/join
+  
+- 요청 파라미터
+  
+application/json
+```
+{
+  "username":"getinthere",
+  "password":"1234",
+  "email":"getinthere@nate.com"
+}
+```
+- 응답 바디
+  
+application/json
+
+```
+{
+    "code": 1,
+    "msg": "회원가입완료",
+    "data": {
+    "id": 3,
+    "username": "getinthere",
+    "password": null,
+    "email": "getinthere@nate.com",
+    "created": "2021-07-10T07:45:15.764705",
+    "updated": "2021-07-10T07:45:15.764705"
+}
+```
+<hr>
+
+
+### 1.회원가입  [담당 : 성훈]
+- 요청 주소 (POST)
+
+http://localhost:8080/join
+  
+- 요청 파라미터
+- application/json
+```
+{
+  "username":"getinthere",
+  "password":"1234",
+  "email":"getinthere@nate.com"
+}
+```
+- 응답 바디
+
+application/json
+
+```
+{
+    "code": 1,
+    "msg": "회원가입완료",
+    "data": {
+    "id": 3,
+    "username": "getinthere",
+    "password": null,
+    "email": "getinthere@nate.com",
+    "created": "2021-07-10T07:45:15.764705",
+    "updated": "2021-07-10T07:45:15.764705"
+}
+```
+<hr>
+
+### .기업 공고 전부조회  [담당 : 승진]
+- 요청 주소 (GET)
+
+http://localhost:8080/jobs/info
+
+- 응답 바디
+
+application/json
+
+```
+{
+    "status": 200,
+    "msg": "성공",
+    "body": [
+        {
+            "id": 9,
+            "title": "[채용공고] 백엔드 개발자 정규직 채용",
+            "career": "경력무관",
+            "area": "서울",
+            "deadline": "2024-05-22",
+            "imgFileName": "d9010d71-a222-478a-b4c1-ef7193ed72e8_ncsoft.png",
+            "compName": "LG",
+            "skills": [
+                {
+                    "name": "Java"
+                },
+                {
+                    "name": "Spring"
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "title": "[경력] Frontend Engineer",
+            "career": "미들(4~8년)",
+            "area": "서울",
+            "deadline": "2024-04-10",
+            "imgFileName": "c227570a-2df9-4969-bbb5-5c49b3700e46_netmarble.png",
+            "compName": "한국닌텐도(주)",
+            "skills": [
+                {
+                    "name": "Spring"
+                },
+                {
+                    "name": "Vue.js"
+                },
+                {
+                    "name": "React"
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "title": "24년도 풀스택 Web 개발자 채용 공고",
+            "career": "신입",
+            "area": "부산",
+            "deadline": "2024-04-29",
+            "imgFileName": "b59207f1-ee5f-4a40-9af7-54945bb1d687_doosan.png",
+            "compName": "(주)넥슨컴퍼니",
+            "skills": [
+                {
+                    "name": "Java"
+                },
+                {
+                    "name": "Spring"
+                },
+                {
+                    "name": "React"
+                }
+            ]
+        }
+    ]
+}
+```
+<hr>
+
+### .기업 공고 수정  [담당 : 승진]
+- 요청 주소 (GET)
+
+http://localhost:8080/jobs/3/update-jobs-form
+
+- 응답 바디
+
+application/json
+
+```
+{
+    "status": 200,
+    "msg": "성공",
+    "body": {
+        "id": 3,
+        "compName": "네이버",
+        "phone": "010-5678-5822",
+        "businessNumber": "301-15-12412",
+        "homepage": "www.naver.com",
+        "title": "프런트 엔드/백엔드 개발자 채용",
+        "edu": "학력무관",
+        "career": "시니어(10년 이상)",
+        "content": "프론트엔드(React)+백엔드(Spring) 풀스택 경력 2년 이상 또는 모바일(Android, iOS, Flutter)+백엔드(Spring) 경력 2년 이상의 경험이 있으신 분",
+        "area": "서울",
+        "deadLine": "2024-04-09",
+        "task": "풀스택",
+        "skills": [
+            {
+                "name": "HTML/CSS"
+            },
+            {
+                "name": "Spring"
+            },
+            {
+                "name": "MySql"
+            },
+            {
+                "name": "React"
+            }
+        ]
+    }
+}
+```
+<hr>
+
 
 > ## 시연 영상 Youtube
 링크 걸기

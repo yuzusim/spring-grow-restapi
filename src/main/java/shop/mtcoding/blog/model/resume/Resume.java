@@ -83,15 +83,6 @@ public class Resume {
                 .build();
     }
 
-    public void setResumeUpdate(ResumeRequest.UpdateDTO reqDTO) {
-        this.title = reqDTO.getTitle();
-        this.career = reqDTO.getCareer();
-        this.edu = reqDTO.getEdu();
-        this.area = reqDTO.getArea();
-        this.introduce = reqDTO.getIntroduce();
-        this.portLink = reqDTO.getPortLink();
-    }
-
     @Override
     public String toString() {
         return "Resume{" +

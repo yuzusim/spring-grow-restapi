@@ -54,15 +54,4 @@ public class JobsController {
 
         return "/jobs/write-jobs-form";
     }
-
-
-
-    @PostMapping("/jobs/{id}/update")
-    public String update(@PathVariable Integer id, JobsRequest.UpdateDTO reqDTO) {
-        User sessionComp = (User)session.getAttribute("sessionComp");
-        jobsService.update(id, reqDTO, sessionComp);
-
-
-        return "redirect:/comp/" + sessionComp.getId() + "/comp-home";
-    }
 }

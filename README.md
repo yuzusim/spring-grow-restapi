@@ -4,12 +4,47 @@
 ___
 > ## RestAPI 기능 정리
 
+### 1.테스트  [담당 : 성훈]
+- 요청 주소 (POST)
+  
+http://localhost:8080/join
+  
+- 요청 파라미터
+  
+application/json
+```
+{
+  "username":"getinthere",
+  "password":"1234",
+  "email":"getinthere@nate.com"
+}
+```
+- 응답 바디
+  
+application/json
+
+```
+{
+    "code": 1,
+    "msg": "회원가입완료",
+    "data": {
+    "id": 3,
+    "username": "getinthere",
+    "password": null,
+    "email": "getinthere@nate.com",
+    "created": "2021-07-10T07:45:15.764705",
+    "updated": "2021-07-10T07:45:15.764705"
+}
+```
+<hr>
+
 
 ### 1.회원가입  [담당 : 성훈]
 - 요청 주소 (POST)
 
 http://localhost:8080/join
-  요청 파라미터
+  
+- 요청 파라미터
 - application/json
 ```
 {
@@ -157,6 +192,7 @@ application/json
 }
 ```
 <hr>
+
 
 
 

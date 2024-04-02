@@ -303,7 +303,6 @@ public class ResumeResponse {
         private List<ResumeApplyDTO> applys;
 
     }
-
     @Data
     public static class ResumeApplyDTO {
         private Integer id;
@@ -358,5 +357,6 @@ public class ResumeResponse {
         }
     }
 }
+
 
 

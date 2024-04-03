@@ -17,6 +17,58 @@ import java.util.stream.Collectors;
 
 public class CompResponse {
 
+    //기업 메인창
+    @Data
+    public static class CompMainDTO {
+        //resume
+        private Integer id;
+        private String title;
+        private String career;
+        private String area;
+        private String edu;
+        //user
+        private UserDTO user;
+        //skill
+        private List<SkillDTO> skills = new ArrayList<>();
+
+        public CompMainDTO(Resume resume) {
+            this.id = resume.getId();
+            this.title = resume.getTitle();
+            this.career = resume.getCareer();
+            this.area = resume.getArea();
+            this.edu = resume.getEdu();
+            this.user = new UserDTO(resume.getUser());
+
+            this.skills = resume.getSkillList().stream().map(skill ->
+                    new SkillDTO(skill)).collect(Collectors.toList());
+        }
+
+        @Data
+        public class UserDTO {
+            private Integer id;
+            private String myName;
+            private String imgFileName;
+
+            public UserDTO(User user) {
+                this.id = user.getId();
+                this.myName = user.getMyName();
+                this.imgFileName = user.getImgFileName();
+            }
+        }
+
+        @Data
+        public class SkillDTO {
+            //         private Integer id;
+            private String name;
+
+            public SkillDTO(Skill skill) {
+                //              this.id = skill.getId();
+                this.name = skill.getName();
+            }
+        }
+
+    }
+
     //기업 회원정보 업데이트 DTO
     @Data
     public static class CompUpdateDTO {

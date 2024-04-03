@@ -114,7 +114,6 @@ public class ResumeService {
     }
 
 
-
 //    public ResumeResponse.ResumeStateDTO findAllResumeJoinApplyByUserIdAndJobsId(Integer userId, Integer jobsId) {
 //        List<Resume> resumeList = resumeJPARepo.findAllByUserId(userId);
 //        List<Apply> applies = applyJPARepo.findAll();
@@ -233,26 +232,29 @@ public class ResumeService {
 
     //이력서 신청
     @Transactional
-    public void save(ResumeRequest.SaveDTO saveDTO) {
+    public ResumeResponse.SaveDTO save(User sessionUser ,ResumeRequest.SaveDTO reqDTO) {
         //1. 인증처리 : 유저가 세션을가지고있는지 로그인상태 확인
-        User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) {
             throw new Exception401("로그인이 필요한 서비스입니다");
         }
 
         //2. 이력서 작성
-        Resume resume = saveDTO.toEntity(sessionUser);
+        Resume resume = reqDTO.toEntity(sessionUser);
         Resume savedResume = resumeJPARepo.save(resume);
         System.out.println("------------------" + resume.getId());
 
         // 3. 스킬 작성
-        saveDTO.getSkillList().stream()
+        reqDTO.getSkillList().stream()
                 .map((skill) -> {
                     return skill.toEntity(savedResume);
                 })
                 .forEach((skill) -> {
                     skillJPARepo.save(skill);
                 });
+
+        List<Skill> skills = skillJPARepo.findByResumeId(resume.getId());
+
+        return new ResumeResponse.SaveDTO(resume, skills);
     }
 
     //이력서 삭제

@@ -51,6 +51,17 @@ public class JobsResponse {
     }
 
     @Data
+    public static class writeJobsFormDTO {
+        private Integer id;
+        private String compName;
+
+        public writeJobsFormDTO(User user) {
+            this.id = user.getId();
+            this.compName = user.getCompName();
+        }
+    }
+
+    @Data
     public static class IndexSearchDTO{
         private Integer id;
         private String imgFileName;

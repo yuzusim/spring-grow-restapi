@@ -24,6 +24,15 @@ public class JobsApiController {
     private final JobsService jobsService;
     private final ResumeService resumeService;
 
+    @GetMapping("/api/jobs/write-jobs-form")
+    public ResponseEntity<?> writeJobsForm() {
+        User sessionComp = (User)session.getAttribute("sessionComp");
+
+        JobsResponse.writeJobsFormDTO writeJobsFormDTO = jobsService.writeJobsForm(sessionComp);
+
+        return ResponseEntity.ok(new ApiUtil<>(writeJobsFormDTO));
+    }
+
     @GetMapping("/api/jobs/info")
     public ResponseEntity<?> jobsInfo () {
         List<JobsResponse.ListDTO> listDTOS = jobsService.listDTOS();

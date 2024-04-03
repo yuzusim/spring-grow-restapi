@@ -18,14 +18,4 @@ import shop.mtcoding.blog.model.user.User;
 @Controller
 public class JobsController {
     private final HttpSession session;
-
-    @GetMapping("/jobs/write-jobs-form")
-    public String writeJobsForm(HttpServletRequest request) {
-        User sessionComp = (User)session.getAttribute("sessionComp");
-
-        // sessionComp 라고 주면 오류나서 sessionC라고 하였음
-        request.setAttribute("sessionC", sessionComp);
-
-        return "/jobs/write-jobs-form";
-    }
 }

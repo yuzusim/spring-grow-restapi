@@ -120,8 +120,14 @@ public class JobsService {
     @Transactional
     public JobsResponse.JonsSaveDTO save(User sessionComp, JobsRequest.JobsSaveDTO reqDTO) {
         // 공고작성 하기
-        Jobs jobs = reqDTO.toEntity(reqDTO, sessionComp);
+        Jobs jobs = jobsRepo.save(reqDTO.toEntity(reqDTO, sessionComp));
+
         return new JobsResponse.JonsSaveDTO(jobs, reqDTO.getSkillList());
+    }
+
+    public JobsResponse.writeJobsFormDTO writeJobsForm(User sessionComp) {
+
+        return new JobsResponse.writeJobsFormDTO(sessionComp);
     }
 
     @Transactional

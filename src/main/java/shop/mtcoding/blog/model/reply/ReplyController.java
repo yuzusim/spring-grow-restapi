@@ -36,6 +36,4 @@ public class ReplyController {
         ReplyResponse.ReplyDTO respDTO = replyService.save(reqDTO, sessionUser);
         return ResponseEntity.ok(new ApiUtil(respDTO));
     }
-
-
 }

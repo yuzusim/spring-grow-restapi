@@ -24,7 +24,6 @@ public class UserApiController {
     private final HttpSession session;
     private final JobsService jobsService;
 
-<<<<<<< HEAD
     @PostMapping("/api/user/login")
     public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO reqDTO, HttpSession session) {
         User user = userService.login(reqDTO);
@@ -71,8 +70,8 @@ public class UserApiController {
     }
 
     @GetMapping("/api/users/username-same-check")
-    public @ResponseBody ApiUtil<?> usernameSameCheck(String email) {
-        User user = userService.findByEmail(email);
+    public  ResponseEntity<?> usernameSameCheck(@RequestBody UserRequest.EmailDTO email) {
+        User user = userService.findByEmail(email.getEmail());
         if (user == null) {
             return ResponseEntity.ok(new ApiUtil<>(true));
         } else {

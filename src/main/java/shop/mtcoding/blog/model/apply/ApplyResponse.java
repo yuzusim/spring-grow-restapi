@@ -27,6 +27,19 @@ public class ApplyResponse {
     }
 
     @Data
+    public static class newApplyDTO {
+        private Integer resumeId;
+        private Integer jobsId;
+        private String isPass;
+
+        public newApplyDTO(Resume resume, Jobs jobs, String isPass) {
+            this.resumeId = resume.getId();
+            this.jobsId = jobs.getId();
+            this.isPass = isPass;
+        }
+    }
+
+    @Data
     public static class ApplyByJobsDTO{
         private Integer id;
         private String myName;

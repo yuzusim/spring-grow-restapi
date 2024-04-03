@@ -12,16 +12,4 @@ import shop.mtcoding.blog.model.user.User;
 public class ResumeController {
     private final ResumeService resumeService;
     private final HttpSession session;
-  
-    @GetMapping("/resume/{id}/update-resume-form")
-    public String updateResumeForm(@PathVariable Integer id, HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-
-        request.setAttribute("sessionU", sessionUser);
-
-        ResumeResponse.UpdateDTO resume = resumeService.updateForm(id);
-        request.setAttribute("resume", resume);
-
-        return "/resume/update-resume-form";
-    }
 }

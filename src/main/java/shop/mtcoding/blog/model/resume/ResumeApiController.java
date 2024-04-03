@@ -24,14 +24,15 @@ public class ResumeApiController {
 //        return ResponseEntity.ok(new ApiUtil<>(null));
 //
 //    }
+
     @GetMapping("/api/resume/{resumeId}/update-form")
-    public ResponseEntity<?> updateFrom(@PathVariable Integer resumeId){
+    public ResponseEntity<?> updateFrom(@PathVariable Integer resumeId) {
 
         ResumeResponse.UpdateDTO respDTO = resumeService.updateForm(resumeId);
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
-    @GetMapping("/resume/resume-detail/{resumeId}")
+    @GetMapping("/api/resume/resume-detail/{resumeId}")
     public ResponseEntity<?> resumeDetail(@PathVariable Integer resumeId, @RequestParam Integer jobsId) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         User sessionComp = (User) session.getAttribute("sessionComp");
@@ -41,11 +42,11 @@ public class ResumeApiController {
     }
 
     @PostMapping("/api/resumes")
+    public ResponseEntity<?> save(@RequestBody ResumeRequest.SaveDTO reqDTO) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        ResumeResponse.SaveDTO respDTO = resumeService.save(sessionUser, reqDTO);
 
-    public ResponseEntity<?> save(@RequestBody ResumeRequest.SaveDTO reqDTO){
-        resumeService.save(reqDTO);
-
-        return ResponseEntity.ok(new ApiUtil<>(null));
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
     @GetMapping("/api/resumes/resume-detail2/{id}")

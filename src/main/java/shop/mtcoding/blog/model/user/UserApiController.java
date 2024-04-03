@@ -44,7 +44,6 @@ public class UserApiController {
         return ResponseEntity.ok(new ApiUtil(null));
     }
 
-
     @GetMapping("/")
     public ResponseEntity<?> index(HttpServletRequest request) {
         List<JobsResponse.ListDTO> respList = jobsService.listDTOS();
@@ -92,5 +91,19 @@ public class UserApiController {
         request.setAttribute("ursDTOList", ursDTOList);
 
         return ResponseEntity.ok(new ApiUtil<>(ursDTOList));
+    }
+
+    //user의 지원 내역
+    @GetMapping("/api/user/{id}/resume-home")
+    public ResponseEntity<?> resumeHome(@PathVariable Integer id) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        List<UserResponse.UserResumeSkillDTO> respDTO = userService.userResumeSkillDTO(sessionUser.getId());
+        //No 카운트 뽑으려고 for문 돌림
+        for (int i = 0; i < respDTO.size(); i++) {
+            respDTO.get(i).setId(i + 1);
+        }
+
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 }

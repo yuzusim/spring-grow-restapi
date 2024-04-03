@@ -33,6 +33,11 @@ public class CompController {
         request.setAttribute("imgFileName", sessionUser.getImgFileName());
         return "/comp/profile-update-form";
     }
-
-
+  
+    // 채현
+    @GetMapping("/comp/jobs-info")
+    public String jobsInfo(HttpServletRequest request) {
+        List<CompResponse.JobsSkillDTO> jobsList = compService.jobsList();
+        request.setAttribute("jobsList", jobsList);
+    }
 }

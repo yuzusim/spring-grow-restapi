@@ -46,7 +46,7 @@ public class Resume {
     private Timestamp createdAt;
 
     @Builder
-    public Resume(Integer id, User user, String title, String area, String edu, String career, String introduce, String portLink, boolean isOwner, Timestamp createdAt) {
+    public Resume(Integer id, User user, String title, String area, String edu, String career, String introduce, String portLink, boolean isOwner, Timestamp createdAt, List<Skill> skillList) {
         this.id = id;
         this.user = user;
         this.title = title;
@@ -56,6 +56,7 @@ public class Resume {
         this.introduce = introduce;
         this.portLink = portLink;
         this.isOwner = isOwner;
+        this.skillList = skillList;
         this.createdAt = createdAt;
     }
 

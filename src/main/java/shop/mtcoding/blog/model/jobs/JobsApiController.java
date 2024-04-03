@@ -72,7 +72,7 @@ public class JobsApiController {
         //사용자 이력서 보유내역과 지원상태를 가져오는 ResumeApplyDTO
         JobsResponse.JobResumeDetailDTO resumeApplyDTOList = jobsService.jobsDetailDTO(jobsId, sessionUser);
 
-        return ResponseEntity.ok(resumeApplyDTOList);
+        return ResponseEntity.ok(new ApiUtil(resumeApplyDTOList));
     }
 
     @PutMapping("/api/jobs/{id}")

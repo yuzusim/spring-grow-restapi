@@ -15,37 +15,37 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class UserController {
-    private final JobsService jobsService;
+
     private final UserService userService;
     private final HttpSession session;
 
+//     //user의 지원 내역
+//     @GetMapping("/user/{id}/resume-home")
+//     public String resumeHome(@PathVariable Integer id, HttpServletRequest request) {
+//         User sessionUser = (User) session.getAttribute("sessionUser");
 
-    //user의 지원 내역
-    @GetMapping("/user/{id}/resume-home")
-    public String resumeHome(@PathVariable Integer id, HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
+//         List<UserResponse.UserResumeSkillDTO> ursList = userService.userResumeSkillDTO(sessionUser.getId());
+//         //No 카운트 뽑으려고 for문 돌림
+//         for (int i = 0; i < ursList.size(); i++) {
+//             ursList.get(i).setId(i + 1);
+//         }
+//         request.setAttribute("ursList", ursList);
 
-        List<UserResponse.UserResumeSkillDTO> ursList = userService.userResumeSkillDTO(sessionUser.getId());
-        //No 카운트 뽑으려고 for문 돌림
-        for (int i = 0; i < ursList.size(); i++) {
-            ursList.get(i).setId(i + 1);
-        }
-        request.setAttribute("ursList", ursList);
-
-        return "/user/resume-home";
-    }
-
-
-    @GetMapping("/user/join-form")
-    public String joinForm() {
-        return "/user/join-form";
-    }
+//         return "/user/resume-home";
+//     }
 
 
-    @DeleteMapping("/user/{id}")
-    public String delete() {
-        return "redirect:/";
-    }
+//     @GetMapping("/user/join-form")
+//     public String joinForm() {
+//         return "/user/join-form";
+//     }
+
+
+//     @DeleteMapping("/user/{id}")
+//     public String delete() {
+//         return "redirect:/";
+//     }
+
 
     @PostMapping("/user/{id}/update")
     public String update(@PathVariable Integer id, CompRequest.UpdateDTO requestDTO) {

@@ -44,8 +44,6 @@ public class User {
     @CreationTimestamp
     private LocalDate createdAt;
 
-    @Column
-    @ColumnDefault(value = "'2cfe3a66-74cb-4688-9f41-f417b1db694e_naver.jpg'")
     private String imgFileName;
 
     @Builder

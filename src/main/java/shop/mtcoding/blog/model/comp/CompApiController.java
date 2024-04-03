@@ -18,15 +18,20 @@ public class CompApiController {
     private final CompService compService;
     private final HttpSession session;
 
-
-    //기업 채용정보 (공고 뿌리기)
-    @GetMapping("/comp/jobs-info")
-    public ResponseEntity<?> jobsInfo() {
-        List<CompResponse.CompJobsInfoDTO> reqsDTO = compService.jobsInfoList();
-//        request.setAttribute("jobsList", jobsList);
-        return ResponseEntity.ok(new ApiUtil<>(reqsDTO));
+    @PostMapping("/comp/join")
+    public ResponseEntity<?> compJoin(@RequestBody CompRequest.CompJoinDTO reqDTO) {
+        CompResponse.CompJoinDTO respDTO = compService.join(reqDTO);
+        session.setAttribute("sessionComp", respDTO);
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
+    //기업 채용정보 (공고 뿌리기)
+    @GetMapping("/api/comp/jobs-info")
+    public ResponseEntity<?> jobsInfo() {
+        List<CompResponse.CompJobsInfoDTO> respDTO = compService.jobsInfoList();
+//        request.setAttribute("jobsList", jobsList);
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
+    }
 
     //기업 메인 (메인이라 api 안 붙였는데 필요하면 붙이세용)
     @GetMapping("/comps/comp-index")

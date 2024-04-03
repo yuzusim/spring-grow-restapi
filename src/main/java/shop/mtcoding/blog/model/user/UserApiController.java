@@ -24,6 +24,12 @@ public class UserApiController {
     private final HttpSession session;
     private final JobsService jobsService;
 
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout() {
+        session.invalidate();
+        return ResponseEntity.ok(new ApiUtil(null));
+    }
+
     @PostMapping("/api/user/login")
     public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO reqDTO, HttpSession session) {
         User user = userService.login(reqDTO);

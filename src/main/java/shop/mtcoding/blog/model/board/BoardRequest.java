@@ -16,13 +16,11 @@ public class BoardRequest {
         private String title;
         private String content;
 
-        public Board toEntity(User user){
+        public Board toEntity(User user) {
             return Board.builder()
                     .title(title)
                     .content(content)
-                    .user(user)
                     .build();
         }
     }
-
 }

@@ -55,7 +55,7 @@ public class ResumeRequest {
         private String career;
         private String introduce;
         private String portLink;
-        private List<WriteSkillDTO> skillList;
+        private List<Skill> skillList;
 
         public Resume toEntity(User user){
             return Resume.builder()
@@ -66,6 +66,7 @@ public class ResumeRequest {
                     .introduce(introduce)
                     .portLink(portLink)
                     .user(user)
+                    .skillList(skillList)
                     .build();
         }
 
@@ -75,13 +76,14 @@ public class ResumeRequest {
             private String name;
             private Integer role;
 
+            @Builder
             public WriteSkillDTO(Integer id, String name, Integer role) {
                 this.id = id;
                 this.name = name;
                 this.role = role;
             }
 
-            public Skill toEntity(Resume resume){
+            public Skill toEntity(Resume resume, Integer role){
                 return Skill.builder()
                         .id(id)
                         .name(name)
@@ -99,7 +101,6 @@ public class ResumeRequest {
         private String edu;
         private String area;
         private String career;
-
         private List<SkillDTO> skills = new ArrayList<>();
 
         @Builder
@@ -147,7 +148,6 @@ public class ResumeRequest {
             } else if (this.name.equals("MySql")) {
                 this.color = "badge badge-pill bg-purple";
             }
-
         }
     }
 }

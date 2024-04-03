@@ -63,7 +63,7 @@ VALUES (5, '끊임없이 개선하고, 발전하는 개발자', '서울', '대�
 INSERT INTO jobs_tb(user_id, area, title, edu, career, content, deadline, task, created_at)
 VALUES (15, '경기도', '대규모 | 백엔드 개발자 (Backend Developer)', '학력무관', '경력무관', 'Java/Kotlin, Spring, JPA 기반 애플리케이션 개발 경험 및 역량 보유한 분, MySQL, Oracle 등 활용 역량이 있는 분', '2024-04-10', '백엔드', NOW());
 INSERT INTO jobs_tb(user_id, area, title, edu, career, content, deadline, task, created_at)
-VALUES (16, '부산', '백엔드 개발자 - Spring (경력무관)', '대졸', '신입', 'Spring 기반으로 백엔드 비즈니스 로직을 개발하고 배포. 백엔드 개발 경험이 있고, 기본적인 SQL 문법, JOIN, Subquery 등을 활용할 줄 아시는 분', '2024-05-22', '백엔드', NOW());
+VALUES (15, '부산', '백엔드 개발자 - Spring (경력무관)', '대졸', '신입', 'Spring 기반으로 백엔드 비즈니스 로직을 개발하고 배포. 백엔드 개발 경험이 있고, 기본적인 SQL 문법, JOIN, Subquery 등을 활용할 줄 아시는 분', '2024-05-22', '백엔드', NOW());
 INSERT INTO jobs_tb(user_id, area, title, edu, career, content, deadline, task, created_at)
 VALUES (15, '서울', '프런트 엔드/백엔드 개발자 채용', '학력무관', '시니어(10년 이상)', '프론트엔드(React)+백엔드(Spring) 풀스택 경력 2년 이상 또는 모바일(Android, iOS, Flutter)+백엔드(Spring) 경력 2년 이상의 경험이 있으신 분', '2024-04-09', '풀스택', NOW());
 INSERT INTO jobs_tb(user_id, area, title, edu, career, content, deadline, task, created_at)

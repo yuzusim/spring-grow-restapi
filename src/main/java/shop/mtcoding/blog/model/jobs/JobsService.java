@@ -128,13 +128,9 @@ public class JobsService {
     }
 
     @Transactional
-    public JobsResponse.UpdateDTO update(Integer id, JobsRequest.UpdateDTO reqDTO, User sessionComp) {
-        Jobs jobs = jobsRepo.findById(id)
+    public JobsResponse.UpdateDTO update(Integer jobsId, JobsRequest.UpdateDTO reqDTO) {
+        Jobs jobs = jobsRepo.findById(jobsId)
                 .orElseThrow(() -> new Exception404("해당 공고를 찾을 수 없습니다."));
-
-        if (sessionComp.getId() != jobs.getUser().getId()) {
-            throw new Exception403("공고를 수정할 권한이 없습니다");
-        }
 
         jobs.setTitle(reqDTO.getTitle());
         jobs.setEdu(reqDTO.getEdu());
@@ -146,7 +142,7 @@ public class JobsService {
 
         System.out.println(reqDTO.getArea());
 
-        skillRepo.deleteByJobsId(id);
+        skillRepo.deleteByJobsId(jobsId);
 
         reqDTO.getSkill().stream()
                 .map((skill) -> {

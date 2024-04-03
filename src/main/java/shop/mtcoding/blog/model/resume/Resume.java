@@ -41,7 +41,6 @@ public class Resume {
     @OneToMany(mappedBy = "resume", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Apply> applyList = new ArrayList<>();
 
-
     @CreationTimestamp //pc -> db 날짜주입
     private Timestamp createdAt;
 
@@ -56,8 +55,8 @@ public class Resume {
         this.introduce = introduce;
         this.portLink = portLink;
         this.isOwner = isOwner;
-        this.skillList = skillList;
         this.createdAt = createdAt;
+        this.skillList = skillList;
     }
 
     public ResumeResponse.ResumeDTO toDTO() {

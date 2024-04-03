@@ -24,9 +24,8 @@ public class FileService {
 
     @Transactional
     public FileResponse.UploadSuccessDTO upload(FileInfoRequest.UploadDTO reqDTO){
-        String encodedData = reqDTO.getEncodedData().split(",")[1];
         //1. 데이터전달
-        byte[] decodedBytes = Base64.getDecoder().decode(encodedData);
+        byte[] decodedBytes = Base64.getDecoder().decode(reqDTO.getEncodedData());
 
         //2. 파일저장 위치 설정 및 파일저장 (UUID)
         String imgFilename = UUID.randomUUID()+"_"+reqDTO.getFileName();

@@ -29,7 +29,6 @@ public class Skill {
     @Column(nullable = false)
     private String name;
     private String color;
-    @Column(nullable = false) // 1: 유저, 2: 기업
     private Integer role;
 
     @Builder

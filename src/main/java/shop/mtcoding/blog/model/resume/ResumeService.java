@@ -16,6 +16,7 @@ import shop.mtcoding.blog.model.skill.SkillJPARepository;
 import shop.mtcoding.blog.model.skill.SkillResponse;
 import shop.mtcoding.blog.model.user.User;
 
+import java.sql.ClientInfoStatus;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -26,7 +27,6 @@ public class ResumeService {
     private final ResumeJPARepository resumeJPARepo;
     private final ApplyJPARepository applyJPARepo;
     private final SkillJPARepository skillJPARepo;
-    private final SkillJPARepository skillRepo;
     private final HttpSession session;
 
     //이력서 상세보기
@@ -177,7 +177,7 @@ public class ResumeService {
         Resume resume = resumeJPARepo.findById(id)
                 .orElseThrow(() -> new Exception404("이력서를 찾을 수 없습니다"));
 
-        List<Skill> skill = skillRepo.findAllByResumeId(id);
+        List<Skill> skill = skillJPARepo.findAllByResumeId(id);
 
         ResumeResponse.UpdateDTO respDTO = ResumeResponse.UpdateDTO.builder()
                 .resume(resume)
@@ -209,7 +209,7 @@ public class ResumeService {
         resume.setPortLink(reqDTO.getPortLink());
 
 
-        skillRepo.deleteByresumeId(id);
+        skillJPARepo.deleteByresumeId(id);
 
         // 스킬뿌리기
         reqDTO.getSkill().stream()
@@ -217,7 +217,7 @@ public class ResumeService {
                     return skill.toEntity(resume);
                 })
                 .forEach((skill) -> {
-                    skillRepo.save(skill);
+                    skillJPARepo.save(skill);
                 });
 
 
@@ -233,28 +233,17 @@ public class ResumeService {
     //이력서 신청
     @Transactional
     public ResumeResponse.SaveDTO save(User sessionUser ,ResumeRequest.SaveDTO reqDTO) {
-        //1. 인증처리 : 유저가 세션을가지고있는지 로그인상태 확인
-        if (sessionUser == null) {
-            throw new Exception401("로그인이 필요한 서비스입니다");
-        }
 
-        //2. 이력서 작성
         Resume resume = reqDTO.toEntity(sessionUser);
         Resume savedResume = resumeJPARepo.save(resume);
-        System.out.println("------------------" + resume.getId());
+        for (Skill skill : reqDTO.getSkillList()) {
+            skillJPARepo.save(Skill.builder()
+                    .resume(savedResume)
+                    .name(skill.getName())
+                    .role(1).build());
+        }
 
-        // 3. 스킬 작성
-        reqDTO.getSkillList().stream()
-                .map((skill) -> {
-                    return skill.toEntity(savedResume);
-                })
-                .forEach((skill) -> {
-                    skillJPARepo.save(skill);
-                });
-
-        List<Skill> skills = skillJPARepo.findByResumeId(resume.getId());
-
-        return new ResumeResponse.SaveDTO(resume, skills);
+        return new ResumeResponse.SaveDTO(savedResume);
     }
 
     //이력서 삭제

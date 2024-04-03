@@ -1,5 +1,6 @@
 package shop.mtcoding.blog.model.jobs;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -16,6 +17,31 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JobsResponse {
+
+    @Data
+    public static class DTO{
+        private Integer id;
+        private String area;
+        private String title;
+        private String edu;
+        private String career;
+        private String content;
+        private LocalDate deadline;
+        private String task;
+
+        @Builder
+        public DTO(Jobs jobs) {
+            this.id = jobs.getId();
+            this.area = jobs.getArea();
+            this.title = jobs.getTitle();
+            this.edu = jobs.getEdu();
+            this.career = jobs.getCareer();
+            this.content = jobs.getContent();
+            this.deadline = jobs.getDeadline();
+            this.task = jobs.getTask();
+        }
+    }
+
 
     @Data
     public static class JonsSaveDTO {

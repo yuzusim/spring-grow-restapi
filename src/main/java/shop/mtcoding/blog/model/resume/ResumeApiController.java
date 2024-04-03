@@ -16,14 +16,13 @@ public class ResumeApiController {
     private final HttpSession session;
     private final UserService userService;
 
-//    @DeleteMapping("/api/resumes/{id}")
-//    public ResponseEntity<?> delete(@PathVariable Integer id) {
-//     //  User sessionUser = (User) session.getAttribute("sessionUser");
-//        resumeService.delete(id);
-//
-//        return ResponseEntity.ok(new ApiUtil<>(null));
-//
-//    }
+    @DeleteMapping("/api/resumes/{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
+        resumeService.delete(id);
+
+        return ResponseEntity.ok(new ApiUtil<>(null));
+
+    }
 
     @GetMapping("/api/resume/{resumeId}/update-form")
     public ResponseEntity<?> updateFrom(@PathVariable Integer resumeId) {

@@ -62,7 +62,6 @@ public class JobsRequest {
 
     @Data
     public static class UpdateDTO {
-        private Integer id;
         private String title;
         private String edu;
         private String career;
@@ -76,18 +75,16 @@ public class JobsRequest {
         public static class SkillDTO {
             private Integer jobsId;
             private String name;
-            private Integer role;
+            private Integer role = 2;
 
-            public SkillDTO(Integer jobsId, String name, Integer role) {
+            public SkillDTO(Integer jobsId, String name) {
                 this.jobsId = jobsId;
                 this.name = name;
-                this.role = role;
             }
 
             public Skill toEntity(Jobs jobs) {
                 return Skill.builder()
                         .name(name)
-                        .role(role)
                         .jobs(jobs)
                         .build();
             }

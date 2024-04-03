@@ -68,10 +68,6 @@ public class JobsApiController {
             throw new Exception401("인증되지 않았습니다.");
         }
 
-        //공고정보와 사용자정보를 가져오는 detailDTO
-        JobsResponse.JobResumeDetailDTO detailDTO = jobsService.jobsDetailDTO(jobsId, sessionUser);
-        System.out.println("detailDTO :" + detailDTO);
-
         //사용자 이력서 보유내역과 지원상태를 가져오는 ResumeApplyDTO
         JobsResponse.JobResumeDetailDTO resumeApplyDTOList = jobsService.jobsDetailDTO(jobsId, sessionUser);
 
@@ -85,6 +81,13 @@ public class JobsApiController {
 
         return ResponseEntity.ok(new ApiUtil(respDTO));
 
+    }
+
+    @GetMapping("/resume/{resumeId}/update-form")
+    public ResponseEntity<?> updateFrom(@PathVariable Integer resumeId){
+
+        ResumeResponse.UpdateDTO respDTO = resumeService.updateForm(resumeId);
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
 }

@@ -15,6 +15,7 @@ public class ReplyService {
     private final BoardJPARepository boardJPARepo;
     private final ReplyJPARepository replyJPARepo;
 
+    // 댓글 삭제
     @Transactional
     public void deleteById(Integer replyId, Integer sessionUserId) {
         Reply reply = replyJPARepo.findById(replyId)
@@ -28,13 +29,14 @@ public class ReplyService {
 
     }
 
-    // 댓글쓰기
+    // 댓글쓰기 완료
     @Transactional
-    public Reply save(ReplyRequest.SaveDTO reqDTO, User sessionUser) {
+    public ReplyResponse.ReplyDTO save(ReplyRequest.SaveDTO reqDTO, User sessionUser) {
         Board board = boardJPARepo.findById(reqDTO.getBoardId())
                 .orElseThrow(() -> new Exception404("없는 게시글에 댓글을 작성할 수 없어요"));
         Reply reply = reqDTO.toEntity(sessionUser, board);
-        return replyJPARepo.save(reply);
+        replyJPARepo.save(reply);
+        return new ReplyResponse.ReplyDTO(reply, sessionUser);
     }
 
 }

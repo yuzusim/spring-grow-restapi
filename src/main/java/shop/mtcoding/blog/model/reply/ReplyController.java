@@ -1,13 +1,12 @@
 package shop.mtcoding.blog.model.reply;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog.model.user.User;
 
@@ -17,19 +16,26 @@ public class ReplyController {
     private final ReplyService replyService;
     private final HttpSession session;
 
-    @PostMapping("/board/{boardId}/reply/{replyId}/delete")
-    public String delete(@PathVariable Integer boardId, @PathVariable Integer replyId) {
+    // 댓글삭제 완료
+    @DeleteMapping("/api/replies/{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        replyService.deleteById(replyId, sessionUser.getId());
-        return "redirect:/board/"+boardId;
+        if (sessionUser == null) {
+            // sessionUser가 null인 경우에 대한 처리
+            // 예를 들어, 예외를 발생시키거나 적절한 응답을 반환할 수 있습니다.
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiUtil("User not authenticated"));
+        }
+        replyService.deleteById(id, sessionUser.getId());
+        return ResponseEntity.ok(new ApiUtil(null));
     }
-    
-    // 댓글쓰기
+
+    // 댓글쓰기 완료
     @PostMapping("/api/replies")
-    public ResponseEntity<?> save(@RequestBody ReplyRequest.SaveDTO requestDTO) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        Reply reply = replyService.save(requestDTO, sessionUser);
-        return ResponseEntity.ok(new ApiUtil(reply));
+    public ResponseEntity<?> save(@Valid @RequestBody ReplyRequest.SaveDTO reqDTO){
+        @Valid User sessionUser = (User) session.getAttribute("sessionUser");
+        ReplyResponse.ReplyDTO respDTO = replyService.save(reqDTO, sessionUser);
+        return ResponseEntity.ok(new ApiUtil(respDTO));
     }
+
 
 }

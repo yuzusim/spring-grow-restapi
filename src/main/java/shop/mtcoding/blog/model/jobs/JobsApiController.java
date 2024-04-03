@@ -24,6 +24,14 @@ public class JobsApiController {
     private final JobsService jobsService;
     private final ResumeService resumeService;
 
+    @GetMapping("/api/jobs/write-jobs-form")
+    public ResponseEntity<?> writeJobsForm() {
+        User sessionComp = (User)session.getAttribute("sessionComp");
+
+        JobsResponse.writeJobsFormDTO writeJobsFormDTO = jobsService.writeJobsForm(sessionComp);
+
+        return ResponseEntity.ok(new ApiUtil<>(writeJobsFormDTO));
+    }
 
     @GetMapping("/api/jobs/info")
     public ResponseEntity<?> jobsInfo () {
@@ -73,7 +81,6 @@ public class JobsApiController {
         JobsResponse.UpdateDTO respDTO = jobsService.update(id, reqDTO, sessionComp);
 
         return ResponseEntity.ok(new ApiUtil(respDTO));
-
     }
 
     @GetMapping("/api/resumes/{resumeId}/update-form")
@@ -82,5 +89,4 @@ public class JobsApiController {
         ResumeResponse.UpdateDTO respDTO = resumeService.updateForm(resumeId);
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
-
 }

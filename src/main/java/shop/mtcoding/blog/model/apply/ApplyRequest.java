@@ -2,7 +2,10 @@ package shop.mtcoding.blog.model.apply;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import shop.mtcoding.blog.model.jobs.Jobs;
+import shop.mtcoding.blog.model.resume.Resume;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -26,13 +29,17 @@ public class ApplyRequest {
     }
 
     @Data
-    public static class saveDTO {
+    public static class SaveDTO {
         private Integer resumeId;
         private Integer jobsId;
         private String isPass;
 
-        public saveDTO() {
-            this.isPass = "대기중";
+        public Apply toEntity(Resume resume, Jobs jobs, String isPass) {
+            return Apply.builder()
+                    .resume(resume)
+                    .jobs(jobs)
+                    .isPass(isPass)
+                    .build();
         }
     }
 

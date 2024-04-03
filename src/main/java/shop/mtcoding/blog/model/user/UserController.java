@@ -42,29 +42,9 @@ public class UserController {
     }
 
 
-
-
     @DeleteMapping("/user/{id}")
     public String delete() {
         return "redirect:/";
-    }
-
-
-
-
-
-
-
-
-
-    @GetMapping("/user/{id}/apply")
-    public String offer(@PathVariable Integer id) {
-        return "/user/apply";
-    }
-
-    @GetMapping("/user/{id}/scrap")
-    public String scrap(@PathVariable Integer id) {
-        return "/user/scrap";
     }
 
     @PostMapping("/user/{id}/update")
@@ -84,13 +64,5 @@ public class UserController {
         request.setAttribute("user", newSessionUser);
 
         return "/user/update-form";
-    }
-
-
-    // 이미지업로드용
-    @PostMapping("/user/profile-upload")
-    public String profileUpload() {
-
-        return "redirect:/user/profile-update-form";
     }
 }

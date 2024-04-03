@@ -51,6 +51,17 @@ public class JobsResponse {
     }
 
     @Data
+    public static class writeJobsFormDTO {
+        private Integer id;
+        private String compName;
+
+        public writeJobsFormDTO(User user) {
+            this.id = user.getId();
+            this.compName = user.getCompName();
+        }
+    }
+
+    @Data
     public static class IndexSearchDTO{
         private Integer id;
         private String imgFileName;
@@ -565,19 +576,18 @@ public class JobsResponse {
             this.notApplys = notApplys;
         }
     }
-
     @Data
     public static class NotResume {
         private int id;
         private String title;
         private int userId;
-        private String isPass;
+        private boolean isyetApply;
 
-        public NotResume(Apply apply) {
-            this.id = apply.getId();
-            this.title = apply.getResume().getTitle();
-            this.userId = apply.getResume().getUser().getId();
-            this.isPass = "1";
+        public NotResume(Resume resume) {
+            this.id = resume.getId();
+            this.title = resume.getTitle();
+            this.userId = resume.getUser().getId();
+            this.isyetApply = true;
         }
     }
 }

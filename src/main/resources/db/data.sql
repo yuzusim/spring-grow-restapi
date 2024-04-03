@@ -18,7 +18,6 @@ values ('96hoho@gmail.com','양승호','1234','010-3535-9985','대전광역시 �
        ('manhou@gmail.com','박만호','1234','010-3567-1252','대전광역시 대덕구 송촌동 555번지 송촌 아파트 601호', '1993-06-22','1','a497e36e-3ded-487d-a867-0fdca503116c_user13.png',now());
 
 
-
 -- 기업 사용자 테이블
 insert into user_tb(email, my_name, password, phone, address, birth, business_number, comp_name, homepage, role, photo,img_file_name,created_at)
 values ('blackpig4b@naver.com','삼성','1234','010-1234-5822','경기도 수원시 영통구 삼성로 129 (매탄동, 삼성디지털시티)','1938-03-01','606-58-33101','SAMSUNG','www.samsung.com',2,'/images/sam.png','0cba0e4d-debb-4413-b079-d9195992e447_lg.png',now());
@@ -148,7 +147,6 @@ VALUES (1,1,'2',NOW()),
        (1,2,'4',NOW()),
        (2,2,'2',NOW()),
        (3,2,'2',NOW());
-
 
 
 -- 커뮤니티 테이블

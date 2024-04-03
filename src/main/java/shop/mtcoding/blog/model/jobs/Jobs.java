@@ -28,25 +28,19 @@ public class Jobs {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @Column(nullable = false)
     private String area;
 
-    @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
     private String edu;
 
-    @Column(nullable = false)
     private String career;
 
-    @Column(nullable = false)
     private String content;
 
     // 이거 머스태치 LocalDate만 인식함..
     private LocalDate deadline;
 
-    @Column(nullable = false)
     private String task;
 
     @CreationTimestamp

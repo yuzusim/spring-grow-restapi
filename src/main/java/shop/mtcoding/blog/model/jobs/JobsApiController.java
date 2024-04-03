@@ -22,6 +22,8 @@ import java.util.List;
 public class JobsApiController {
     private final HttpSession session;
     private final JobsService jobsService;
+    private final ResumeService resumeService;
+
 
     @GetMapping("/api/jobs/info")
     public ResponseEntity<?> jobsInfo () {
@@ -74,7 +76,7 @@ public class JobsApiController {
 
     }
 
-    @GetMapping("/resume/{resumeId}/update-form")
+    @GetMapping("/api/resumes/{resumeId}/update-form")
     public ResponseEntity<?> updateFrom(@PathVariable Integer resumeId){
 
         ResumeResponse.UpdateDTO respDTO = resumeService.updateForm(resumeId);

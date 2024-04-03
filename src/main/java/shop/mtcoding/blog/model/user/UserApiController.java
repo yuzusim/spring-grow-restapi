@@ -24,6 +24,16 @@ public class UserApiController {
     private final HttpSession session;
     private final JobsService jobsService;
 
+
+    //user 회원가입 api
+    @PostMapping("/users/join")
+    public ResponseEntity<?> join(@RequestBody UserRequest.JoinDTO reqDTO) {
+        UserResponse.UserJoinDTO respDTO = userService.join(reqDTO, reqDTO.getRole());
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
+
+    }
+
+
     @GetMapping("/logout")
     public ResponseEntity<?> logout() {
         session.invalidate();

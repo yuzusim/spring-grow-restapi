@@ -32,6 +32,11 @@ public class UserController {
         return "redirect:/";
     }
 
+    @DeleteMapping("/user/{id}")
+    public String delete() {
+        return "redirect:/";
+    }
+
     @PostMapping("/user/{id}/update")
     public String update(@PathVariable Integer id, CompRequest.UpdateDTO requestDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");

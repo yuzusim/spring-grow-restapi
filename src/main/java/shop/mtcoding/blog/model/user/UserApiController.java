@@ -24,7 +24,13 @@ public class UserApiController {
     private final HttpSession session;
     private final JobsService jobsService;
 
-    @PostMapping("/user/login")
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout() {
+        session.invalidate();
+        return ResponseEntity.ok(new ApiUtil(null));
+    }
+
+    @PostMapping("/api/user/login")
     public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO reqDTO, HttpSession session) {
         User user = userService.login(reqDTO);
         if (user != null) {
@@ -37,7 +43,6 @@ public class UserApiController {
         }
         return ResponseEntity.ok(new ApiUtil(null));
     }
-
 
     @GetMapping("/")
     public ResponseEntity<?> index(HttpServletRequest request) {
@@ -60,7 +65,7 @@ public class UserApiController {
     }
 
 
-    @GetMapping("/api/users/{id}/user-home")
+    @GetMapping("/api/users/{id}/home")
     public ResponseEntity<?> userHome (@PathVariable Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 

@@ -12,8 +12,6 @@ import shop.mtcoding.blog.model.resume.ResumeService;
 
 import shop.mtcoding.blog.model.user.User;
 
-
-
 @RequiredArgsConstructor
 @Controller
 public class JobsController {

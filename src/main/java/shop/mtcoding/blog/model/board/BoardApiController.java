@@ -1,11 +1,9 @@
 package shop.mtcoding.blog.model.board;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog.model.user.User;
@@ -14,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-public class BoardController {
+public class BoardApiController {
     private final BoardService boardService;
     private final HttpSession session;
 
@@ -40,12 +38,12 @@ public class BoardController {
     public ResponseEntity<?> detail(@PathVariable Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         BoardResponse.DetailDTO respDTO = boardService.findByIdJoinUser(id, sessionUser);
-        return ResponseEntity.ok(new ApiUtil(respDTO));
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
     // 글쓰기 완료
     @PostMapping("/api/boards")
-    public ResponseEntity<ApiUtil> save(@RequestBody BoardRequest.SaveDTO reqDTO) {
+    public ResponseEntity<?> save(@Valid @RequestBody BoardRequest.SaveDTO reqDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         Board board = boardService.save(reqDTO, sessionUser);
         return ResponseEntity.ok(new ApiUtil(board));

@@ -58,15 +58,27 @@ public class JobsService {
         List<Resume> notApplyResumeList = resumeRepo.findAllDetailResumeByUserId(sessionUser.getId());  // 공고에 지원하지않은 이력서리스트
         List<Apply> applyList = applyRepo.findAllUserByApply(sessionUser.getId()); // 세션유저가 지원한 시청리스트
 
+
         JobsResponse.JobDetailDTO2.UserDTO user = new JobsResponse.JobDetailDTO2.UserDTO(jobs.getUser());
         List<JobsResponse.JobDetailDTO2.SkillDTO> skillList = jobs.getSkillList().stream().map(JobsResponse.JobDetailDTO2.SkillDTO::new).toList();
         JobsResponse.JobDetailDTO2 job = new JobsResponse.JobDetailDTO2(jobs, user, skillList);
 
-        List<JobsResponse.NotResume> notResumeList = applyList.stream().map(JobsResponse.NotResume::new).toList();
 
-        // 지원 안한 이력서(Resume)가 0이면 true
-        // 지원 내용 리스트가 0보다 크면 true
+        List<JobsResponse.NotResume> notResumeList = notApplyResumeList.stream().map(JobsResponse.NotResume::new).toList();
+
+
+        for (int i = 0; i < notApplyResumeList.size(); i++) {
+            boolean yetApply = false;
+
+            if (applyRepo.findApplyByResumeId(notApplyResumeList.get(i).getId(), userJobsId) == null) {
+                yetApply = true;
+            }
+
+            notResumeList.get(i).setIsyetApply(yetApply);
+        }
+
         boolean isApply = false;
+
         if(notApplyResumeList.size() < 1 &&  applyList.size() > 1){
             isApply = true;
         }
@@ -76,26 +88,6 @@ public class JobsService {
         return new JobsResponse.JobResumeDetailDTO(job, resumeDetailDTO);
     }
 
-//    public JobsResponse.DetailDTO detailDTO(Integer jobsId, User sessionUser) {
-//
-//        Jobs jobs = jobsRepo.findById(jobsId)
-//                .orElseThrow(() -> new Exception404("해당 공고를 찾을 수 없습니다."));
-//        User user = userRepo.findById(jobs.getUser().getId())
-//                .orElseThrow(() -> new Exception404("해당 사용자를 찾을 수 없습니다."));
-//        List<Skill> skillList = skillRepo.findAllById(jobs.getId());
-//
-//
-//        JobsResponse.DetailDTO detailDTO = new JobsResponse.DetailDTO(jobs, user, skillList);
-//        Boolean isOwner = false;
-//
-//        if (sessionUser.getRole() == 2) {
-//            isOwner = true;
-//        }
-//
-//        detailDTO.setIsOwner(isOwner);
-//
-//        return detailDTO;
-//    }
 
     public List<JobsResponse.ListDTO> listDTOS() {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");

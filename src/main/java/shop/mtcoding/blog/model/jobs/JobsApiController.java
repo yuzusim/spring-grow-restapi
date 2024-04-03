@@ -82,4 +82,11 @@ public class JobsApiController {
 
         return ResponseEntity.ok(new ApiUtil(respDTO));
     }
+
+    @GetMapping("/api/resumes/{resumeId}/update-form")
+    public ResponseEntity<?> updateFrom(@PathVariable Integer resumeId){
+
+        ResumeResponse.UpdateDTO respDTO = resumeService.updateForm(resumeId);
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
+    }
 }

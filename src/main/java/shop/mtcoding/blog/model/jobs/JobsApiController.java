@@ -22,7 +22,7 @@ public class JobsApiController {
     private final JobsService jobsService;
     private final ResumeService resumeService;
 
-    @GetMapping("/resume/resume-detail/{resumeId}")
+    @GetMapping("/api/resumes/resume-detail/{resumeId}")
     public ResponseEntity<?> resumeDetail(@PathVariable Integer resumeId, @RequestParam Integer jobsId) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         User sessionComp = (User) session.getAttribute("sessionComp");
@@ -74,7 +74,7 @@ public class JobsApiController {
         return ResponseEntity.ok(resumeApplyDTOList);
     }
 
-    @PutMapping("/jobs/{id}/update")
+    @PutMapping("/api/jobs/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody JobsRequest.UpdateDTO reqDTO) {
         User sessionComp = (User)session.getAttribute("sessionComp");
         JobsResponse.UpdateDTO respDTO = jobsService.update(id, reqDTO, sessionComp);

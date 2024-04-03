@@ -24,7 +24,8 @@ public class UserApiController {
     private final HttpSession session;
     private final JobsService jobsService;
 
-    @GetMapping("/api")
+
+    @GetMapping("/")
     public ResponseEntity<?> index(HttpServletRequest request) {
         List<JobsResponse.ListDTO> respList = jobsService.listDTOS();
         request.setAttribute("listDTOS", respList);
@@ -33,7 +34,7 @@ public class UserApiController {
     }
 
 
-    @PostMapping("/api/search")
+    @PostMapping("/search")
     public ResponseEntity<?> indexKeyword(HttpServletRequest request, @RequestBody JobsRequest.KeywordDTO reqDTO) {
 
         List<JobsResponse.IndexSearchDTO> respList = jobsService.searchKeyword(reqDTO.getKeyword());
@@ -44,7 +45,8 @@ public class UserApiController {
         return ResponseEntity.ok(new ApiUtil<>(respList));
     }
 
-    @GetMapping("/api/user/{id}/home")
+
+    @GetMapping("/api/users/{id}/user-home")
     public ResponseEntity<?> userHome (@PathVariable Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
@@ -53,7 +55,7 @@ public class UserApiController {
         return ResponseEntity.ok(new ApiUtil<>(userHomeDTO));
     }
 
-    @GetMapping("/api/user/username-same-check")
+    @GetMapping("/api/users/username-same-check")
     public @ResponseBody ApiUtil<?> usernameSameCheck(String email) {
         User user = userService.findByEmail(email);
         if (user == null) {

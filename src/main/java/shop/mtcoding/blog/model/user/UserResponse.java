@@ -40,6 +40,39 @@ public class UserResponse {
 
     }
 
+    // 개인 회원정보 수정 DTO
+    @Data
+    public static class UserUpdateDTO{
+        private String myName;
+        private String phone;
+        private LocalDate birth;
+        private String address;
+
+        @Builder
+        public UserUpdateDTO(User user) {
+            this.myName = user.getMyName();
+            this.phone = user.getPhone();
+            this.birth = user.getBirth();
+            this.address = user.getAddress();
+        }
+    }
+
+    @Data
+    public static class UserUpdateFormDTO{
+        private String myName;
+        private String phone;
+        private LocalDate birth;
+        private String address;
+
+        @Builder
+        public UserUpdateFormDTO(User user) {
+            this.myName = user.getMyName();
+            this.phone = user.getPhone();
+            this.birth = user.getBirth();
+            this.address = user.getAddress();
+        }
+    }
+
     @Data
     public static class UserHomeDTO{
         // count

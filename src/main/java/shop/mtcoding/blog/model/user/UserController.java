@@ -76,26 +76,6 @@ public class UserController {
         return "/user/scrap";
     }
 
-    @PostMapping("/user/{id}/update")
-    public String update(@PathVariable Integer id, CompRequest.UpdateDTO requestDTO) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        userService.updateById(sessionUser, requestDTO);
-        User user = userService.findById(sessionUser.getId());
-        session.setAttribute("sessionUser", user);
-
-        return "redirect:/";
-    }
-
-    @GetMapping("/user/{id}/update-form")
-    public String updateForm(@PathVariable int id, HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        User newSessionUser = userService.findById(sessionUser.getId());
-        request.setAttribute("user", newSessionUser);
-
-        return "/user/update-form";
-    }
-
-
     // 이미지업로드용
     @PostMapping("/user/profile-upload")
     public String profileUpload() {

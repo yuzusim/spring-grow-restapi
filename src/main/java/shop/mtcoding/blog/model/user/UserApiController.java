@@ -2,6 +2,7 @@ package shop.mtcoding.blog.model.user;
 
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,6 +11,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.util.ApiUtil;
+import shop.mtcoding.blog.model.comp.CompRequest;
+import shop.mtcoding.blog.model.comp.CompResponse;
 import shop.mtcoding.blog.model.jobs.Jobs;
 import shop.mtcoding.blog.model.jobs.JobsRequest;
 import shop.mtcoding.blog.model.jobs.JobsResponse;
@@ -24,6 +27,26 @@ public class UserApiController {
     private final HttpSession session;
     private final JobsService jobsService;
 
+
+    // Update 사용자 정보 수정 완료
+    @PutMapping("/api/users")
+    public ResponseEntity<?> update(@RequestBody UserRequest.UpdateDTO reqDTO) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        UserResponse.UserUpdateDTO updatedUser = userService.updateById(sessionUser, reqDTO);
+        session.setAttribute("sessionUser", updatedUser);
+        return ResponseEntity.ok(new ApiUtil<>(updatedUser));
+    }
+
+    // Update Form에 필요한 사용자 정보 조회 완료
+    @GetMapping("/api/users/{id}")
+    public ResponseEntity<?> updateForm(@PathVariable int id) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        UserResponse.UserUpdateFormDTO respDTO = userService.updateForm(sessionUser.getId());
+
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
+    }
+
+    // 로그인 완료
     @PostMapping("/api/user/login")
     public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO reqDTO, HttpSession session) {
         User user = userService.login(reqDTO);

@@ -24,6 +24,7 @@ public class ResumeApiController {
 //        return ResponseEntity.ok(new ApiUtil<>(null));
 //
 //    }
+
     @GetMapping("/api/resume/{resumeId}/update-form")
     public ResponseEntity<?> updateFrom(@PathVariable Integer resumeId){
 
@@ -31,7 +32,7 @@ public class ResumeApiController {
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
-    @GetMapping("/resume/resume-detail/{resumeId}")
+    @GetMapping("/api/resume/resume-detail/{resumeId}")
     public ResponseEntity<?> resumeDetail(@PathVariable Integer resumeId, @RequestParam Integer jobsId) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         User sessionComp = (User) session.getAttribute("sessionComp");

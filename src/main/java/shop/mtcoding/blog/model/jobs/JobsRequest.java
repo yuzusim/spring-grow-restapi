@@ -18,7 +18,7 @@ public class JobsRequest {
         private String keyword;
     }
 
-    @Data // 공고작성 DTO 2탄
+    @Data
     public static class JobsSaveDTO{
 
         @Size(min = 1, max = 10, message = "제목이 공백이거나 10자 이상입니다.")

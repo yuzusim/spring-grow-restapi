@@ -24,7 +24,22 @@ public class UserApiController {
     private final HttpSession session;
     private final JobsService jobsService;
 
-    @GetMapping("/api")
+    @PostMapping("/api/user/login")
+    public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO reqDTO, HttpSession session) {
+        User user = userService.login(reqDTO);
+        if (user != null) {
+            session.setAttribute("sessionUser", user);
+            int role = user.getRole();
+            if (role == 1) {
+            } else if (role == 2) {
+                session.setAttribute("sessionComp", user);
+            }
+        }
+        return ResponseEntity.ok(new ApiUtil(null));
+    }
+
+
+    @GetMapping("/")
     public ResponseEntity<?> index(HttpServletRequest request) {
         List<JobsResponse.ListDTO> respList = jobsService.listDTOS();
         request.setAttribute("listDTOS", respList);
@@ -33,7 +48,7 @@ public class UserApiController {
     }
 
 
-    @PostMapping("/api/search")
+    @PostMapping("/search")
     public ResponseEntity<?> indexKeyword(HttpServletRequest request, @RequestBody JobsRequest.KeywordDTO reqDTO) {
 
         List<JobsResponse.IndexSearchDTO> respList = jobsService.searchKeyword(reqDTO.getKeyword());
@@ -44,7 +59,8 @@ public class UserApiController {
         return ResponseEntity.ok(new ApiUtil<>(respList));
     }
 
-    @GetMapping("/user/{id}/user-home")
+
+    @GetMapping("/api/users/{id}/user-home")
     public ResponseEntity<?> userHome (@PathVariable Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
@@ -53,25 +69,22 @@ public class UserApiController {
         return ResponseEntity.ok(new ApiUtil<>(userHomeDTO));
     }
 
-    @GetMapping("/api/user/username-same-check")
-    public @ResponseBody ApiUtil<?> usernameSameCheck(String email) {
-        User user = userService.findByEmail(email);
+    @GetMapping("/api/users/username-same-check")
+    public  ResponseEntity<?> usernameSameCheck(@RequestBody UserRequest.EmailDTO email) {
+        User user = userService.findByEmail(email.getEmail());
         if (user == null) {
-            return new ApiUtil<>(true);
+            return ResponseEntity.ok(new ApiUtil<>(true));
         } else {
-            return new ApiUtil<>(false);
+            return ResponseEntity.ok(new ApiUtil<>(false));
         }
     }
 
     @PostMapping("/api/find-jobs-resume")
-    public List<UserResponse.UrsDTO> findAllJobsByResumeId(@RequestParam(name = "resumeId") Integer resumeId, HttpServletRequest request){
-        List<UserResponse.UrsDTO> ursDTOList = userService.ursDTOS(resumeId);
-        //No 카운트 뽑으려고 for문 돌림
-        for (int i = 0; i < ursDTOList.size(); i++) {
-            ursDTOList.get(i).setId(i + 1);
-        }
+    public ResponseEntity<?> findAllJobsByResumeId(@RequestBody UserRequest.ResumeIdDTO resumeId, HttpServletRequest request){
+        List<UserResponse.UrsDTO> ursDTOList = userService.ursDTOS(resumeId.getResumeId());
+
         request.setAttribute("ursDTOList", ursDTOList);
 
-        return ursDTOList;
+        return ResponseEntity.ok(new ApiUtil<>(ursDTOList));
     }
 }

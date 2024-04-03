@@ -32,6 +32,7 @@ public class UserService {
     private final JobsJPARepository jobsRepo;
     private final ApplyJPARepository applyRepo;
 
+    @Transactional
     public UserResponse.UserHomeDTO userHome(Integer userId) {
         Integer waitCount = userRepo.findByUserIdN1(userId);
         Integer resultCount = userRepo.findByUserId34(userId);
@@ -69,7 +70,9 @@ public class UserService {
                             .resume(resume)
                             .skillList(skills).build();
                 }).collect(Collectors.toList());
-
+        for (int i = 0; i < ursDTOList.size(); i++) {
+            ursDTOList.get(i).setId(i + 1);
+        }
         return ursDTOList;
 
     }

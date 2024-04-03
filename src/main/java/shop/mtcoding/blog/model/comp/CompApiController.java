@@ -18,7 +18,7 @@ public class CompApiController {
     private final CompService compService;
     private final HttpSession session;
 
-    //기업 메인
+    //기업 메인 (메인이라 api 안 붙였는데 필요하면 붙이세용)
     @GetMapping("/comps/comp-index")
     public ResponseEntity<?> compIndex() {
         List<CompResponse.CompMainDTO> reqsDTO = compService.compMainList();
@@ -26,7 +26,7 @@ public class CompApiController {
         return ResponseEntity.ok(new ApiUtil<>(reqsDTO));
     }
 
-    @GetMapping("/comp/{id}/comp-home")
+    @GetMapping("/api/comps/{id}/comp-home")
     public ResponseEntity<?> compHome(@PathVariable Integer id) {
         User sessionComp = (User) session.getAttribute("sessionComp");
         List<CompResponse.ComphomeDTO> comphomeDTOList = compService.findAllByUserId(sessionComp);
@@ -34,7 +34,7 @@ public class CompApiController {
         return ResponseEntity.ok(new ApiUtil<>(comphomeDTOList));
     }
 
-    @GetMapping("/api/comp/read-resume")
+    @GetMapping("/api/comps/read-resume")
     public ResponseEntity<?> readResume(HttpServletRequest request) {
         List<CompResponse.ResumeUserSkillDTO> rusList = compService.findAllRusList();
         request.setAttribute("rusList", rusList);
@@ -58,7 +58,7 @@ public class CompApiController {
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
-    @GetMapping("/comp/comp-manage")
+    @GetMapping("/api/comps/comp-manage")
     public ResponseEntity<?> compManage () {
         User sessionUser = (User) session.getAttribute("sessionUser");
         CompResponse.CompManageDTO  compManageDTO = compService.compManage(sessionUser.getId());

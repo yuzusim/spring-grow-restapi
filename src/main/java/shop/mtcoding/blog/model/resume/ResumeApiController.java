@@ -16,13 +16,19 @@ public class ResumeApiController {
     private final HttpSession session;
     private final UserService userService;
 
-    @DeleteMapping("/api/resumes/{id}")
-    public ResponseEntity<?> delete(@PathVariable Integer id) {
-     //  User sessionUser = (User) session.getAttribute("sessionUser");
-        resumeService.delete(id);
+//    @DeleteMapping("/api/resumes/{id}")
+//    public ResponseEntity<?> delete(@PathVariable Integer id) {
+//     //  User sessionUser = (User) session.getAttribute("sessionUser");
+//        resumeService.delete(id);
+//
+//        return ResponseEntity.ok(new ApiUtil<>(null));
+//
+//    }
+    @GetMapping("/api/resume/{resumeId}/update-form")
+    public ResponseEntity<?> updateFrom(@PathVariable Integer resumeId){
 
-        return ResponseEntity.ok(new ApiUtil<>(null));
-
+        ResumeResponse.UpdateDTO respDTO = resumeService.updateForm(resumeId);
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
     @GetMapping("/resume/resume-detail/{resumeId}")
@@ -34,15 +40,15 @@ public class ResumeApiController {
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
+    @PostMapping("/api/resumes")
 
-    @PostMapping("/resume/save")
     public ResponseEntity<?> save(@RequestBody ResumeRequest.SaveDTO reqDTO){
         resumeService.save(reqDTO);
 
         return ResponseEntity.ok(new ApiUtil<>(null));
     }
 
-    @GetMapping("/resume/resume-detail2/{id}")
+    @GetMapping("/api/resumes/resume-detail2/{id}")
     public ResponseEntity<?> resumeDetail2(@PathVariable Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         User newSessionUser = userService.findById(sessionUser.getId());
@@ -52,7 +58,7 @@ public class ResumeApiController {
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
-    @GetMapping("/comp/comp-resume-detail/{id}")
+    @GetMapping("/api/comps/comp-resume-detail/{id}")
     public ResponseEntity<?> compResumeDetail(@PathVariable Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         User newSessionUser = userService.findById(sessionUser.getId());
@@ -62,7 +68,7 @@ public class ResumeApiController {
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
-    @PutMapping("/resume/{id}/update")
+    @PutMapping("/api/resumes/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody ResumeRequest.UpdateDTO reqDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         //해당 부분 redirect 해보고 틀렸으면 본인이 수정

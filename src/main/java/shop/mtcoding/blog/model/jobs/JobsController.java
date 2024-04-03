@@ -17,13 +17,8 @@ import shop.mtcoding.blog.model.user.User;
 @RequiredArgsConstructor
 @Controller
 public class JobsController {
-    private final JobsService jobsService;
-    private final ResumeService resumeService;
     private final HttpSession session;
 
-
-
-    // 지워도 될듯?
     @GetMapping("/jobs/write-jobs-form")
     public String writeJobsForm(HttpServletRequest request) {
         User sessionComp = (User)session.getAttribute("sessionComp");

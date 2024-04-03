@@ -2,8 +2,10 @@ package shop.mtcoding.blog.model.jobs;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.errors.exception.Exception401;
 import shop.mtcoding.blog._core.util.ApiUtil;
@@ -20,16 +22,6 @@ import java.util.List;
 public class JobsApiController {
     private final HttpSession session;
     private final JobsService jobsService;
-    private final ResumeService resumeService;
-
-    @GetMapping("/api/resumes/resume-detail/{resumeId}")
-    public ResponseEntity<?> resumeDetail(@PathVariable Integer resumeId, @RequestParam Integer jobsId) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        User sessionComp = (User) session.getAttribute("sessionComp");
-        ResumeResponse.DetailDTO respDTO = resumeService.resumeDetail(resumeId, jobsId, sessionUser, sessionComp);
-
-        return ResponseEntity.ok(new ApiUtil<>(respDTO));
-    }
 
     @GetMapping("/api/jobs/info")
     public ResponseEntity<?> jobsInfo () {
@@ -37,11 +29,10 @@ public class JobsApiController {
         return ResponseEntity.ok(new ApiUtil<>(listDTOS));
     }
 
-    // 하다 도망친거 - 승진
     @PostMapping("/api/jobs/save")
-    public @ResponseBody ResponseEntity<?> save (@RequestBody JobsRequest.JobsSaveDTO reqDTO) {
+    public @ResponseBody ResponseEntity<?> save (@Valid @RequestBody JobsRequest.JobsSaveDTO reqDTO, Errors errors) {
         User sessionComp = (User)session.getAttribute("sessionComp");
-        Jobs jobs = jobsService.save(sessionComp, reqDTO);
+        JobsResponse.JonsSaveDTO jobs = jobsService.save(sessionComp, reqDTO);
         return ResponseEntity.ok(new ApiUtil(jobs));
     }
 

@@ -4,7 +4,19 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+
 public class UserRequest {
+
+
+    @Data
+    public static class ResumeIdDTO{
+        private Integer resumeId;
+    }
+
+    @Data
+    public static class EmailDTO{
+        private String email;
+    }
 
     @Data
     public static class UpdateDTO{
@@ -44,4 +56,6 @@ public class UserRequest {
         private String email;
         private String password;
     }
+
+
 }

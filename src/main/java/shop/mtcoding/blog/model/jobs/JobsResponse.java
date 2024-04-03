@@ -1,5 +1,7 @@
 package shop.mtcoding.blog.model.jobs;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 import shop.mtcoding.blog.model.apply.Apply;
@@ -14,6 +16,39 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JobsResponse {
+
+    @Data
+    public static class JonsSaveDTO {
+        private String title;
+        private String area;
+        private String edu;
+        private String career;
+        private String content;
+        private LocalDate deadLine;
+        private String task;
+        private List<SkillDTO> skillList;
+
+        @Builder
+        public JonsSaveDTO(Jobs jobs, List<Skill> skillList) {
+            this.title = jobs.getTitle();
+            this.area = jobs.getArea();
+            this.edu = jobs.getEdu();
+            this.career = jobs.getCareer();
+            this.content = jobs.getContent();
+            this.deadLine = jobs.getDeadline();
+            this.task = jobs.getTask();
+            this.skillList = skillList.stream().map(SkillDTO::new).toList();
+        }
+
+        @Data
+        public class SkillDTO {
+            private String name;
+
+            public SkillDTO(Skill skill) {
+                this.name = skill.getName();
+            }
+        }
+    }
 
     @Data
     public static class IndexSearchDTO{

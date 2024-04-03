@@ -24,6 +24,20 @@ public class UserApiController {
     private final HttpSession session;
     private final JobsService jobsService;
 
+    @PostMapping("/api/user/login")
+    public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO reqDTO, HttpSession session) {
+        User user = userService.login(reqDTO);
+        if (user != null) {
+            session.setAttribute("sessionUser", user);
+            int role = user.getRole();
+            if (role == 1) {
+            } else if (role == 2) {
+                session.setAttribute("sessionComp", user);
+            }
+        }
+        return ResponseEntity.ok(new ApiUtil(null));
+    }
+
 
     @GetMapping("/")
     public ResponseEntity<?> index(HttpServletRequest request) {
@@ -56,24 +70,21 @@ public class UserApiController {
     }
 
     @GetMapping("/api/users/username-same-check")
-    public @ResponseBody ApiUtil<?> usernameSameCheck(String email) {
-        User user = userService.findByEmail(email);
+    public  ResponseEntity<?> usernameSameCheck(@RequestBody UserRequest.EmailDTO email) {
+        User user = userService.findByEmail(email.getEmail());
         if (user == null) {
-            return new ApiUtil<>(true);
+            return ResponseEntity.ok(new ApiUtil<>(true));
         } else {
-            return new ApiUtil<>(false);
+            return ResponseEntity.ok(new ApiUtil<>(false));
         }
     }
 
     @PostMapping("/api/find-jobs-resume")
-    public List<UserResponse.UrsDTO> findAllJobsByResumeId(@RequestParam(name = "resumeId") Integer resumeId, HttpServletRequest request){
-        List<UserResponse.UrsDTO> ursDTOList = userService.ursDTOS(resumeId);
-        //No 카운트 뽑으려고 for문 돌림
-        for (int i = 0; i < ursDTOList.size(); i++) {
-            ursDTOList.get(i).setId(i + 1);
-        }
+    public ResponseEntity<?> findAllJobsByResumeId(@RequestBody UserRequest.ResumeIdDTO resumeId, HttpServletRequest request){
+        List<UserResponse.UrsDTO> ursDTOList = userService.ursDTOS(resumeId.getResumeId());
+
         request.setAttribute("ursDTOList", ursDTOList);
 
-        return ursDTOList;
+        return ResponseEntity.ok(new ApiUtil<>(ursDTOList));
     }
 }

@@ -24,4 +24,7 @@ public interface JobsJPARepository extends JpaRepository <Jobs, Integer> {
 
     @Query("select j from Jobs j join fetch j.user u left join fetch j.skillList s")
     List<Jobs> findAllJobsList();
+
+    @Query("select j from Jobs j join fetch j.skillList where j.user.id = :userId")
+    List<Jobs> findAllByUserIdWithSkill(@Param("userId") Integer userId);
 }

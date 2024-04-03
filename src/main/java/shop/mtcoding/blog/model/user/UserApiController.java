@@ -30,7 +30,7 @@ public class UserApiController {
         return ResponseEntity.ok(new ApiUtil(null));
     }
 
-    @PostMapping("/api/user/login")
+    @PostMapping("/user/login")
     public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO reqDTO, HttpSession session) {
         User user = userService.login(reqDTO);
         if (user != null) {

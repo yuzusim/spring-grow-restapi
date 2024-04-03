@@ -15,27 +15,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class UserController {
-    private final JobsService jobsService;
+
     private final UserService userService;
     private final HttpSession session;
 
-    @PostMapping("/user/join")
-    public String join(@RequestParam(name = "role") Integer role, UserRequest.JoinDTO reqDTO) {
-        User user = userService.join(reqDTO, role);
-        session.setAttribute("sessionUser", user);
-        return "redirect:/";
-    }
-
-    @GetMapping("/logout")
-    public String logout() {
-        session.invalidate();
-        return "redirect:/";
-    }
-
-    @DeleteMapping("/user/{id}")
-    public String delete() {
-        return "redirect:/";
-    }
 
     @PostMapping("/user/{id}/update")
     public String update(@PathVariable Integer id, CompRequest.UpdateDTO requestDTO) {

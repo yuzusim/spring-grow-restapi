@@ -36,6 +36,18 @@ public class CompService {
     private final ApplyJPARepository applyJPARepo;
 
 
+    //기업 로그인하면 보여줄 이력서 목록 (api 전환)
+    public List<CompResponse.CompMainDTO> compMainList() {
+        List<Resume> resumeList = resumeJPARepo.findAllMainList();
+
+//        List<Resume> resumeList = resumeJPARepo.findAllJoinUser();
+//        List<Skill> skillList = skillJPARepo.findAllResumeWithSkill();
+
+        return resumeList.stream().map(resume ->
+                new CompResponse.CompMainDTO(resume)).collect(Collectors.toList());
+
+    }
+
     public List<ResumeResponse.CmrDTO> findAllAppli(Integer userId) {
         List<Apply> applyList = applyJPARepo.findAllByUidN1(userId);
 

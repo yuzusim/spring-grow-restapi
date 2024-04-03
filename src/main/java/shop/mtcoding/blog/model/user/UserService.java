@@ -69,7 +69,9 @@ public class UserService {
                             .resume(resume)
                             .skillList(skills).build();
                 }).collect(Collectors.toList());
-
+        for (int i = 0; i < ursDTOList.size(); i++) {
+            ursDTOList.get(i).setId(i + 1);
+        }
         return ursDTOList;
 
     }

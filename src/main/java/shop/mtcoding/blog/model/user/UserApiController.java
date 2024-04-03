@@ -58,8 +58,8 @@ public class UserApiController {
         return ResponseEntity.ok(new ApiUtil<>(respList));
     }
 
-    @GetMapping("/user/user-home")
-    public ResponseEntity<?> userHome () {
+    @GetMapping("/api/user/{id}/home")
+    public ResponseEntity<?> userHome (@PathVariable Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         UserResponse.UserHomeDTO userHomeDTO = userService.userHome(sessionUser.getId());

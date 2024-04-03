@@ -19,18 +19,28 @@ public class UserController {
     private final UserService userService;
     private final HttpSession session;
 
-    @PostMapping("/user/join")
-    public String join(@RequestParam(name = "role") Integer role, UserRequest.JoinDTO reqDTO) {
-        User user = userService.join(reqDTO, role);
-        session.setAttribute("sessionUser", user);
-        return "redirect:/";
+
+    //user의 지원 내역
+    @GetMapping("/user/{id}/resume-home")
+    public String resumeHome(@PathVariable Integer id, HttpServletRequest request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        List<UserResponse.UserResumeSkillDTO> ursList = userService.userResumeSkillDTO(sessionUser.getId());
+        //No 카운트 뽑으려고 for문 돌림
+        for (int i = 0; i < ursList.size(); i++) {
+            ursList.get(i).setId(i + 1);
+        }
+        request.setAttribute("ursList", ursList);
+
+        return "/user/resume-home";
     }
 
-    @GetMapping("/logout")
-    public String logout() {
-        session.invalidate();
-        return "redirect:/";
+
+    @GetMapping("/user/join-form")
+    public String joinForm() {
+        return "/user/join-form";
     }
+
 
     @DeleteMapping("/user/{id}")
     public String delete() {

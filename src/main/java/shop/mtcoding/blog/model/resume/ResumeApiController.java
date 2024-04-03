@@ -25,6 +25,15 @@ public class ResumeApiController {
 
     }
 
+    @GetMapping("/resume/resume-detail/{resumeId}")
+    public ResponseEntity<?> resumeDetail(@PathVariable Integer resumeId, @RequestParam Integer jobsId) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        User sessionComp = (User) session.getAttribute("sessionComp");
+        ResumeResponse.DetailDTO respDTO = resumeService.resumeDetail(resumeId, jobsId, sessionUser, sessionComp);
+
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
+    }
+
 
     @PostMapping("/resume/save")
     public ResponseEntity<?> save(@RequestBody ResumeRequest.SaveDTO reqDTO){

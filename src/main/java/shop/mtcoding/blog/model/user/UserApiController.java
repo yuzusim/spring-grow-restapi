@@ -44,7 +44,7 @@ public class UserApiController {
         return ResponseEntity.ok(new ApiUtil<>(respList));
     }
 
-    @GetMapping("/user/{id}/user-home")
+    @GetMapping("/api/user/{id}/home")
     public ResponseEntity<?> userHome (@PathVariable Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 

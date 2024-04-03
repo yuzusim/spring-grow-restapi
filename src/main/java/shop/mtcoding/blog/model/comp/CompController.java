@@ -34,11 +34,5 @@ public class CompController {
         return "/comp/profile-update-form";
     }
 
-    @GetMapping("/comp/jobs-info")
-    public String jobsInfo(HttpServletRequest request) {
-        List<CompResponse.JobsSkillDTO> jobsList = compService.jobsList();
-        request.setAttribute("jobsList", jobsList);
 
-        return "/comp/jobs-info";
-    }
 }

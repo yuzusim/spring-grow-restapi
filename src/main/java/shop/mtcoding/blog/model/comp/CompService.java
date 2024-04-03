@@ -196,25 +196,32 @@ public class CompService {
         return listDTOS;
     }
 
-    //기업 로그인하면 보여줄 채용 공고
-    public List<CompResponse.JobsSkillDTO> jobsList() {
-        List<Jobs> jobsList = jobsJPARepo.findAll();
-        List<CompResponse.JobsSkillDTO> jobsSkillList = new ArrayList<>();
-
-        for (int i = 0; i < jobsList.size(); i++) {
-            User user = userJPARepo.findById(jobsList.get(i).getUser().getId())
-                    .orElseThrow(() -> new Exception404("정보를 찾을 수 없습니다."));
-
-            List<Skill> skillList = skillJPARepo.findAllByJobsId(jobsList.get(i).getId());
-            jobsSkillList.add(CompResponse.JobsSkillDTO.builder()
-                    .jobs(jobsList.get(i))
-                    .user(user)
-                    .skillList(skillList)
-                    .build());
-        }
-        return jobsSkillList;
-
+    //기업 로그인 시 보여줄 채용 공고
+    public List<CompResponse.CompJobsInfoDTO> jobsInfoList() {
+        List<Jobs> jobsList = jobsJPARepo.findAllJobsList();
+        return jobsList.stream().map(jobs ->
+                new CompResponse.CompJobsInfoDTO(jobs)).collect(Collectors.toList());
     }
+
+    //기업 로그인하면 보여줄 채용 공고
+//    public List<CompResponse.JobsSkillDTO> jobsList() {
+//        List<Jobs> jobsList = jobsJPARepo.findAll();
+//        List<CompResponse.JobsSkillDTO> jobsSkillList = new ArrayList<>();
+//
+//        for (int i = 0; i < jobsList.size(); i++) {
+//            User user = userJPARepo.findById(jobsList.get(i).getUser().getId())
+//                    .orElseThrow(() -> new Exception404("정보를 찾을 수 없습니다."));
+//
+//            List<Skill> skillList = skillJPARepo.findAllByJobsId(jobsList.get(i).getId());
+//            jobsSkillList.add(CompResponse.JobsSkillDTO.builder()
+//                    .jobs(jobsList.get(i))
+//                    .user(user)
+//                    .skillList(skillList)
+//                    .build());
+//        }
+//        return jobsSkillList;
+//
+//    }
 
     // 기업 로그인하면 보여줄 이력서 목록들
     public List<CompResponse.ResumeUserSkillDTO> findAllRusList() {

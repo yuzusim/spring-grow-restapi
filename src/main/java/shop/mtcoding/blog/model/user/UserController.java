@@ -55,19 +55,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/user/login")
-    public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO reqDTO, HttpSession session) {
-        User user = userService.login(reqDTO);
-        if (user != null) {
-            session.setAttribute("sessionUser", user);
-            int role = user.getRole();
-            if (role == 1) {
-            } else if (role == 2) {
-                session.setAttribute("sessionComp", user);
-            }
-        }
-        return ResponseEntity.ok(new ApiUtil(null));
-    }
+
 
 
     @GetMapping("/logout")
@@ -77,10 +65,6 @@ public class UserController {
     }
 
 
-    @GetMapping("/user/login-form")
-    public String loginForm() {
-        return "/user/login-form";
-    }
 
     @GetMapping("/user/{id}/apply")
     public String offer(@PathVariable Integer id) {

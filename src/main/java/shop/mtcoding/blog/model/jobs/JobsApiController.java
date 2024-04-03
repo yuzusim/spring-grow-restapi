@@ -2,8 +2,10 @@ package shop.mtcoding.blog.model.jobs;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.errors.exception.Exception401;
 import shop.mtcoding.blog._core.util.ApiUtil;
@@ -22,14 +24,6 @@ public class JobsApiController {
     private final JobsService jobsService;
     private final ResumeService resumeService;
 
-    @GetMapping("/resume/resume-detail/{resumeId}")
-    public ResponseEntity<?> resumeDetail(@PathVariable Integer resumeId, @RequestParam Integer jobsId) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        User sessionComp = (User) session.getAttribute("sessionComp");
-        ResumeResponse.DetailDTO respDTO = resumeService.resumeDetail(resumeId, jobsId, sessionUser, sessionComp);
-
-        return ResponseEntity.ok(new ApiUtil<>(respDTO));
-    }
 
     @GetMapping("/api/jobs/info")
     public ResponseEntity<?> jobsInfo () {
@@ -37,11 +31,10 @@ public class JobsApiController {
         return ResponseEntity.ok(new ApiUtil<>(listDTOS));
     }
 
-    // 하다 도망친거 - 승진
     @PostMapping("/api/jobs/save")
-    public @ResponseBody ResponseEntity<?> save (@RequestBody JobsRequest.JobsSaveDTO reqDTO) {
+    public @ResponseBody ResponseEntity<?> save (@Valid @RequestBody JobsRequest.JobsSaveDTO reqDTO, Errors errors) {
         User sessionComp = (User)session.getAttribute("sessionComp");
-        Jobs jobs = jobsService.save(sessionComp, reqDTO);
+        JobsResponse.JonsSaveDTO jobs = jobsService.save(sessionComp, reqDTO);
         return ResponseEntity.ok(new ApiUtil(jobs));
     }
 
@@ -68,23 +61,26 @@ public class JobsApiController {
             throw new Exception401("인증되지 않았습니다.");
         }
 
-        //공고정보와 사용자정보를 가져오는 detailDTO
-        JobsResponse.JobResumeDetailDTO detailDTO = jobsService.jobsDetailDTO(jobsId, sessionUser);
-        System.out.println("detailDTO :" + detailDTO);
-
         //사용자 이력서 보유내역과 지원상태를 가져오는 ResumeApplyDTO
         JobsResponse.JobResumeDetailDTO resumeApplyDTOList = jobsService.jobsDetailDTO(jobsId, sessionUser);
 
         return ResponseEntity.ok(resumeApplyDTOList);
     }
 
-    @PutMapping("/jobs/{id}/update")
+    @PutMapping("/api/jobs/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody JobsRequest.UpdateDTO reqDTO) {
         User sessionComp = (User)session.getAttribute("sessionComp");
         JobsResponse.UpdateDTO respDTO = jobsService.update(id, reqDTO, sessionComp);
 
         return ResponseEntity.ok(new ApiUtil(respDTO));
 
+    }
+
+    @GetMapping("/api/resumes/{resumeId}/update-form")
+    public ResponseEntity<?> updateFrom(@PathVariable Integer resumeId){
+
+        ResumeResponse.UpdateDTO respDTO = resumeService.updateForm(resumeId);
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
 }

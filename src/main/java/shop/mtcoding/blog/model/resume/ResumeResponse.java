@@ -51,18 +51,28 @@ public class ResumeResponse {
         private String career;
         private String introduce;
         private String portLink;
-        private SkillResponse.SkillCheckedDTO skillChecked;
+        private List<UpdateSkill> skillList;
 
         @Builder
-        public UpdateDTO(String title, String area, String edu, String career, String introduce, String portLink, SkillResponse.SkillCheckedDTO skillChecked) {
-            this.title = title;
-            this.area = area;
-            this.edu = edu;
-            this.career = career;
-            this.introduce = introduce;
-            this.portLink = portLink;
-            this.skillChecked = skillChecked;
+        public UpdateDTO(Resume resume,List<Skill> skills) {
+            this.title = resume.getTitle();
+            this.area = resume.getArea();
+            this.edu = resume.getEdu();
+            this.career = resume.getCareer();
+            this.introduce = resume.getIntroduce();
+            this.portLink = resume.getPortLink();
+            this.skillList = skills.stream()
+                    .map(updateSkill -> new UpdateSkill(updateSkill))
+                    .collect(Collectors.toList());
+        }
 
+        @Data
+        public static class UpdateSkill {
+            private String name;
+
+            public UpdateSkill(Skill skill) {
+                this.name = skill.getName();
+            }
         }
     }
 

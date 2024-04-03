@@ -17,6 +17,46 @@ import java.util.stream.Collectors;
 
 public class CompResponse {
 
+    //기업 채용정보창
+    @Data
+    public static class CompJobsInfoDTO {
+        //jobs
+        private Integer id;
+        private String title;
+        private String career;
+        private String area;
+        private LocalDate deadline;
+        //user
+        private Integer userId;
+        private String compName;
+        private String imgFileName;
+        //skill
+        private List<SkillDTO2> skills = new ArrayList<>();
+
+        public CompJobsInfoDTO(Jobs jobs) {
+            this.id = jobs.getId();
+            this.title = jobs.getTitle();
+            this.career = jobs.getCareer();
+            this.area = jobs.getArea();
+            this.deadline = jobs.getDeadline();
+            this.userId = jobs.getUser().getId();
+            this.compName = jobs.getUser().getCompName();
+            this.imgFileName = jobs.getUser().getImgFileName();
+            this.skills = jobs.getSkillList().stream().map(skill ->
+                    new SkillDTO2(skill)).collect(Collectors.toList());
+        }
+
+        @Data
+        public class SkillDTO2 {
+            private String name;
+
+            public SkillDTO2(Skill skill) {
+                this.name = skill.getName();
+            }
+        }
+    }
+
+
     //기업 메인창
     @Data
     public static class CompMainDTO {

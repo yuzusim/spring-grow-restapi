@@ -15,6 +15,36 @@ import java.util.stream.Collectors;
 
 public class ResumeResponse {
 
+    @Data
+    public static class SaveDTO {
+        private String title;
+        private String area;
+        private String edu;
+        private String career;
+        private String introduce;
+        private String portLink;
+        private List<WriteSkillDTO> skillList;
+
+        public SaveDTO(Resume resume, List<Skill> skillList) {
+            this.title = resume.getTitle();
+            this.area = resume.getArea();
+            this.edu = resume.getEdu();
+            this.career = resume.getCareer();
+            this.introduce = resume.getIntroduce();
+            this.portLink = resume.getPortLink();
+            this.skillList = skillList.stream().map(WriteSkillDTO::new).toList();
+        }
+
+        @Data
+        public class WriteSkillDTO {
+            private String name;
+
+            public WriteSkillDTO(Skill skill) {
+                this.name = skill.getName();
+            }
+        }
+    }
+
     @Data // comp-manage페이지에 뿌려지는 resume용 DTO
     public static class CmrDTO {
         private Integer id;

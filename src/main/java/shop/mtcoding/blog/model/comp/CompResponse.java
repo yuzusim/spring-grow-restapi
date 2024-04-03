@@ -5,17 +5,38 @@ import lombok.Data;
 import shop.mtcoding.blog.model.apply.Apply;
 import shop.mtcoding.blog.model.jobs.Jobs;
 import shop.mtcoding.blog.model.resume.Resume;
-import shop.mtcoding.blog.model.resume.ResumeResponse;
 import shop.mtcoding.blog.model.skill.Skill;
 import shop.mtcoding.blog.model.user.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CompResponse {
+
+    @Data
+    public static class CompJoinDTO {
+        private String email;
+        private String myName;
+        private String phone;
+        private String address;
+        private LocalDate birth;
+        private String businessNumber;
+        private String compName;
+        private String homepage;
+
+        public CompJoinDTO(User user) {
+            this.email = user.getEmail();
+            this.myName = user.getMyName();
+            this.phone = user.getPhone();
+            this.address = user.getAddress();
+            this.birth = user.getBirth();
+            this.businessNumber = user.getBusinessNumber();
+            this.compName = user.getCompName();
+            this.homepage = user.getHomepage();
+        }
+    }
 
     //기업 채용정보창
     @Data

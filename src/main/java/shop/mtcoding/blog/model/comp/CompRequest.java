@@ -73,7 +73,7 @@ public class CompRequest {
         private String imgFileName;
         private LocalDate createdAt;
 
-        public User toEntity(Integer role, String imgFileName) {
+        public User toEntity(Integer role) {
             return User.builder()
                     .id(id)
                     .email(email)
@@ -84,7 +84,6 @@ public class CompRequest {
                     .birth(birth)
                     .businessNumber(businessNumber)
                     .photo(photo)
-
                     .compName(compName)
                     .homepage(homepage)
                     .role(role)

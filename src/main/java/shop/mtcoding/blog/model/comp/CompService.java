@@ -87,7 +87,7 @@ public class CompService {
         Integer jobsCount = jobsJPARepo.countByUserId(userId);
         List<Apply> applicantList = applyJPARepo.findAllByUidN1(userId);
         List<Apply> noRespList = applyJPARepo.findAllByUidI2(userId);
-        List<Jobs> jobsList = compJPARepo.findAllByUserIdWithSkill(userId);
+        List<Jobs> jobsList = jobsJPARepo.findAllByUserIdWithSkill(userId);
 
         return new CompResponse.CompManageDTO(jobsCount, applicantList.size(), noRespList.size(), jobsList);
     }
@@ -126,38 +126,16 @@ public class CompService {
 
     // 기업 회원가입
     @Transactional
-    public User join(Integer role, CompRequest.CompJoinDTO reqDTO) {
+    public CompResponse.CompJoinDTO join(CompRequest.CompJoinDTO reqDTO) {
 
         // 회원가입 할 때마다 이미지 못가져와서 터지니까 디폴트 이미지 하나 추가함
-        compJPARepo.save(reqDTO.toEntity(role, "54040a46-d1b0-4ea5-9938-d461cd656fc1_naver.jpg"));
+        User comp = compJPARepo.save(reqDTO.toEntity(2));
 
-        // 전에거에 있던 이메일 찾아서 그걸로 세션저장해서 회원가입 직후 바로 로그인 되는거 구현하려고 만듬
-        User comp = compJPARepo.findByEmail(reqDTO.getEmail());
+//        // 전에거에 있던 이메일 찾아서 그걸로 세션저장해서 회원가입 직후 바로 로그인 되는거 구현하려고 만듬
+//        compJPARepo.findByEmail(reqDTO.getEmail());
 
-        System.out.println(comp.getRole());
-        return comp;
+        return new CompResponse.CompJoinDTO(comp);
     }
-
-//    public void jobsUserSkillDTO(Integer id) {
-//        List<Jobs> jobsList = jobsJPARepo.findAllByJobsId(id);
-//        List<JobsResponse.JobsListDTO> jobsListDTOS = new ArrayList<>();
-//
-//        jobsList.stream().map(jobs -> {
-//            User user = userJPARepo.findById(jobs.getUser().getId())
-//                    .orElseThrow(() -> new Exception404("회원정보를 찾을 수 없습니다."));
-//            List<Skill> skillList = skillJPARepo.findAllByJobsId(jobs.getId());
-//            return jobsListDTOS.add(JobsResponse.JobsListDTO.builder()
-//                    .jobs(jobs)
-//                    .user(user)
-//                    .skills(skillList).build());
-//        }).collect(Collectors.toList());
-//
-//        // 조회된 DTO에 목록 번호 붙이기
-//        for (int i = 0; i < jobsListDTOS.size(); i++) {
-//            jobsListDTOS.get(i).setId(i + 1);
-//        }
-//    }
-
 
     public List<JobsResponse.ApplyResumeListDTO> findAllByJobsId(Integer jobsId) {
         List<Apply> applyList = applyJPARepo.findAllByJobsId(jobsId);

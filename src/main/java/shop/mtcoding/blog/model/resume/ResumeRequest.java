@@ -70,7 +70,7 @@ public class ResumeRequest {
         }
 
         @Data
-        public class WriteSkillDTO {
+        public static class WriteSkillDTO {
             private Integer id;
             private String name;
             private Integer role;
@@ -82,15 +82,14 @@ public class ResumeRequest {
             }
 
             public Skill toEntity(Resume resume){
-               return Skill.builder()
-                       .id(id)
-                       .name(name)
-                       .role(role)
-                       .resume(resume)
-                       .build();
+                return Skill.builder()
+                        .id(id)
+                        .name(name)
+                        .role(role)
+                        .resume(resume)
+                        .build();
             }
         }
-
     }
 
     @Data

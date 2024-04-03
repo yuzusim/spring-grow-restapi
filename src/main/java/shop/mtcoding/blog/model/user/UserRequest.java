@@ -36,6 +36,7 @@ public class UserRequest {
         private LocalDate birth;
         private String address;
         private String imgFileName;
+        private Integer role;
 
 
         public User toEntity (Integer role){

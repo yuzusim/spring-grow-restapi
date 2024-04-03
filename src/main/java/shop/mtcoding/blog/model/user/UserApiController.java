@@ -46,8 +46,20 @@ public class UserApiController {
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
-    // 로그인 완료
-    @PostMapping("/api/user/login")
+    //user 회원가입 api
+    @PostMapping("/users/join")
+    public ResponseEntity<?> join(@RequestBody UserRequest.JoinDTO reqDTO) {
+        UserResponse.UserJoinDTO respDTO = userService.join(reqDTO, reqDTO.getRole());
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout() {
+        session.invalidate();
+        return ResponseEntity.ok(new ApiUtil(null));
+    }
+
+    @PostMapping("/user/login")
     public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO reqDTO, HttpSession session) {
         User user = userService.login(reqDTO);
         if (user != null) {
@@ -60,7 +72,6 @@ public class UserApiController {
         }
         return ResponseEntity.ok(new ApiUtil(null));
     }
-
 
     @GetMapping("/")
     public ResponseEntity<?> index(HttpServletRequest request) {
@@ -109,5 +120,19 @@ public class UserApiController {
         request.setAttribute("ursDTOList", ursDTOList);
 
         return ResponseEntity.ok(new ApiUtil<>(ursDTOList));
+    }
+
+    //user의 지원 내역
+    @GetMapping("/api/user/{id}/resume-home")
+    public ResponseEntity<?> resumeHome(@PathVariable Integer id) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        List<UserResponse.UserResumeSkillDTO> respDTO = userService.userResumeSkillDTO(sessionUser.getId());
+        //No 카운트 뽑으려고 for문 돌림
+        for (int i = 0; i < respDTO.size(); i++) {
+            respDTO.get(i).setId(i + 1);
+        }
+
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 }

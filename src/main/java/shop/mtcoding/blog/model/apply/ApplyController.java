@@ -13,20 +13,6 @@ public class ApplyController {
     private final ApplyService applyService;
     private final HttpSession session;
 
-    @PostMapping("/apply/cancel")
-    public ResponseEntity<?> applyCancel (@RequestParam("jobsId") Integer jobsId, @RequestParam("resumeId") Integer resumeId) {
-        applyService.cancel(jobsId, resumeId);
-        return ResponseEntity.ok().body("Cancelled successfully");
-    }
-
-
-    @PostMapping("/jobs/apply")
-    public String applySave(@RequestParam(name = "jobsId") Integer jobsId, @RequestParam(name = "resumeId") Integer resumeId) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        applyService.newApply(jobsId, resumeId);
-
-        return "redirect:/user/" + sessionUser.getId() + "/user-home";
-    }
 
     @PostMapping("/apply/pass/update/{resumeId}")
     public String applyPassUpDate(@PathVariable Integer resumeId, @RequestParam("jobsId")Integer jobsId) {
@@ -42,30 +28,6 @@ public class ApplyController {
         applyService.fail(resumeId, jobsId);
 
         return "redirect:/comp/" + user.getId() + "/comp-home?jobsId=" + jobsId;
-    }
-
-    @PostMapping("/apply/pass2/{id}")
-    public String applyPassUpDate2(@PathVariable Integer id) {
-
-        return "redirect:/";
-    }
-
-    @PostMapping("/apply/fail2/{id}")
-    public String applyFailUpDate2(@PathVariable Integer id) {
-
-        return "redirect:/";
-    }
-
-    @PostMapping("/resume/{jobId}/apply")
-    public String apply(@PathVariable Integer jobId) {
-
-        return "redirect:/";
-    }
-
-    @GetMapping("/resume/{jobId}/applyList")
-    public String resumeApplyList(@PathVariable Integer jobId) {
-
-        return "/user/apply";
     }
 }
 

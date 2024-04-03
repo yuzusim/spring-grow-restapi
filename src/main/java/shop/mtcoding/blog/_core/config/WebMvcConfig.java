@@ -13,7 +13,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
-                .addPathPatterns("/board/**", "/user/**", "/reply/**", "/comp/**")
+                .addPathPatterns("/api/**")
                 .excludePathPatterns("/board/{id:\\d+}", "/user/login-form", "/user/login"
                         , "/user/join-form", "/user/join", "/comp/join-form", "/comp/join"
                         , "/comp/read-resume");

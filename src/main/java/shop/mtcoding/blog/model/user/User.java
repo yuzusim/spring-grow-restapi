@@ -36,7 +36,7 @@ public class User {
     private String photo;
     private String compName;
     private String homepage;
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Integer role;
 
 

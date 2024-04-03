@@ -42,12 +42,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/user/join")
-    public String join(@RequestParam(name = "role") Integer role, UserRequest.JoinDTO reqDTO) {
-        User user = userService.join(reqDTO, role);
-        session.setAttribute("sessionUser", user);
-        return "redirect:/";
-    }
+
 
     @DeleteMapping("/user/{id}")
     public String delete() {

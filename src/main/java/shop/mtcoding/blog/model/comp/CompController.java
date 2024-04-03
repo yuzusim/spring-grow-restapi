@@ -18,12 +18,6 @@ public class CompController {
     private final CompService compService;
     private final HttpSession session;
 
-    @GetMapping("/comp/comp-index")
-    public String compIndex(HttpServletRequest request) {
-        List<CompResponse.ResumeUserSkillDTO> rusList = compService.findAllRusList();
-        request.setAttribute("rusList", rusList);
-        return "comp/comp-index";
-    }
 
     @PostMapping("/comp/join")
     public String compJoin(@RequestParam(name = "role") Integer role, CompRequest.CompJoinDTO reqDTO) {

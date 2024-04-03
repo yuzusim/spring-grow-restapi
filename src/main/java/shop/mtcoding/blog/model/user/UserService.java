@@ -32,6 +32,7 @@ public class UserService {
     private final JobsJPARepository jobsRepo;
     private final ApplyJPARepository applyRepo;
 
+    @Transactional
     public UserResponse.UserHomeDTO userHome(Integer userId) {
         Integer waitCount = userRepo.findByUserIdN1(userId);
         Integer resultCount = userRepo.findByUserId34(userId);

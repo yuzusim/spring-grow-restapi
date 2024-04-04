@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.errors.exception.Exception401;
-import shop.mtcoding.blog._core.utils.ApiUtil;
+import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog.domain.resume.ResumeResponse;
 
 import shop.mtcoding.blog.domain.resume.ResumeService;

@@ -1,4 +1,4 @@
-package shop.mtcoding.blog._core.utils;
+package shop.mtcoding.blog._core.util;
 
 public interface JwtVO {
     public static final String HEADER ="Authorization";

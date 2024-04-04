@@ -4,8 +4,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.HandlerInterceptor;
-import shop.mtcoding.blog._core.utils.JwtUtil;
+import shop.mtcoding.blog._core.util.JwtUtil;
 import shop.mtcoding.blog.domain.user.SessionUser;
+
 
 public class LoginInterceptor implements HandlerInterceptor{
     @Override
@@ -14,11 +15,13 @@ public class LoginInterceptor implements HandlerInterceptor{
 
         // Bearer jwt 토큰 으로 들어오는 것이 프로토콜이다.
         String jwt = request.getHeader("Authorization");
+        System.out.println(jwt);
         jwt = jwt.replace("Bearer ", "");
 
         // 검증
         try {
-            SessionUser sessionUser = (SessionUser) JwtUtil.verify(jwt);
+            SessionUser sessionUser = JwtUtil.verify(jwt);
+            System.out.println(jwt);
             if (sessionUser.getRole() == 1){
                 HttpSession session = request.getSession();
                 session.setAttribute("sessionUser", sessionUser);

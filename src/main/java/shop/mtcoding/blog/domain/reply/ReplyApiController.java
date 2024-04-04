@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import shop.mtcoding.blog._core.utils.ApiUtil;
+import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog.domain.user.SessionUser;
 import shop.mtcoding.blog.domain.user.User;
 import shop.mtcoding.blog.domain.user.UserService;

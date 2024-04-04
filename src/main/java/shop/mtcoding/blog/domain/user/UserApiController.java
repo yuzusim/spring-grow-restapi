@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import shop.mtcoding.blog._core.utils.ApiUtil;
-import shop.mtcoding.blog._core.utils.JwtVO;
+import shop.mtcoding.blog._core.util.ApiUtil;
+import shop.mtcoding.blog._core.util.JwtUtil;
+import shop.mtcoding.blog._core.util.JwtVO;
 import shop.mtcoding.blog.domain.jobs.JobsRequest;
 import shop.mtcoding.blog.domain.jobs.JobsResponse;
 import shop.mtcoding.blog.domain.jobs.JobsService;
@@ -59,15 +60,9 @@ public class UserApiController {
     @PostMapping("/user/login")
     public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO reqDTO, HttpSession session) {
         User user = userService.login(reqDTO);
-        if (user != null) {
-            session.setAttribute("sessionUser", user);
-            int role = user.getRole();
-            if (role == 1) {
-            } else if (role == 2) {
-                session.setAttribute("sessionComp", user);
-            }
-        }
-        return ResponseEntity.ok().header(JwtVO.HEADER, JwtVO.PREFIX).body(new ApiUtil(null));
+        String jwt = JwtUtil.create(user);
+
+        return ResponseEntity.ok().header(JwtVO.HEADER, JwtVO.PREFIX + jwt).body(new ApiUtil(null));
     }
 
     @GetMapping("/")

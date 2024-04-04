@@ -2,8 +2,12 @@ package shop.mtcoding.blog.domain.user;
 
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.util.ApiUtil;
@@ -24,7 +28,7 @@ public class UserApiController {
 
     // Update 사용자 정보 수정 완료
     @PutMapping("/api/users")
-    public ResponseEntity<?> update(@RequestBody UserRequest.UpdateDTO reqDTO) {
+    public ResponseEntity<?> update(@Valid @RequestBody UserRequest.UpdateDTO reqDTO, Errors errors) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         User user = userService.findById(sessionUser.getId());
         UserResponse.UserUpdateDTO updatedUser = userService.updateById(user, reqDTO);
@@ -43,7 +47,7 @@ public class UserApiController {
 
     //user 회원가입 api
     @PostMapping("/users/join")
-    public ResponseEntity<?> join(@RequestBody UserRequest.JoinDTO reqDTO) {
+    public ResponseEntity<?> join(@Valid @RequestBody UserRequest.JoinDTO reqDTO, Errors errors) {
         UserResponse.UserJoinDTO respDTO = userService.join(reqDTO, reqDTO.getRole());
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
@@ -55,7 +59,7 @@ public class UserApiController {
     }
 
     @PostMapping("/user/login")
-    public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO reqDTO, HttpSession session) {
+    public ResponseEntity<?> login(@Valid @RequestBody UserRequest.LoginDTO reqDTO, HttpSession session, Errors errors) {
         User user = userService.login(reqDTO);
         String jwt = JwtUtil.create(user);
 

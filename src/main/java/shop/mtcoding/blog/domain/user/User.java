@@ -2,8 +2,11 @@ package shop.mtcoding.blog.domain.user;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 import shop.mtcoding.blog.domain.comp.CompRequest;
 import shop.mtcoding.blog.domain.resume.ResumeResponse;
 
@@ -74,8 +77,9 @@ public class User {
                 .build();
     }
 
-    //회원정보용 업데이트 의미있는 메서드
-    public void update(CompRequest.UpdateDTO requestDTO) {
+
+    // 기업 사용자 정보 업데이트 폼
+    public void updateComp(UserRequest.UpdateCompDTO requestDTO) {
         this.myName = requestDTO.getMyName();
         this.password = requestDTO.getPassword();
         this.compName = requestDTO.getCompName();
@@ -85,24 +89,13 @@ public class User {
         this.address = requestDTO.getAddress();
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", myName='" + myName + '\'' +
-                ", password='" + password + '\'' +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", birth=" + birth +
-                ", businessNumber='" + businessNumber + '\'' +
-                ", photo='" + photo + '\'' +
-                ", compName='" + compName + '\'' +
-                ", homepage='" + homepage + '\'' +
-                ", role=" + role +
-                ", createdAt=" + createdAt +
-                ", imgFileName='" + imgFileName + '\'' +
-                '}';
+    // 개인 사용자 정보 업데이트 폼
+    public void updateUser(UserRequest.UpdateUserDTO reqDTO) {
+        this.myName = reqDTO.getMyName();
+        this.password = reqDTO.getPassword();
+        this.birth = reqDTO.getBirth();
+        this.phone = reqDTO.getPhone();
+        this.address = reqDTO.getAddress();
     }
 }
 

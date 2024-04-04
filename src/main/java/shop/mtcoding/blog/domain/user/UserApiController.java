@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog._core.util.JwtUtil;
 import shop.mtcoding.blog._core.util.JwtVO;
+import shop.mtcoding.blog.domain.comp.CompRequest;
 import shop.mtcoding.blog.domain.jobs.JobsRequest;
 import shop.mtcoding.blog.domain.jobs.JobsResponse;
 import shop.mtcoding.blog.domain.jobs.JobsService;
@@ -26,21 +27,40 @@ public class UserApiController {
     private final JobsService jobsService;
 
 
-    // Update 사용자 정보 수정 완료
+    // 사용자 정보 수정
     @PutMapping("/api/users")
-    public ResponseEntity<?> update(@Valid @RequestBody UserRequest.UpdateDTO reqDTO, Errors errors) {
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UserRequest.UpdateUserDTO reqDTO, Errors errors) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         User user = userService.findById(sessionUser.getId());
-        UserResponse.UserUpdateDTO updatedUser = userService.updateById(user, reqDTO);
-        session.setAttribute("sessionUser", updatedUser);
+
+        UserResponse.UserUpdateDTO updatedUser = userService.updateByUserId(user, reqDTO);
         return ResponseEntity.ok(new ApiUtil<>(updatedUser));
     }
 
-    // Update Form에 필요한 사용자 정보 조회 완료
-    @GetMapping("/api/users/{id}")
-    public ResponseEntity<?> updateForm(@PathVariable int id) {
+    // 기업 회원 정보수정
+    @PutMapping("/api/comp-users")
+    public ResponseEntity<?> updateComp (@Valid @RequestBody UserRequest.UpdateCompDTO reqDTO, Errors errors) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
-        UserResponse.UserUpdateFormDTO respDTO = userService.updateForm(sessionUser.getId());
+        User user = userService.findById(sessionUser.getId());
+
+        UserResponse.UpdatedCompDTO updatedUser = userService.updateByCompId(user, reqDTO);
+        return ResponseEntity.ok(new ApiUtil<>(updatedUser));
+    }
+
+    // 개인 사용자 정보 수정 페이지
+    @GetMapping("/api/users")
+    public ResponseEntity<?> updateUserForm() {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
+        UserResponse.UpdateUserFormDTO respDTO = userService.updateUserForm(sessionUser.getId());
+
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
+    }
+
+    // 기업 사용자 정보 수정 페이지
+    @GetMapping("/api/comp-users")
+    public ResponseEntity<?> updateCompForm() {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
+        UserResponse.UpdateCompFormDTO respDTO = userService.updateCompForm(sessionUser.getId());
 
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }

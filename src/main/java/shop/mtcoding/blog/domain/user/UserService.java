@@ -9,6 +9,7 @@ import shop.mtcoding.blog._core.errors.exception.Exception401;
 import shop.mtcoding.blog._core.errors.exception.Exception404;
 import shop.mtcoding.blog.domain.apply.Apply;
 import shop.mtcoding.blog.domain.apply.ApplyJPARepository;
+import shop.mtcoding.blog.domain.comp.CompRequest;
 import shop.mtcoding.blog.domain.jobs.Jobs;
 import shop.mtcoding.blog.domain.jobs.JobsJPARepository;
 import shop.mtcoding.blog.domain.resume.Resume;
@@ -29,6 +30,22 @@ public class UserService {
     private final SkillJPARepository skillRepo;
     private final JobsJPARepository jobsRepo;
     private final ApplyJPARepository applyRepo;
+
+    @Transactional
+    public UserResponse.UpdatedCompDTO updateByCompId(User sessionUser, UserRequest.UpdateCompDTO reqDTO) {
+        User user = userRepo.findById(sessionUser.getId())
+                .orElseThrow(() -> new Exception401("로그인이 필요한 서비스입니다."));
+        user.updateComp(reqDTO);
+        return new UserResponse.UpdatedCompDTO(user);
+    }
+
+    @Transactional
+    public UserResponse.UserUpdateDTO updateByUserId(User sessionUser, UserRequest.UpdateUserDTO reqDTO) {
+        User user = userRepo.findById(sessionUser.getId())
+                .orElseThrow(() -> new Exception401("로그인이 필요한 서비스입니다."));
+        user.updateUser(reqDTO);
+        return new UserResponse.UserUpdateDTO(user);
+    }
 
     @Transactional
     public UserResponse.UserHomeDTO userHome(Integer userId) {
@@ -118,67 +135,6 @@ public class UserService {
     public User findByEmail(String email) {
         return userRepo.findByEmail(email);
     }
-
-
-    //유저 홈 리스트
-
-//    public List<ResumeRequest.UserViewDTO> userHome(Integer sessionUserId) {
-//        List<Resume> resumeList = resumeRepo.findAll();
-//        User sessionUser = userRepo.findById(sessionUserId)
-//                .orElseThrow(() -> new Exception404("사용자 정보를 찾을 수 없습니다."));
-//        List<ResumeRequest.UserViewDTO> listDTO = resumeList.stream()
-//                .filter(resume -> resume.getUser().getId() == sessionUser.getId()) // Filter resumes by ID = 1
-//                .map(resume -> ResumeRequest.UserViewDTO.builder()
-//                        .resume(resume)
-//                        .skills(resume.getSkillList())
-//                        .build())
-//                .collect(Collectors.toList());
-//
-//        return listDTO;
-//    }
-
-
-    //유저 회원정보 폼 업데이트 메소드
-    @Transactional
-    public UserResponse.UserUpdateDTO updateById(User sessionUser, UserRequest.UpdateDTO reqDTO) {
-        User user = userRepo.findById(sessionUser.getId())
-                .orElseThrow(() -> new Exception401("로그인이 필요한 서비스입니다."));
-
-        if (reqDTO.getMyName() != null) {
-            user.setMyName(reqDTO.getMyName());
-        }
-
-        if (reqDTO.getPassword() != null) {
-            user.setPassword(reqDTO.getPassword());
-        }
-
-        if (reqDTO.getBirth() != null) {
-            user.setBirth(reqDTO.getBirth());
-        }
-
-        if (reqDTO.getPhone() != null) {
-            user.setPhone(reqDTO.getPhone());
-        }
-
-        if (reqDTO.getAddress() != null) {
-            user.setAddress(reqDTO.getAddress());
-        }
-
-        // 변경된 유저 엔티티를 저장하고 반환
-        User user1 = userRepo.save(user);
-
-        return new UserResponse.UserUpdateDTO(user1);
-    }
-
-
-//    public User updateById(User sessionUser, CompRequest.UpdateDTO requestDTO) {
-//        User user = compJPARepo.findById(sessionUser.getId())
-//                .orElseThrow(() -> new Exception401("로그인이 필요한 서비스입니다."));
-//
-//        if (requestDTO.getMyName() != null) {
-//            user.setMyName(requestDTO.getMyName());
-//        }
-
     //유저 회원 정보 업데이트용 조회
     public User findById(Integer sessionUserId) {
         User user = userRepo.findById(sessionUserId)
@@ -187,10 +143,16 @@ public class UserService {
 
     }
 
-    public UserResponse.UserUpdateFormDTO updateForm(Integer sessionUserId) {
+    public UserResponse.UpdateUserFormDTO updateUserForm(Integer sessionUserId) {
         User user = userRepo.findById(sessionUserId)
                 .orElseThrow(() -> new Exception401("로그인이 필요한 서비스입니다."));
-        return new UserResponse.UserUpdateFormDTO(user);
+        return new UserResponse.UpdateUserFormDTO(user);
+    }
 
+
+    public UserResponse.UpdateCompFormDTO updateCompForm(Integer sessionUserId) {
+        User user = userRepo.findById(sessionUserId)
+                .orElseThrow(() -> new Exception401("로그인이 필요한 서비스입니다."));
+        return new UserResponse.UpdateCompFormDTO(user);
     }
 }

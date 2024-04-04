@@ -1,7 +1,10 @@
 package shop.mtcoding.blog.domain.user;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 import shop.mtcoding.blog.domain.apply.Apply;
 import shop.mtcoding.blog.domain.jobs.Jobs;
 import shop.mtcoding.blog.domain.resume.Resume;
@@ -52,14 +55,14 @@ public class UserResponse {
     }
 
     @Data
-    public static class UserUpdateFormDTO{
+    public static class UpdateUserFormDTO{
         private String myName;
         private String phone;
         private LocalDate birth;
         private String address;
 
         @Builder
-        public UserUpdateFormDTO(User user) {
+        public UpdateUserFormDTO(User user) {
             this.myName = user.getMyName();
             this.phone = user.getPhone();
             this.birth = user.getBirth();
@@ -221,4 +224,48 @@ public class UserResponse {
         }
     }
 
+    @Data
+    public static class UpdatedCompDTO {
+        private String myName;
+        private String password;
+        private String phone;
+        private String address;
+        private LocalDate birth;
+        private String businessNumber;
+        private String compName;
+        private String homepage;
+
+        @Builder
+        public UpdatedCompDTO(User user) {
+            this.myName = user.getMyName();
+            this.password = user.getPassword();
+            this.phone = user.getPhone();
+            this.address = user.getAddress();
+            this.birth = user.getBirth();
+            this.businessNumber = user.getBusinessNumber();
+            this.compName = user.getCompName();
+            this.homepage = user.getHomepage();
+        }
+    }
+
+    @Data
+    public static class UpdateCompFormDTO {
+        private Integer id;
+        private String myName;
+        private String compName;
+        private String phone;
+        private String businessNumber;
+        private String homepage;
+        private String address;
+
+        public UpdateCompFormDTO(User user) {
+            this.id = user.getId();
+            this.myName = user.getMyName();
+            this.compName = user.getCompName();
+            this.phone = user.getPhone();
+            this.businessNumber = user.getBusinessNumber();
+            this.homepage = user.getHomepage();
+            this.address = user.getAddress();
+        }
+    }
 }

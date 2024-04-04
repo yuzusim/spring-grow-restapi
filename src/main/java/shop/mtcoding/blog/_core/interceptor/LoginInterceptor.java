@@ -4,9 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.HandlerInterceptor;
-import shop.mtcoding.blog._core.errors.exception.Exception401;
-import shop.mtcoding.blog.model.user.SessionUser;
-import shop.mtcoding.blog.model.user.User;
+import shop.mtcoding.blog.domain.user.User;
 
 public class LoginInterceptor implements HandlerInterceptor{
     @Override

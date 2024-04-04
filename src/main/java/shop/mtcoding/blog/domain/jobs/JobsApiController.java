@@ -40,8 +40,8 @@ public class JobsApiController {
 
     @GetMapping("/api/jobs/info")
     public ResponseEntity<?> jobsInfo () {
-        List<JobsResponse.ListDTO> listDTOS = jobsService.listDTOS();
-        return ResponseEntity.ok(new ApiUtil<>(listDTOS));
+        List<JobsResponse.InfoDTO> respList = jobsService.jobsInfo();
+        return ResponseEntity.ok(new ApiUtil<>(respList));
     }
 
     @PostMapping("/api/jobs/save")

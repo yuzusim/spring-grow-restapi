@@ -15,7 +15,6 @@ public class JwtUtil {
                 .withSubject("blog")
                 .withExpiresAt(new Date(System.currentTimeMillis()+ 1000*60*60*24*7))
                 .withClaim("id", user.getId())
-                .withClaim("username", user.getMyName())
                 .withClaim("role", user.getRole())
                 .sign(Algorithm.HMAC512("grow-no1"));
         return jwt;
@@ -23,20 +22,16 @@ public class JwtUtil {
 
     public static SessionUser verify(String jwt){
 
-        DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512("grow-no1")).build().verify(jwt);
+        DecodedJWT decodedJWT =
+                JWT.require(Algorithm.HMAC512("grow-no1")).build().verify(jwt);
         int id = decodedJWT.getClaim("id").asInt();
         int role = decodedJWT.getClaim("role").asInt();
-        String username = decodedJWT.getClaim("username").asString();
 
-
-        if (role == 1) {
-            // 개인 사용자
-            return SessionUser.builder().id(id).username(username).role(1).build();
-        } else if (role == 2) {
-            // 기업 사용자
-            return SessionUser.builder().id(id).username(username).role(2).build();
+        if (role == 1) { // 개인 사용자
+            return SessionUser.builder().id(id).role(role).build();
+        } else if (role == 2) { // 기업 사용자
+            return SessionUser.builder().id(id).role(role).build();
         } else {
-            // 적절한 예외 처리 또는 기본값 설정
             return null;
         }
     }

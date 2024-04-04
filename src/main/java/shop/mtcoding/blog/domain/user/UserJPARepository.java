@@ -3,6 +3,9 @@ package shop.mtcoding.blog.domain.user;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import shop.mtcoding.blog.domain.jobs.Jobs;
+
+import java.util.List;
 import java.util.Optional;
 
 public interface UserJPARepository extends JpaRepository<User, Integer> {
@@ -21,4 +24,7 @@ public interface UserJPARepository extends JpaRepository<User, Integer> {
 
     @Query("select count(a.resume) from Apply a where (a.isPass = '3' or a.isPass = '4') and a.resume.user.id = :userId ")
     Integer findByUserId34 (@Param("userId") Integer userId);
+
+    @Query("select j from Jobs j join fetch j.user u join fetch j.skillList s")
+    List<Jobs>  findAllJoinUserWithSkills ();
 }

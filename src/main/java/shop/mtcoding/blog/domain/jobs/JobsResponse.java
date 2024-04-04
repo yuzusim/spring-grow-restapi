@@ -250,7 +250,7 @@ public class JobsResponse {
 
     // 공고 리스트를 뿌려야 되는 곳에 '회사이름''공고필요기술''공고정보'를 뿌릴 수 있는 DTO
     @Data
-    public static class ListDTO { //이 DTO는 (/jobs/info) 에 사용된다.
+    public static class InfoDTO { //이 DTO는 (/jobs/info) 에 사용된다.
         private Integer id;
         private String title;
         private String career;
@@ -261,7 +261,7 @@ public class JobsResponse {
         private List<SkillDTOs> skills;
 
         @Builder
-        public ListDTO(Jobs jobs, User user, List<Skill> skills) {
+        public InfoDTO(Jobs jobs, User user, List<Skill> skills) {
             this.id = jobs.getId();
             this.title = jobs.getTitle();
             this.career = jobs.getCareer();

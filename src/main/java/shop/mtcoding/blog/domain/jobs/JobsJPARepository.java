@@ -1,5 +1,6 @@
 package shop.mtcoding.blog.domain.jobs;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,4 +28,7 @@ public interface JobsJPARepository extends JpaRepository <Jobs, Integer> {
 
     @Query("select j from Jobs j join fetch j.skillList where j.user.id = :userId")
     List<Jobs> findAllByUserIdWithSkill(@Param("userId") Integer userId);
+
+    @Query("select j from Jobs j join fetch j.user u join fetch j.skillList s ")
+    List<Jobs> findAllJoinUserWithSkills(Sort sort);
 }

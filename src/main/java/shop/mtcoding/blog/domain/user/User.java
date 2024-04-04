@@ -79,14 +79,15 @@ public class User {
 
 
     // 기업 사용자 정보 업데이트 폼
-    public void updateComp(UserRequest.UpdateCompDTO requestDTO) {
-        this.myName = requestDTO.getMyName();
-        this.password = requestDTO.getPassword();
-        this.compName = requestDTO.getCompName();
-        this.phone = requestDTO.getPhone();
-        this.homepage = requestDTO.getHomepage();
-        this.birth = requestDTO.getBirth();
-        this.address = requestDTO.getAddress();
+    public void updateComp(UserRequest.UpdateCompDTO reqDTO) {
+        this.myName = reqDTO.getMyName();
+        this.password = reqDTO.getPassword();
+        this.compName = reqDTO.getCompName();
+        this.phone = reqDTO.getPhone();
+        this.businessNumber = reqDTO.getBusinessNumber();
+        this.homepage = reqDTO.getHomepage();
+        this.birth = reqDTO.getBirth();
+        this.address = reqDTO.getAddress();
     }
 
     // 개인 사용자 정보 업데이트 폼

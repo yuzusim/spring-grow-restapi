@@ -1,7 +1,5 @@
 package shop.mtcoding.blog.domain.user;
 
-
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.Errors;
@@ -13,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog._core.util.JwtUtil;
 import shop.mtcoding.blog._core.util.JwtVO;
-import shop.mtcoding.blog.domain.comp.CompRequest;
 import shop.mtcoding.blog.domain.jobs.JobsRequest;
 import shop.mtcoding.blog.domain.jobs.JobsResponse;
 import shop.mtcoding.blog.domain.jobs.JobsService;
+
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -25,7 +23,6 @@ public class UserApiController {
     private final UserService userService;
     private final HttpSession session;
     private final JobsService jobsService;
-
 
     // 사용자 정보 수정
     @PutMapping("/api/users")
@@ -39,7 +36,7 @@ public class UserApiController {
 
     // 기업 회원 정보수정
     @PutMapping("/api/comp-users")
-    public ResponseEntity<?> updateComp (@Valid @RequestBody UserRequest.UpdateCompDTO reqDTO, Errors errors) {
+    public ResponseEntity<?> updateComp(@Valid @RequestBody UserRequest.UpdateCompDTO reqDTO, Errors errors) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         User user = userService.findById(sessionUser.getId());
 
@@ -65,55 +62,50 @@ public class UserApiController {
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
-    //user 회원가입 api
+    // 회원가입
     @PostMapping("/users/join")
     public ResponseEntity<?> join(@Valid @RequestBody UserRequest.JoinDTO reqDTO, Errors errors) {
-        UserResponse.UserJoinDTO respDTO = userService.join(reqDTO, reqDTO.getRole());
+        UserResponse.JoinDTO respDTO = userService.join(reqDTO, reqDTO.getRole());
+
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
-    @GetMapping("/logout")
-    public ResponseEntity<?> logout() {
-        session.invalidate();
-        return ResponseEntity.ok(new ApiUtil(null));
-    }
-
+    // 로그인
     @PostMapping("/user/login")
-    public ResponseEntity<?> login(@Valid @RequestBody UserRequest.LoginDTO reqDTO, HttpSession session, Errors errors) {
+    public ResponseEntity<?> login(@Valid @RequestBody UserRequest.LoginDTO reqDTO, Errors errors) {
         User user = userService.login(reqDTO);
         String jwt = JwtUtil.create(user);
 
-        return ResponseEntity.ok().header(JwtVO.HEADER, JwtVO.PREFIX + jwt).body(new ApiUtil(null));
+        return ResponseEntity.ok()
+                .header(JwtVO.HEADER, JwtVO.PREFIX + jwt)
+                .body(new ApiUtil(null));
     }
 
+    // 메인페이지 정보요청
     @GetMapping("/")
-    public ResponseEntity<?> index(HttpServletRequest request) {
-        List<JobsResponse.ListDTO> respList = jobsService.listDTOS();
-        request.setAttribute("listDTOS", respList);
-
+    public ResponseEntity<?> index() {
+        List<JobsResponse.InfoDTO> respList = jobsService.indexDTOs();
         return ResponseEntity.ok(new ApiUtil(respList));
     }
 
-
+    // 메인페이지에서 검색 정보 요청
     @PostMapping("/search")
-    public ResponseEntity<?> indexKeyword(HttpServletRequest request, @RequestBody JobsRequest.KeywordDTO reqDTO) {
+    public ResponseEntity<?> indexKeyword(@RequestBody JobsRequest.KeywordDTO reqDTO) {
         List<JobsResponse.IndexSearchDTO> respList = jobsService.searchKeyword(reqDTO.getKeyword());
-        request.setAttribute("jobsKeyword", respList);
-        request.setAttribute("keyword", reqDTO.getKeyword());
-        System.out.println("respList size : " + respList.size());
         return ResponseEntity.ok(new ApiUtil<>(respList));
     }
 
-
+    // 이력서 관리 페이지 정보
     @GetMapping("/api/users/{id}/home")
-    public ResponseEntity<?> userHome (@PathVariable Integer id) {
+    public ResponseEntity<?> userHome(@PathVariable Integer id) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
-        UserResponse.UserHomeDTO userHomeDTO = userService.userHome(sessionUser.getId());
+        UserResponse.HomeDTO userHomeDTO = userService.userHome(sessionUser.getId());
         return ResponseEntity.ok(new ApiUtil<>(userHomeDTO));
     }
 
+    // 회원가입시 username 중복 체크
     @GetMapping("/api/users/username-same-check")
-    public  ResponseEntity<?> usernameSameCheck(@RequestBody UserRequest.EmailDTO email) {
+    public ResponseEntity<?> usernameSameCheck(@RequestBody UserRequest.EmailDTO email) {
         User user = userService.findByEmail(email.getEmail());
         if (user == null) {
             return ResponseEntity.ok(new ApiUtil<>(true));
@@ -122,24 +114,18 @@ public class UserApiController {
         }
     }
 
+    // ajax 이력서 지원내역 요청
     @PostMapping("/api/find-jobs-resume")
-    public ResponseEntity<?> findAllJobsByResumeId(@RequestBody UserRequest.ResumeIdDTO resumeId, HttpServletRequest request){
-        List<UserResponse.FindJobsResumeDTO> fjrDTOList = userService.findJobsResumeDTOS(resumeId.getResumeId());
-        request.setAttribute("ursDTOList", fjrDTOList);
-        return ResponseEntity.ok(new ApiUtil<>(fjrDTOList));
+    public ResponseEntity<?> findAllJobsByResumeId(@RequestBody UserRequest.ResumeIdDTO resumeId) {
+        List<UserResponse.FindJobsResumeDTO> respList = userService.findJobsResumeDTOS(resumeId.getResumeId());
+        return ResponseEntity.ok(new ApiUtil<>(respList));
     }
 
-    //user의 지원 내역
-    @GetMapping("/api/user/{id}/resume-home")
-    public ResponseEntity<?> resumeHome(@PathVariable Integer id) {
+    // 지원 내역 페이지 정보 요청
+    @GetMapping("/api/user/resume-home")
+    public ResponseEntity<?> resumeHome() {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
-
-        List<UserResponse.UserResumeSkillDTO> respDTO = userService.userResumeSkillDTO(sessionUser.getId());
-        //No 카운트 뽑으려고 for문 돌림
-        for (int i = 0; i < respDTO.size(); i++) {
-            respDTO.get(i).setId(i + 1);
-        }
-
-        return ResponseEntity.ok(new ApiUtil<>(respDTO));
+        List<UserResponse.resumeHomeDTO> respList = userService.resumeHome(sessionUser.getId());
+        return ResponseEntity.ok(new ApiUtil<>(respList));
     }
 }

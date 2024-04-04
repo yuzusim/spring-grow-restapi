@@ -30,19 +30,32 @@ public class JobsService {
     private final ResumeJPARepository resumeRepo;
     private final ApplyJPARepository applyRepo;
 
+    public List<JobsResponse.InfoDTO> jobsInfo(){
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        List<Jobs> jobsList = jobsRepo.findAllJoinUserWithSkills(sort);
+
+        List<JobsResponse.InfoDTO> respList = new ArrayList<>();
+
+        jobsList.stream().map(jobs ->
+                respList.add(JobsResponse.InfoDTO.builder()
+                        .user(jobs.getUser())
+                        .skills(jobs.getSkillList())
+                        .build())).toList();
+        return respList;
+    }
+
 
     public List<JobsResponse.IndexSearchDTO> searchKeyword(String keyword) {
         List<Jobs> jobsList = jobsRepo.findAllKeyword(keyword);
+
         List<JobsResponse.IndexSearchDTO> indexSearchDTOList = new ArrayList<>();
 
-        System.out.println(keyword);
-        System.out.println("jobsList size : " + jobsList.size());
-        jobsList.stream().map(jobs -> {
-            return indexSearchDTOList.add(JobsResponse.IndexSearchDTO.builder()
+        jobsList.stream().map(jobs ->
+                indexSearchDTOList.add(JobsResponse.IndexSearchDTO.builder()
                     .jobs(jobs)
                     .user(jobs.getUser())
-                    .skillList(jobs.getSkillList()).build());
-                }).collect(Collectors.toList());
+                    .skillList(jobs.getSkillList()).build()))
+                    .toList();
 
         return indexSearchDTOList;
 
@@ -86,24 +99,18 @@ public class JobsService {
     }
 
 
-    public List<JobsResponse.ListDTO> listDTOS() {
+    public List<JobsResponse.InfoDTO> indexDTOs() {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        List<Jobs> jobsList = jobsRepo.findAll(sort);
+        List<Jobs> jobsList = jobsRepo.findAllJoinUserWithSkills(sort);
 
-        List<JobsResponse.ListDTO> listDTOS = new ArrayList<>();
+        List<JobsResponse.InfoDTO> infoDTOList = new ArrayList<>();
 
-        for (int i = 0; i < jobsList.size(); i++) {
-            User user = userRepo.findById(jobsList.get(i).getUser().getId())
-                    .orElseThrow(() -> new Exception404("사용자를 찾을 수 없습니다."));
-
-            List<Skill> skillList = skillRepo.findAllById(jobsList.get(i).getId());
-
-            listDTOS.add(JobsResponse.ListDTO.builder()
-                    .jobs(jobsList.get(i))
-                    .user(user)
-                    .skills(skillList).build());
-        }
-        return listDTOS;
+        jobsList.stream().map(jobs ->
+                infoDTOList.add(JobsResponse.InfoDTO.builder()
+                        .user(jobs.getUser())
+                        .skills(jobs.getSkillList())
+                        .build())).toList();
+        return infoDTOList;
     }
 
     @Transactional

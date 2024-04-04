@@ -1,10 +1,8 @@
 package shop.mtcoding.blog.domain.user;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 import shop.mtcoding.blog.domain.apply.Apply;
 import shop.mtcoding.blog.domain.jobs.Jobs;
 import shop.mtcoding.blog.domain.resume.Resume;
@@ -18,7 +16,7 @@ public class UserResponse {
 
     //유저 회원가입 DTO
     @Data
-    public static class UserJoinDTO {
+    public static class JoinDTO {
         private Integer id;
         private String email;
         private String myName;
@@ -27,7 +25,7 @@ public class UserResponse {
         private LocalDate birth;
 
         @Builder
-        public UserJoinDTO(User user) {
+        public JoinDTO(User user) {
             this.id = user.getId();
             this.email = user.getEmail();
             this.myName = user.getMyName();
@@ -71,7 +69,7 @@ public class UserResponse {
     }
 
     @Data
-    public static class UserHomeDTO{
+    public static class HomeDTO{
         // count
         private Integer applyCount;
         private Integer waitCount;
@@ -81,7 +79,7 @@ public class UserResponse {
         //skillList
 
         @Builder
-        public UserHomeDTO(Integer applyCount, Integer waitCount, Integer resultCount, List<Resume> resumeList) {
+        public HomeDTO(Integer applyCount, Integer waitCount, Integer resultCount, List<Resume> resumeList) {
             this.applyCount = applyCount;
             this.waitCount = waitCount;
             this.resultCount = resultCount;
@@ -175,6 +173,16 @@ public class UserResponse {
                     .map(skill -> new SkillDTO(skill))
                     .collect(Collectors.toList());
         }
+        @Data
+        public class SkillDTO {
+            private Integer id;
+            private String name;
+
+            public SkillDTO(Skill skill) {
+                this.id = skill.getId();
+                this.name = skill.getName();
+            }
+        }
 
     }
 
@@ -192,7 +200,7 @@ public class UserResponse {
     }
 
     @Data
-    public static class UserResumeSkillDTO {
+    public static class resumeHomeDTO {
         private Integer id;
         private String myName;
         private String career;
@@ -201,7 +209,7 @@ public class UserResponse {
         private List<SkillDTO> skillList;
 
         @Builder
-        public UserResumeSkillDTO(User user, Resume resume, List<Skill> skillList) {
+        public resumeHomeDTO(User user, Resume resume, List<Skill> skillList) {
             this.id = user.getId();
             this.myName = user.getMyName();
             this.career = resume.getCareer();
@@ -211,18 +219,19 @@ public class UserResponse {
                     .map(skill -> new SkillDTO(skill))
                     .collect(Collectors.toList());
         }
-    }
+        @Data
+        public class SkillDTO {
+            private Integer id;
+            private String name;
 
-    @Data
-    public static class SkillDTO {
-        private Integer id;
-        private String name;
-
-        public SkillDTO(Skill skill) {
-            this.id = skill.getId();
-            this.name = skill.getName();
+            public SkillDTO(Skill skill) {
+                this.id = skill.getId();
+                this.name = skill.getName();
+            }
         }
     }
+
+
 
     @Data
     public static class UpdatedCompDTO {

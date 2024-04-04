@@ -83,7 +83,7 @@ public class JobsApiController {
     }
 
     @PutMapping("/api/jobs/{id}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody JobsRequest.UpdateDTO reqDTO) {
+    public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody JobsRequest.UpdateDTO reqDTO, Errors errors) {
         JobsResponse.UpdateDTO respDTO = jobsService.update(id, reqDTO);
         return ResponseEntity.ok(new ApiUtil(respDTO));
     }

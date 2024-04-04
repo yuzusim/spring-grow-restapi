@@ -61,13 +61,30 @@ public class JobsRequest {
 
     @Data
     public static class UpdateDTO {
+
+        @Size(max = 10, message = "제목은 10글자를 넘길 수 없습니다.")
+        @NotEmpty(message = "제목을 작성하여 주십시오.")
         private String title;
-        private String edu;
-        private String career;
-        private String content;
+
+        @NotEmpty(message = "근무 지역을 선택하여 주십시오.")
         private String area;
+
+        @NotEmpty(message = "학력사항을 선택하여 주십시오.")
+        private String edu;
+
+        @NotEmpty(message = "경력사항을 선택하여 주십시오.")
+        private String career;
+
+        @Size(max = 100, message = "내용은 100글자 이내로 작성하여 주십시오")
+        @NotEmpty(message = "내용을 작성하여 주십시오.")
+        private String content;
+
         private LocalDate deadLine;
+
+        @NotEmpty(message = "업무를 선택하여 주십시오.")
         private String task;
+
+        @NotEmpty(message = "필요기술을 선택하여 주십시오.")
         private List<SkillDTO> skill;
 
         @Data

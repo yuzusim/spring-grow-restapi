@@ -3,8 +3,11 @@ package shop.mtcoding.blog.domain.comp;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog.domain.resume.ResumeResponse;
@@ -22,7 +25,7 @@ public class CompApiController {
     private final UserService userService;
 
     @PostMapping("/comp/join")
-    public ResponseEntity<?> compJoin(@RequestBody CompRequest.CompJoinDTO reqDTO) {
+    public ResponseEntity<?> compJoin(@Valid @RequestBody CompRequest.CompJoinDTO reqDTO, Errors errors) {
         CompResponse.CompJoinDTO respDTO = compService.join(reqDTO);
         session.setAttribute("sessionComp", respDTO);
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
@@ -62,7 +65,7 @@ public class CompApiController {
 
     //update
     @PutMapping("/api/comps/{id}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody CompRequest.UpdateDTO requestDTO) {
+    public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody CompRequest.UpdateDTO requestDTO, Errors errors) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionComp");
         User sessionComp = userService.findById(sessionUser.getId());
         User user = compService.updateById(sessionComp, requestDTO);

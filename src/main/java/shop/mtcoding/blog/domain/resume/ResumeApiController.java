@@ -1,8 +1,10 @@
 package shop.mtcoding.blog.domain.resume;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog.domain.user.SessionUser;
@@ -43,7 +45,7 @@ public class ResumeApiController {
     }
 
     @PostMapping("/api/resumes")
-    public ResponseEntity<?> save(@RequestBody ResumeRequest.SaveDTO reqDTO) {
+    public ResponseEntity<?> save(@Valid @RequestBody ResumeRequest.SaveDTO reqDTO, Errors errors) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         User user = userService.findById(sessionUser.getId());
         ResumeResponse.SaveDTO respDTO = resumeService.save(user, reqDTO);
@@ -72,7 +74,7 @@ public class ResumeApiController {
     }
 
     @PutMapping("/api/resumes/{id}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody ResumeRequest.UpdateDTO reqDTO) {
+    public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody ResumeRequest.UpdateDTO reqDTO, Errors errors) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         //해당 부분 redirect 해보고 틀렸으면 본인이 수정
         ResumeResponse.ResumeUpdateDTO respDTO = resumeService.update(id, sessionUser.getId(), reqDTO);

@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog.domain.user.SessionUser;
@@ -29,7 +30,7 @@ public class BoardApiController {
 
     // 글수정 완료
     @PutMapping("/api/boards/{id}")
-    public ResponseEntity<?> update(@Valid @PathVariable Integer id, @RequestBody BoardRequest.UpdateDTO reqDTO) {
+    public ResponseEntity<?> update(@Valid @PathVariable Integer id, @Valid @RequestBody BoardRequest.UpdateDTO reqDTO, Errors errors) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         //Board board = boardService.update(id, sessionUser.getId(), reqDTO);
         BoardResponse.UpdateDTO respDTO = boardService.update(id, sessionUser.getId(), reqDTO);
@@ -47,7 +48,7 @@ public class BoardApiController {
 
     // 글쓰기 완료
     @PostMapping("/api/boards")
-    public ResponseEntity<?> save(@Valid @RequestBody BoardRequest.SaveDTO reqDTO) {
+    public ResponseEntity<?> save(@Valid @RequestBody BoardRequest.SaveDTO reqDTO, Errors errors) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         User user = userService.findById(sessionUser.getId());
         Board board = boardService.save(reqDTO, user);

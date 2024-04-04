@@ -2,10 +2,8 @@ package shop.mtcoding.blog.domain.user;
 
 
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.util.ApiUtil;
@@ -14,7 +12,6 @@ import shop.mtcoding.blog._core.util.JwtVO;
 import shop.mtcoding.blog.domain.jobs.JobsRequest;
 import shop.mtcoding.blog.domain.jobs.JobsResponse;
 import shop.mtcoding.blog.domain.jobs.JobsService;
-
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -103,9 +100,9 @@ public class UserApiController {
 
     @PostMapping("/api/find-jobs-resume")
     public ResponseEntity<?> findAllJobsByResumeId(@RequestBody UserRequest.ResumeIdDTO resumeId, HttpServletRequest request){
-        List<UserResponse.UrsDTO> ursDTOList = userService.ursDTOS(resumeId.getResumeId());
-        request.setAttribute("ursDTOList", ursDTOList);
-        return ResponseEntity.ok(new ApiUtil<>(ursDTOList));
+        List<UserResponse.FindJobsResumeDTO> fjrDTOList = userService.findJobsResumeDTOS(resumeId.getResumeId());
+        request.setAttribute("ursDTOList", fjrDTOList);
+        return ResponseEntity.ok(new ApiUtil<>(fjrDTOList));
     }
 
     //user의 지원 내역

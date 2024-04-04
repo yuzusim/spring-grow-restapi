@@ -34,12 +34,6 @@ public class UserResponse {
         }
     }
 
-
-    @Data
-    public static class JobsKeywordDTO{
-
-    }
-
     // 개인 회원정보 수정 DTO
     @Data
     public static class UserUpdateDTO{
@@ -125,8 +119,6 @@ public class UserResponse {
     }
 
 
-
-
     @Data
     public static class UserResumeSkillV2DTO{
         private Integer id;
@@ -151,22 +143,9 @@ public class UserResponse {
         }
     }
 
-    @Data
-    public static class SkillV2DTO{
-        private Integer id;
-        private String name;
-        private String color;
-
-        public SkillV2DTO(Skill skill) {
-            this.id = skill.getId();
-            this.name = skill.getName();
-            this.color = skill.getColor();
-        }
-    }
-
 
     @Data
-    public static class UrsDTO {
+    public static class FindJobsResumeDTO{
         //user
         private Integer id;
         private String compName;
@@ -181,7 +160,7 @@ public class UserResponse {
         private List<SkillDTO> skillList;
 
         @Builder
-        public UrsDTO(User user, Jobs jobs, Apply apply,Resume resume, List<Skill> skillList) {
+        public FindJobsResumeDTO(User user, Jobs jobs, Apply apply,Resume resume, List<Skill> skillList) {
             this.id = user.getId();
             this.compName = user.getCompName();
             this.jobsId = jobs.getId();

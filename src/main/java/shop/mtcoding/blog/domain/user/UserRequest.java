@@ -7,7 +7,6 @@ import java.time.LocalDate;
 
 public class UserRequest {
 
-
     @Data
     public static class ResumeIdDTO{
         private Integer resumeId;

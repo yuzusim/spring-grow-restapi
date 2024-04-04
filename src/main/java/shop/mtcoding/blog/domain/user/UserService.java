@@ -45,13 +45,13 @@ public class UserService {
     }
 
 
-    public List<UserResponse.UrsDTO> ursDTOS(Integer resumeId) {
+    public List<UserResponse.FindJobsResumeDTO> findJobsResumeDTOS(Integer resumeId) {
         List<Apply> applyList = applyRepo.findAppliesByNot1ByResumeId(resumeId);
 
         Resume resume = resumeRepo.findById(resumeId)
                 .orElseThrow(() -> new Exception404("정보를 찾을 수 없습니다."));
 
-        List<UserResponse.UrsDTO> ursDTOList = applyList.stream()
+        List<UserResponse.FindJobsResumeDTO> ursDTOList = applyList.stream()
                 .map(apply -> {
                     Jobs jobs = jobsRepo.findById(apply.getJobs().getId())
                             .orElseThrow(() -> new Exception404("공고를 찾을 수 없습니다."));
@@ -61,13 +61,14 @@ public class UserService {
 
                     List<Skill> skills = skillRepo.findAllByJobsId(apply.getJobs().getId());
 
-                    return UserResponse.UrsDTO.builder()
+                    return UserResponse.FindJobsResumeDTO.builder()
                             .user(compUser)
                             .jobs(jobs)
                             .apply(apply)
                             .resume(resume)
                             .skillList(skills).build();
                 }).collect(Collectors.toList());
+
         for (int i = 0; i < ursDTOList.size(); i++) {
             ursDTOList.get(i).setId(i + 1);
         }

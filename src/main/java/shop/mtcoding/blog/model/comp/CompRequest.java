@@ -1,8 +1,8 @@
 package shop.mtcoding.blog.model.comp;
 
 import lombok.Data;
-import shop.mtcoding.blog.model.skill.SkillRequest;
-import shop.mtcoding.blog.model.user.User;
+import shop.mtcoding.blog.domain.skill.SkillRequest;
+import shop.mtcoding.blog.domain.user.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

@@ -29,7 +29,7 @@ public class JobsApiController {
     public ResponseEntity<?> writeJobsForm() {
         User sessionComp = (User)session.getAttribute("sessionComp");
 
-        JobsResponse.writeJobsFormDTO writeJobsFormDTO = jobsService.writeJobsForm(sessionComp);
+        JobsResponse.WriteJobsFormDTO writeJobsFormDTO = jobsService.writeJobsForm(sessionComp);
 
         return ResponseEntity.ok(new ApiUtil<>(writeJobsFormDTO));
     }

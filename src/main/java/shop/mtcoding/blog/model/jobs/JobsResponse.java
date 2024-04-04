@@ -77,11 +77,11 @@ public class JobsResponse {
     }
 
     @Data
-    public static class writeJobsFormDTO {
+    public static class WriteJobsFormDTO {
         private Integer id;
         private String compName;
 
-        public writeJobsFormDTO(User user) {
+        public WriteJobsFormDTO(User user) {
             this.id = user.getId();
             this.compName = user.getCompName();
         }
@@ -460,7 +460,7 @@ public class JobsResponse {
     }
 
     @Data
-    public static class saveDTO {
+    public static class SaveDTO {
         private Integer id;
         private String compName;
         private String phone;
@@ -478,7 +478,7 @@ public class JobsResponse {
 
     @Data
     @Builder
-    public static class searchDTO {
+    public static class SearchDTO {
         private String area;
         private String skill;
         private String career;

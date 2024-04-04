@@ -117,9 +117,9 @@ public class JobsService {
         return new JobsResponse.JonsSaveDTO(jobs, reqDTO.getSkillList());
     }
 
-    public JobsResponse.writeJobsFormDTO writeJobsForm(User sessionComp) {
+    public JobsResponse.WriteJobsFormDTO writeJobsForm(User sessionComp) {
 
-        return new JobsResponse.writeJobsFormDTO(sessionComp);
+        return new JobsResponse.WriteJobsFormDTO(sessionComp);
     }
 
     @Transactional

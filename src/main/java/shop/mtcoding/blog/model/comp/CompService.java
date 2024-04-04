@@ -155,13 +155,13 @@ public class CompService {
         return listDTOS;
     }
 
-    public List<CompResponse.ComphomeDTO> findAllByUserId(User sessionComp) {
+    public List<CompResponse.CompHomeDTO> findAllByUserId(User sessionComp) {
         List<Jobs> jobsList = jobsJPARepo.findAllByUserId(sessionComp.getId());
-        List<CompResponse.ComphomeDTO> listDTOS = new ArrayList<>();
+        List<CompResponse.CompHomeDTO> listDTOS = new ArrayList<>();
 
         for (int i = 0; i < jobsList.size(); i++) {
             List<Skill> skills = skillJPARepo.findByJobsId(jobsList.get(i).getId());
-            listDTOS.add(CompResponse.ComphomeDTO.builder()
+            listDTOS.add(CompResponse.CompHomeDTO.builder()
                     .jobs(jobsList.get(i))
                     .skillList(skills)
                     .build());

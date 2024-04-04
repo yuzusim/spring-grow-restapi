@@ -205,7 +205,7 @@ public class CompResponse {
 
 
     @Data
-    public static class ComphomeDTO {
+    public static class CompHomeDTO {
         private Integer id;
         private String title;
         private String task;
@@ -214,7 +214,7 @@ public class CompResponse {
         private List<SkillDTO> skillList;
 
         @Builder
-        public ComphomeDTO(Jobs jobs, List<Skill> skillList) {
+        public CompHomeDTO(Jobs jobs, List<Skill> skillList) {
             this.title = jobs.getTitle();
             this.task = jobs.getTask();
             this.career = jobs.getCareer();

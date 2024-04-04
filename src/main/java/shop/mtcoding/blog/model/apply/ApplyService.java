@@ -33,19 +33,19 @@ public class ApplyService {
 
     @Transactional
     //이력서로 공고에 막 지원했을때 사용되는 메소드
-    public ApplyResponse.newApplyDTO newApply(Integer jobsId, Integer resumeId, ApplyRequest.SaveDTO reqDTO) {
+    public ApplyResponse.NewApplyDTO newApply(Integer jobsId, Integer resumeId, ApplyRequest.SaveDTO reqDTO) {
         Jobs jobs = jobsJPARepo.findById(jobsId).orElseThrow(() -> new Exception404("공고를 찾을 수 없습니다."));
         Resume resume = resumeJPARepo.findById(resumeId).orElseThrow(() -> new Exception404("이력서를 찾을 수 없습니다."));
 
         // isPass = 2는 지원한 상태
         Apply apply = applyJPARepo.save(reqDTO.toEntity(resume, jobs, "2"));
 
-        return new ApplyResponse.newApplyDTO(apply.getResume(), apply.getJobs(), apply.getIsPass());
+        return new ApplyResponse.NewApplyDTO(apply.getResume(), apply.getJobs(), apply.getIsPass());
     }
 
 
     // 신청테이블 뿌리기
-    public ApplyResponse.stateViewDTO findAll(Integer id){
+    public ApplyResponse.StateViewDTO findAll(Integer id){
 
         //1. 지원테이블 뿌리기 (뿌리기 완성)
         //2. sessionUser만 지원한 지원테이블 뿌리기(뿌리기 완성)
@@ -53,7 +53,7 @@ public class ApplyService {
 
         User sessionUser = userJPARepo.findById(id)
                 .orElseThrow(() -> new Exception401("로그인이 필요한 서비스 입니다"));
-        ApplyResponse.stateViewDTO stateDTO = new ApplyResponse.stateViewDTO();
+        ApplyResponse.StateViewDTO stateDTO = new ApplyResponse.StateViewDTO();
 
         List<Apply> applies =  applyJPARepo.findAll();
 

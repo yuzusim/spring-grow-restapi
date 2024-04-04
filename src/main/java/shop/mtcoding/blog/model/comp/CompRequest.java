@@ -32,7 +32,7 @@ public class CompRequest {
         private String career;
         private String area;
         private String imgFileName;
-        private List<SkillRequest.CompskillDTO> skillList = new ArrayList<>();
+        private List<SkillRequest.CompSkillDTO> skillList = new ArrayList<>();
     }
 
     @Data

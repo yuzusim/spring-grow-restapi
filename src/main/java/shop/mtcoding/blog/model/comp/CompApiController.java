@@ -44,7 +44,7 @@ public class CompApiController {
     @GetMapping("/api/comps/{id}/comp-home")
     public ResponseEntity<?> compHome(@PathVariable Integer id) {
         User sessionComp = (User) session.getAttribute("sessionComp");
-        List<CompResponse.ComphomeDTO> comphomeDTOList = compService.findAllByUserId(sessionComp);
+        List<CompResponse.CompHomeDTO> comphomeDTOList = compService.findAllByUserId(sessionComp);
 
         return ResponseEntity.ok(new ApiUtil<>(comphomeDTOList));
     }

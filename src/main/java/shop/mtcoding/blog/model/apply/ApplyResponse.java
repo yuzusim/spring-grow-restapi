@@ -27,12 +27,12 @@ public class ApplyResponse {
     }
 
     @Data
-    public static class newApplyDTO {
+    public static class NewApplyDTO {
         private Integer resumeId;
         private Integer jobsId;
         private String isPass;
 
-        public newApplyDTO(Resume resume, Jobs jobs, String isPass) {
+        public NewApplyDTO(Resume resume, Jobs jobs, String isPass) {
             this.resumeId = resume.getId();
             this.jobsId = jobs.getId();
             this.isPass = isPass;
@@ -46,7 +46,7 @@ public class ApplyResponse {
         private String title;
         private String career;
         private Integer jobsId;
-        private List<SkillRequest.ApplyskillDTO> skillList;
+        private List<SkillRequest.ApplySkillDTO> skillList;
 
         public ApplyByJobsDTO(Integer id, String myName, String title, String career, Integer jobsId) {
             this.id = id;
@@ -59,7 +59,7 @@ public class ApplyResponse {
 
 
     @Data
-    public static class stateViewDTO{
+    public static class StateViewDTO{
         private Integer applyCount;
         private Integer waitCount;
         private Integer resultCount;

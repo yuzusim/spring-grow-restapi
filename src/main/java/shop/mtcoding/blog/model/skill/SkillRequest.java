@@ -44,14 +44,14 @@ public class SkillRequest {
 
     @Builder
     @Data
-    public static class CompskillDTO{
+    public static class CompSkillDTO{
         private String name;
         private String color;
     }
 
     @Data
     @Builder
-    public static class UserskillDTO{
+    public static class UserSkillDTO{
         private String name;
         private String color;
     }
@@ -66,11 +66,11 @@ public class SkillRequest {
 
 
     @Data
-    public static class ApplyskillDTO{
+    public static class ApplySkillDTO{
         private String name;
         private String color;
 
-        public ApplyskillDTO(String name, String color) {
+        public ApplySkillDTO(String name, String color) {
             String colorClass = "";
             if (name.equals("Jquery")){
                 colorClass = "badge bg-primary";

@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.errors.exception.Exception401;
-import shop.mtcoding.blog._core.util.ApiUtil;
+import shop.mtcoding.blog._core.utils.ApiUtil;
 import shop.mtcoding.blog.domain.resume.ResumeResponse;
 
 import shop.mtcoding.blog.domain.resume.ResumeService;
@@ -30,7 +30,8 @@ public class JobsApiController {
 
     @GetMapping("/api/jobs/write-jobs-form")
     public ResponseEntity<?> writeJobsForm() {
-        User sessionComp = (User)session.getAttribute("sessionComp");
+        SessionUser sessionUser = (SessionUser)session.getAttribute("sessionComp");
+        User sessionComp = userService.findById(sessionUser.getId());
 
         JobsResponse.writeJobsFormDTO writeJobsFormDTO = jobsService.writeJobsForm(sessionComp);
 
@@ -45,7 +46,8 @@ public class JobsApiController {
 
     @PostMapping("/api/jobs/save")
     public @ResponseBody ResponseEntity<?> save (@Valid @RequestBody JobsRequest.JobsSaveDTO reqDTO, Errors errors) {
-        User sessionComp = (User)session.getAttribute("sessionComp");
+        SessionUser sessionUser = (SessionUser)session.getAttribute("sessionComp");
+        User sessionComp = userService.findById(sessionUser.getId());
         JobsResponse.JonsSaveDTO jobs = jobsService.save(sessionComp, reqDTO);
         return ResponseEntity.ok(new ApiUtil(jobs));
     }
@@ -59,7 +61,7 @@ public class JobsApiController {
 
     @GetMapping("/api/jobs/{jobsId}/update-jobs-form")
     public  ResponseEntity<?> updateForm (@PathVariable Integer jobsId) {
-        User sessionComp = (User)session.getAttribute("sessionComp");
+        SessionUser sessionComp = (SessionUser)session.getAttribute("sessionComp");
         JobsResponse.JobUpdateDTO job = jobsService.updateForm(jobsId, sessionComp.getId());
         return ResponseEntity.ok(new ApiUtil(job));
     }

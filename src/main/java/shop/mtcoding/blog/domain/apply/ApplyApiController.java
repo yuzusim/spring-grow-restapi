@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import shop.mtcoding.blog._core.util.ApiUtil;
+import shop.mtcoding.blog._core.utils.ApiUtil;
 
 @RequiredArgsConstructor
 @RestController

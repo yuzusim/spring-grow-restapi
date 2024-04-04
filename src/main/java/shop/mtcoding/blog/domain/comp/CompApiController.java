@@ -6,10 +6,11 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import shop.mtcoding.blog._core.util.ApiUtil;
+import shop.mtcoding.blog._core.utils.ApiUtil;
 import shop.mtcoding.blog.domain.resume.ResumeResponse;
 import shop.mtcoding.blog.domain.user.SessionUser;
 import shop.mtcoding.blog.domain.user.User;
+import shop.mtcoding.blog.domain.user.UserService;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
 public class CompApiController {
     private final CompService compService;
     private final HttpSession session;
+    private final UserService userService;
 
     @PostMapping("/comp/join")
     public ResponseEntity<?> compJoin(@RequestBody CompRequest.CompJoinDTO reqDTO) {
@@ -44,7 +46,8 @@ public class CompApiController {
 
     @GetMapping("/api/comps/{id}/comp-home")
     public ResponseEntity<?> compHome(@PathVariable Integer id) {
-        User sessionComp = (User) session.getAttribute("sessionComp");
+        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionComp");
+        User sessionComp = userService.findById(sessionUser.getId());
         List<CompResponse.ComphomeDTO> comphomeDTOList = compService.findAllByUserId(sessionComp);
 
         return ResponseEntity.ok(new ApiUtil<>(comphomeDTOList));
@@ -60,7 +63,8 @@ public class CompApiController {
     //update
     @PutMapping("/api/comps/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody CompRequest.UpdateDTO requestDTO) {
-        User sessionComp = (User) session.getAttribute("sessionComp");
+        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionComp");
+        User sessionComp = userService.findById(sessionUser.getId());
         User user = compService.updateById(sessionComp, requestDTO);
         session.setAttribute("sessionComp", user);
         return ResponseEntity.ok(new ApiUtil<>(requestDTO));
@@ -69,35 +73,35 @@ public class CompApiController {
     //update-form
     @GetMapping("/api/comps/{id}")
     public ResponseEntity<?> updateForm(@PathVariable int id) {
-        User sessionComp = (User) session.getAttribute("sessionComp");
+        SessionUser sessionComp = (SessionUser) session.getAttribute("sessionComp");
         CompResponse.CompUpdateDTO respDTO = compService.findByIdUpdate(sessionComp.getId());
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
     @GetMapping("/api/comps/comp-manage")
-    public ResponseEntity<?> compManage () {
+    public ResponseEntity<?> compManage() {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
-        CompResponse.CompManageDTO  compManageDTO = compService.compManage(sessionUser.getId());
+        CompResponse.CompManageDTO compManageDTO = compService.compManage(sessionUser.getId());
         return ResponseEntity.ok(new ApiUtil<>(compManageDTO));
     }
 
     @PostMapping("/api/find-all-jobs")
-    public CompResponse.CompManageDTO compManageDTO (@RequestParam(name = "userId") Integer userId){
+    public CompResponse.CompManageDTO compManageDTO(@RequestParam(name = "userId") Integer userId) {
         return compService.compManage(userId);
     }
 
     @PostMapping("/api/find-all-applicants")
-    public List<ResumeResponse.CmrDTO> findAllApplicants (@RequestParam(name = "userId") Integer userId){
+    public List<ResumeResponse.CmrDTO> findAllApplicants(@RequestParam(name = "userId") Integer userId) {
         return compService.findAllAppli(userId);
     }
 
     @PostMapping("/api/find-applicants")
-    public List<CompResponse.RusaDTO> findApplicants (@RequestParam(name = "jobsId") Integer jId){
+    public List<CompResponse.RusaDTO> findApplicants(@RequestParam(name = "jobsId") Integer jId) {
         return compService.findApplicants(jId);
     }
 
     @PostMapping("/api/find-no-resp")
-    public List<ResumeResponse.CmrDTO> findNoResp(@RequestParam(name = "userId") Integer uId){
+    public List<ResumeResponse.CmrDTO> findNoResp(@RequestParam(name = "userId") Integer uId) {
         return compService.findNoResp(uId);
     }
 

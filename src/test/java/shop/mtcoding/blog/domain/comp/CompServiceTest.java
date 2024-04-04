@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import shop.mtcoding.blog.domain.user.SessionUser;
 import shop.mtcoding.blog.domain.user.User;
 
 @Import(CompService.class)
@@ -27,7 +28,7 @@ public class CompServiceTest {
     @Test
     public void findAllResumeUserSKill_test(){
         // given
-        User sessionComp = (User) session.getAttribute("sessionComp");
+        SessionUser sessionComp = (SessionUser) session.getAttribute("sessionComp");
         // when
         compService.findAllRusList();
         // then

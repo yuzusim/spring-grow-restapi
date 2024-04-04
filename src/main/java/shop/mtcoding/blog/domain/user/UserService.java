@@ -103,7 +103,6 @@ public class UserService {
     public UserResponse.JoinDTO join(UserRequest.JoinDTO reqDTO, Integer role) {
         User user = userRepo.save(reqDTO.toEntity(role));
         return new UserResponse.JoinDTO(user);
-
     }
 
 
@@ -116,15 +115,16 @@ public class UserService {
         }
     }
 
+    // 가입 email 중복 조회
     public User findByEmail(String email) {
         return userRepo.findByEmail(email);
     }
+
     //유저 회원 정보 업데이트용 조회
     public User findById(Integer sessionUserId) {
         User user = userRepo.findById(sessionUserId)
                 .orElseThrow(() -> new Exception401("로그인이 필요한 서비스입니다."));
         return user;
-
     }
 
     public UserResponse.UpdateUserFormDTO updateUserForm(Integer sessionUserId) {

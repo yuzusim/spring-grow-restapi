@@ -7,15 +7,13 @@ import shop.mtcoding.blog.domain.apply.Apply;
 import shop.mtcoding.blog.domain.jobs.Jobs;
 import shop.mtcoding.blog.domain.resume.Resume;
 import shop.mtcoding.blog.domain.skill.Skill;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
-
 public class UserResponse {
 
-    //유저 회원가입 DTO
-    @Data
+
+    @Data  //유저 회원가입 DTO
     public static class JoinDTO {
         private Integer id;
         private String email;
@@ -35,8 +33,8 @@ public class UserResponse {
         }
     }
 
-    // 개인 회원정보 수정 DTO
-    @Data
+
+    @Data  // 개인 회원정보 수정 DTO
     public static class UserUpdateDTO{
         private String myName;
         private String phone;
@@ -52,7 +50,7 @@ public class UserResponse {
         }
     }
 
-    @Data
+    @Data  //개인 정보수정 페이지
     public static class UpdateUserFormDTO{
         private String myName;
         private String phone;
@@ -68,23 +66,19 @@ public class UserResponse {
         }
     }
 
-    @Data
+    @Data  // 개인 홈 페이지
     public static class HomeDTO{
-        // count
         private Integer applyCount;
         private Integer waitCount;
         private Integer resultCount;
-        //resumeList
         private List<ResumeDTO> resumeList;
-        //skillList
 
         @Builder
         public HomeDTO(Integer applyCount, Integer waitCount, Integer resultCount, List<Resume> resumeList) {
             this.applyCount = applyCount;
             this.waitCount = waitCount;
             this.resultCount = resultCount;
-            this.resumeList = resumeList.stream().map(ResumeDTO::new)
-                    .collect(Collectors.toList());
+            this.resumeList = resumeList.stream().map(ResumeDTO::new).toList();
         }
 
         @Data
@@ -102,61 +96,29 @@ public class UserResponse {
                 this.edu = resume.getEdu();
                 this.career = resume.getCareer();
                 this.area = resume.getArea();
-                this.skillList = resume.getSkillList().stream().map(skill -> {
-                    return new SkillDTO(skill);
-                }).collect(Collectors.toList());;
+                this.skillList = resume.getSkillList().stream().map(SkillDTO::new).toList();
             }
-        }
-        @Data
-        public class SkillDTO{
-            private Integer id;
-            private String name;
+            @Data
+            public class SkillDTO{
+                private Integer id;
+                private String name;
 
-            public SkillDTO(Skill skill) {
-                this.id = skill.getId();
-                this.name = skill.getName();
+                public SkillDTO(Skill skill) {
+                    this.id = skill.getId();
+                    this.name = skill.getName();
+                }
             }
         }
     }
 
-
-    @Data
-    public static class UserResumeSkillV2DTO{
-        private Integer id;
-        private String myName;
-        private String address;
-        private Integer resumeId;
-        private String title; // resume
-        private String career; // resume
-        private List<Skill2DTO> skillList;
-
-        @Builder
-        public UserResumeSkillV2DTO(User user, Resume resume, List<Skill> skillList) {
-            this.id = user.getId();
-            this.myName = user.getMyName();
-            this.address = user.getAddress();
-            this.resumeId = resume.getId();
-            this.title = resume.getTitle();
-            this.career = resume.getCareer();
-            this.skillList = skillList.stream()
-                    .map(skill -> new Skill2DTO(skill))
-             .collect(Collectors.toList());
-        }
-    }
-
-
-    @Data
+    @Data  // ajax 이력서로 지원한 공고 내역 요청
     public static class FindJobsResumeDTO{
-        //user
         private Integer id;
         private String compName;
-        //jobs
         private Integer jobsId;
         private String jobsTitle;
         private String jobsCareer;
-        //Apply
         private String isPass;
-        //skill
         private Integer resumeId;
         private List<SkillDTO> skillList;
 
@@ -169,10 +131,9 @@ public class UserResponse {
             this.jobsCareer = jobs.getCareer();
             this.isPass = apply.getIsPass();
             this.resumeId = resume.getId();
-            this.skillList = skillList.stream()
-                    .map(skill -> new SkillDTO(skill))
-                    .collect(Collectors.toList());
+            this.skillList = skillList.stream().map(SkillDTO::new).toList();
         }
+
         @Data
         public class SkillDTO {
             private Integer id;
@@ -183,23 +144,9 @@ public class UserResponse {
                 this.name = skill.getName();
             }
         }
-
     }
 
-    @Data
-    public static class Skill2DTO{
-        private Integer id;
-        private String name;
-        private String color;
-
-        public Skill2DTO(Skill skill) {
-            this.id = skill.getId();
-            this.name = skill.getName();
-            this.color = skill.getColor();
-        }
-    }
-
-    @Data
+    @Data  // 개인 지원내역 페이지
     public static class resumeHomeDTO {
         private Integer id;
         private String myName;
@@ -215,10 +162,9 @@ public class UserResponse {
             this.career = resume.getCareer();
             this.resumeTitle = resume.getTitle();
             this.resumeId = resume.getId();
-            this.skillList = skillList.stream()
-                    .map(skill -> new SkillDTO(skill))
-                    .collect(Collectors.toList());
+            this.skillList = skillList.stream().map(SkillDTO::new).toList();
         }
+
         @Data
         public class SkillDTO {
             private Integer id;
@@ -233,7 +179,7 @@ public class UserResponse {
 
 
 
-    @Data
+    @Data // 수정 완료된 기업 정보 DTO
     public static class UpdatedCompDTO {
         private String myName;
         private String password;
@@ -257,7 +203,7 @@ public class UserResponse {
         }
     }
 
-    @Data
+    @Data  // 기업 정보 수정 DTO
     public static class UpdateCompFormDTO {
         private Integer id;
         private String myName;

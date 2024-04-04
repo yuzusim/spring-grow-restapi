@@ -73,7 +73,6 @@ public class ResumeRequest {
             public Skill toEntity(Resume resume) {
                 return Skill.builder()
                         .name(name)
-                        .role(role)
                         .resume(resume)
                         .build();
             }
@@ -146,7 +145,6 @@ public class ResumeRequest {
                 return Skill.builder()
                         .id(id)
                         .name(name)
-                        .role(role)
                         .resume(resume)
                         .build();
             }

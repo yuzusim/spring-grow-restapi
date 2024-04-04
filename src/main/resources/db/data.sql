@@ -84,61 +84,61 @@ VALUES (23, '서울', '[채용공고] 백엔드 개발자 정규직 채용', '�
 
 
 -- 스킬 테이블 (개인)
-insert into skill_tb (resume_id, name, role) values(1, 'Java', 1);
-insert into skill_tb (resume_id, name, role) values(1, 'JavaScript', 1);
-insert into skill_tb (resume_id, name, role) values(1, 'HTML/CSS', 1);
-insert into skill_tb (resume_id, name, role) values(2, 'JavaScript', 1);
-insert into skill_tb (resume_id, name, role) values(3, 'Java', 1);
-insert into skill_tb (resume_id, name, role) values(3, 'HTML/CSS', 1);
-insert into skill_tb (resume_id, name, role) values
-                                                 (4, 'Java', 1),
-                                                 (4, 'JavaScript', 1),
-                                                 (4, 'HTML/CSS', 1),
-                                                 (4, 'MySql', 1),
-                                                 (5, 'React', 1),
-                                                 (5, 'Spring', 1),
-                                                 (6, 'Java', 1),
-                                                 (6, 'MySql', 1),
-                                                 (6, 'JSP', 1),
-                                                 (7, 'Java', 1),
-                                                 (7, 'JSP', 1),
-                                                 (7, 'Jquery', 1),
-                                                 (7, 'Vue.js', 1),
-                                                 (7, 'React', 1),
-                                                 (8, 'Spring', 1),
-                                                 (8, 'HTML/CSS', 1),
-                                                 (9, 'Spring', 1),
-                                                 (10, 'JavaScript', 1),
-                                                 (10, 'React', 1),
-                                                 (10, 'JSP', 1),
-                                                 (11, 'JavaScript', 1),
-                                                 (11, 'JSP', 1),
-                                                 (12, 'Java', 1);
+insert into skill_tb (resume_id, name) values(1, 'Java');
+insert into skill_tb (resume_id, name) values(1, 'JavaScript');
+insert into skill_tb (resume_id, name) values(1, 'HTML/CSS');
+insert into skill_tb (resume_id, name) values(2, 'JavaScript');
+insert into skill_tb (resume_id, name) values(3, 'Java');
+insert into skill_tb (resume_id, name) values(3, 'HTML/CSS');
+insert into skill_tb (resume_id, name) values
+                                                 (4, 'Java'),
+                                                 (4, 'JavaScript'),
+                                                 (4, 'HTML/CSS'),
+                                                 (4, 'MySql'),
+                                                 (5, 'React'),
+                                                 (5, 'Spring'),
+                                                 (6, 'Java'),
+                                                 (6, 'MySql'),
+                                                 (6, 'JSP'),
+                                                 (7, 'Java'),
+                                                 (7, 'JSP'),
+                                                 (7, 'Jquery'),
+                                                 (7, 'Vue.js'),
+                                                 (7, 'React'),
+                                                 (8, 'Spring'),
+                                                 (8, 'HTML/CSS'),
+                                                 (9, 'Spring'),
+                                                 (10, 'JavaScript'),
+                                                 (10, 'React'),
+                                                 (10, 'JSP'),
+                                                 (11, 'JavaScript'),
+                                                 (11, 'JSP'),
+                                                 (12, 'Java');
 
 -- 스킬 테이블 (기업)
-INSERT INTO skill_tb(jobs_id, name, role) VALUES(1, 'Java', 2);
-INSERT INTO skill_tb(jobs_id, name, role) VALUES(1, 'Oracle', 2);
-INSERT INTO skill_tb(jobs_id, name, role) VALUES(2, 'Spring', 2);
-INSERT INTO skill_tb(jobs_id, name, role) VALUES(3, 'HTML/CSS', 2),
-                                                (3, 'Spring', 2),
-                                                (3, 'MySql', 2),
-                                                (3, 'React', 2),
-                                                (4, 'Java', 2),
-                                                (4, 'Spring', 2),
-                                                (4, 'JSP', 2),
-                                                (5, 'Jquery', 2),
-                                                (5, 'JSP', 2),
-                                                (5, 'Oracle', 2),
-                                                (6, 'JavaScript', 2),
-                                                (6, 'HTML/CSS', 2),
-                                                (7, 'Java', 2),
-                                                (7, 'Spring', 2),
-                                                (7, 'React', 2),
-                                                (8, 'Spring', 2),
-                                                (8, 'Vue.js', 2),
-                                                (8, 'React', 2),
-                                                (9, 'Java', 2),
-                                                (9, 'Spring', 2);
+INSERT INTO skill_tb(jobs_id, name) VALUES(1, 'Java');
+INSERT INTO skill_tb(jobs_id, name) VALUES(1, 'Oracle');
+INSERT INTO skill_tb(jobs_id, name) VALUES(2, 'Spring');
+INSERT INTO skill_tb(jobs_id, name) VALUES(3, 'HTML/CSS'),
+                                                (3, 'Spring'),
+                                                (3, 'MySql'),
+                                                (3, 'React'),
+                                                (4, 'Java'),
+                                                (4, 'Spring'),
+                                                (4, 'JSP'),
+                                                (5, 'Jquery'),
+                                                (5, 'JSP'),
+                                                (5, 'Oracle'),
+                                                (6, 'JavaScript'),
+                                                (6, 'HTML/CSS'),
+                                                (7, 'Java'),
+                                                (7, 'Spring'),
+                                                (7, 'React'),
+                                                (8, 'Spring'),
+                                                (8, 'Vue.js'),
+                                                (8, 'React'),
+                                                (9, 'Java'),
+                                                (9, 'Spring');
 
 --- 지원내역 테이블
 INSERT INTO apply_tb(resume_id, jobs_id, is_pass, created_at)

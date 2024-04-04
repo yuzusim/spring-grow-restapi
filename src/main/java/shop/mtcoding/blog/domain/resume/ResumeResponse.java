@@ -380,7 +380,6 @@ public class ResumeResponse {
             public SkillDTO(Skill skill) {
                 this.id = skill.getId();
                 this.name = skill.getName();
-                this.role = skill.getRole();
             }
         }
     }

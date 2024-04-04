@@ -237,7 +237,7 @@ public class ResumeService {
             skillJPARepo.save(Skill.builder()
                     .resume(savedResume)
                     .name(skill.getName())
-                    .role(1).build());
+                    .build());
         }
 
         return new ResumeResponse.SaveDTO(savedResume);

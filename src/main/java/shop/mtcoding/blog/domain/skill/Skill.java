@@ -27,16 +27,14 @@ public class Skill {
     @Column(nullable = false)
     private String name;
     private String color;
-    private Integer role;
 
     @Builder
-    public Skill(Integer id, Resume resume, Jobs jobs, String name, String color, Integer role) {
+    public Skill(Integer id, Resume resume, Jobs jobs, String name, String color) {
         this.id = id;
         this.resume = resume;
         this.jobs = jobs;
         this.name = name;
         this.color = color;
-        this.role = role;
     }
 
     public ResumeResponse.SkillDTO toDTO(){

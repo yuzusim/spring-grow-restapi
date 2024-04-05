@@ -13,6 +13,69 @@ import java.util.stream.Collectors;
 
 public class ResumeResponse {
 
+
+    @Data  // comp-resume-detail 페이지 요청
+    public static class CompResumeDetailDTO {
+        private Integer resumeId;
+        private String imgFileName;
+        private String myName;
+        private LocalDate birth;
+        private String phone;
+        private Integer jobsId;
+        private String email;
+        private String address;
+        private String area;
+        private String title;
+        private String edu;
+        private String introduce;
+        private String career;
+        private String portLink;
+        private List<SkillDTO> skills;
+        private Boolean isComp = true;
+        private Boolean isPass = false;
+        private Boolean isFail = false;
+        private Boolean isWaiting = false;
+
+        @Builder
+        public CompResumeDetailDTO(Resume resume, User user, Apply apply, List<Skill> skills) {
+            this.resumeId = resume.getId();
+            this.imgFileName = user.getImgFileName();
+            this.myName = user.getMyName();
+            this.birth = user.getBirth();
+            this.phone = user.getPhone();
+            this.jobsId = user.getId();
+            this.email = user.getEmail();
+            this.address = user.getAddress();
+            this.area = resume.getArea();
+            this.title = resume.getTitle();
+            this.edu = resume.getEdu();
+            this.introduce = resume.getIntroduce();
+            this.career = resume.getCareer();
+            this.portLink = resume.getPortLink();
+            this.skills = skills.stream().map(SkillDTO::new).toList();
+
+            if (apply.getIsPass().equals("3")) {
+                this.isPass = true;
+            } else if (apply.getIsPass().equals("4")) {
+                this.isFail = true;
+            } else if (apply.getIsPass().equals("2")) {
+                this.isWaiting = true;
+            }
+        }
+
+        @Data
+        public class SkillDTO {
+            private Integer id;
+            private String name;
+
+            public SkillDTO(Skill skill) {
+                this.id = skill.getId();
+                this.name = skill.getName();
+            }
+        }
+    }
+
+
     @Data
     public static class SaveDTO {
         private String title;
@@ -281,9 +344,9 @@ public class ResumeResponse {
         private List<SkillDTO> skills;
 
         @Builder
-        public DetailDTO3(Resume resume, Integer jobsId, String isApply, User user, Integer role, List<Skill> skills) {
+        public DetailDTO3(Resume resume, Jobs jobs, String isApply, User user, Integer role, List<Skill> skills) {
             this.id = resume.getId();
-            this.jobsId = jobsId;
+            this.jobsId = jobs.getId();
             this.title = resume.getTitle();
             this.edu = resume.getEdu();
             this.introduce = resume.getIntroduce();
@@ -322,6 +385,7 @@ public class ResumeResponse {
                 this.isWaiting = true;
             }
         }
+
         @Data
         public class SkillDTO {
             private Integer id;
@@ -395,7 +459,7 @@ public class ResumeResponse {
     }
 
     @Data
-    public static class ResumeUpdateDTO {
+    public static class UpdatedDTO {
         private Integer id;
         private String title;
         private String area;
@@ -405,7 +469,7 @@ public class ResumeResponse {
         private String portLink;
         private List<SkillDTO> skill;
 
-        public ResumeUpdateDTO(Resume resume, List<Skill> skills) {
+        public UpdatedDTO(Resume resume) {
             this.id = resume.getId();
             this.title = resume.getTitle();
             this.area = resume.getArea();
@@ -413,21 +477,6 @@ public class ResumeResponse {
             this.career = resume.getCareer();
             this.introduce = resume.getIntroduce();
             this.portLink = resume.getPortLink();
-            this.skill = skills.stream()
-                    .map(skill -> new SkillDTO(skill))
-                    .collect(Collectors.toList());
-        }
-
-        @Data
-        public class SkillDTO {
-            private Integer id;
-            private String name;
-            private Integer role;
-
-            public SkillDTO(Skill skill) {
-                this.id = skill.getId();
-                this.name = skill.getName();
-            }
         }
     }
 }

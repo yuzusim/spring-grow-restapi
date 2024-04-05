@@ -1,10 +1,8 @@
 package shop.mtcoding.blog.domain.resume;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import shop.mtcoding.blog.domain.apply.Apply;
 import shop.mtcoding.blog.domain.skill.Skill;
@@ -57,5 +55,27 @@ public class Resume {
         this.skillList = skillList;
         this.applyList = applyList;
         this.createdAt = createdAt;
+    }
+
+    public void updateResume(ResumeRequest.UpdateDTO reqDTO, List<SkillDTO> skills) {
+        this.title = reqDTO.getTitle();
+        this.area = reqDTO.getArea();
+        this.edu = reqDTO.getEdu();
+        this.career = reqDTO.getCareer();
+        this.introduce = reqDTO.getIntroduce();
+        this.portLink = reqDTO.getPortLink();
+        this.skillList = skills.stream().map(skill -> SkillDTO.toEntity(skill));
+
+    }
+    @Data
+    public class SkillDTO {
+        private Integer id;
+        private String name;
+
+        public Skill toEntity(SkillDTO skillDTO) {
+            this.id = skillDTO.getId();
+            this.name = skillDTO.getName();
+        }
+
     }
 }

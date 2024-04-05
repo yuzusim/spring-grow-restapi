@@ -3,7 +3,9 @@ package shop.mtcoding.blog._core.interceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.constraints.Null;
 import org.springframework.web.servlet.HandlerInterceptor;
+import shop.mtcoding.blog._core.errors.exception.Exception401;
 import shop.mtcoding.blog._core.util.JwtUtil;
 import shop.mtcoding.blog.domain.user.SessionUser;
 
@@ -31,7 +33,8 @@ public class LoginInterceptor implements HandlerInterceptor{
                 session.setAttribute("sessionComp", sessionUser);
             }
             return true;
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
+            e.printStackTrace();
             return false;
         }
     }

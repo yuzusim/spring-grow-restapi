@@ -24,8 +24,8 @@ public class UserService {
     private final ApplyJPARepository applyRepo;
 
     @Transactional
-    public UserResponse.UpdatedCompDTO updateByCompId(User sessionUser, UserRequest.UpdateCompDTO reqDTO) {
-        User user = userRepo.findById(sessionUser.getId())
+    public UserResponse.UpdatedCompDTO updateByCompId(Integer sessionUserId, UserRequest.UpdateCompDTO reqDTO) {
+        User user = userRepo.findById(sessionUserId)
                 .orElseThrow(() -> new Exception401("로그인이 필요한 서비스입니다."));
         user.updateComp(reqDTO);
         return new UserResponse.UpdatedCompDTO(user);

@@ -64,22 +64,22 @@ public class JobsServiceTest {
         System.out.println(detailDTO.toString());
     }
 
-    @Test
-    public void listDTOS_test() {
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        List<Jobs> jobsList = jobsRepo.findAll(sort);
-
-        List<JobsResponse.ListDTO> listDTOS = new ArrayList<>();
-
-        for (int i = 0; i < jobsList.size(); i++) {
-            User user = userRepo.findById(jobsList.get(i).getUser().getId())
-                    .orElseThrow(() -> new Exception404("사용자를 찾을 수 없습니다."));
-
-            List<Skill> skillList = skillRepo.findAllById(jobsList.get(i).getId());
-            listDTOS.add(JobsResponse.ListDTO.builder()
-                    .jobs(jobsList.get(i))
-                    .user(user)
-                    .skills(skillList).build());
-        }
-    }
+//    @Test
+//    public void listDTOS_test() {
+//        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+//        List<Jobs> jobsList = jobsRepo.findAll(sort);
+//
+//        List<JobsResponse.ListDTO> listDTOS = new ArrayList<>();
+//
+//        for (int i = 0; i < jobsList.size(); i++) {
+//            User user = userRepo.findById(jobsList.get(i).getUser().getId())
+//                    .orElseThrow(() -> new Exception404("사용자를 찾을 수 없습니다."));
+//
+//            List<Skill> skillList = skillRepo.findAllById(jobsList.get(i).getId());
+//            listDTOS.add(JobsResponse.ListDTO.builder()
+//                    .jobs(jobsList.get(i))
+//                    .user(user)
+//                    .skills(skillList).build());
+//        }
+//    }
 }

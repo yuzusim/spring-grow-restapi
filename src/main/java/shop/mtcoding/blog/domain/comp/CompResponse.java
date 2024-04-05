@@ -15,24 +15,39 @@ import java.util.stream.Collectors;
 
 public class CompResponse {
 
+
+    @Data
+    public static class UpdateDTO{
+        private Integer id;
+        private String myName;
+        private String compName;
+        private String phone;
+        private String homepage;
+        private LocalDate birth;
+        private String address;
+
+        @Builder
+        public UpdateDTO(User user) {
+            this.id = user.getId();
+            this.myName = user.getMyName();
+            this.compName = user.getCompName();
+            this.phone = user.getPhone();
+            this.homepage = user.getHomepage();
+            this.birth = user.getBirth();
+            this.address = user.getAddress();
+        }
+    }
+
     @Data
     public static class CompJoinDTO {
         private String email;
         private String myName;
-        private String phone;
-        private String address;
-        private LocalDate birth;
-        private String businessNumber;
         private String compName;
         private String homepage;
 
         public CompJoinDTO(User user) {
             this.email = user.getEmail();
             this.myName = user.getMyName();
-            this.phone = user.getPhone();
-            this.address = user.getAddress();
-            this.birth = user.getBirth();
-            this.businessNumber = user.getBusinessNumber();
             this.compName = user.getCompName();
             this.homepage = user.getHomepage();
         }

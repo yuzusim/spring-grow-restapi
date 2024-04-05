@@ -1,6 +1,7 @@
 package shop.mtcoding.blog.domain.resume;
 
 import jakarta.transaction.Transactional;
+import jdk.swing.interop.SwingInterOpUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.mtcoding.blog._core.errors.exception.Exception400;
@@ -23,26 +24,18 @@ public class ResumeService {
     private final ApplyJPARepository applyRepo;
     private final SkillJPARepository skillRepo;
 
-    public ResumeResponse.DetailDTO3 compResumeDetail(Integer resumeId, Integer jobsId, User sessionUser, User sessionComp) {
-        Resume resume = resumeRepo.findByIdJoinUser(resumeId);
+    public ResumeResponse.CompResumeDetailDTO compResumeDetail(Integer resumeId, Integer jobsId, User sessionUser) {
+        Apply apply = applyRepo.findByRIdJIdUserSkills(resumeId, jobsId)
+                .orElseThrow(() -> new Exception404("정보를 찾을 수 없습니다."));
 
-        boolean isOwner = resume.getUser().equals(sessionUser);
-        resume.setOwner(isOwner);
+        boolean isOwner = apply.getResume().getUser().equals(sessionUser);
+        apply.getResume().setOwner(isOwner);
 
-        List<Skill> skills = skillRepo.findAllByResumeId(resume.getId());
-        Apply apply = applyRepo.findByResumeIdAndJobsId(resumeId, jobsId)
-                .orElseThrow(() -> new Exception400("잘못된 요청입니다."));
-        if (sessionUser != null) {
-            ResumeResponse.DetailDTO3 resumeDetailDTO = new ResumeResponse.DetailDTO3(resume, jobsId, apply.getIsPass(), resume.getUser(), sessionUser.getRole(), skills);
-
-            return resumeDetailDTO;
-        } else if (sessionComp != null) {
-            ResumeResponse.DetailDTO3 resumeDetailDTO = new ResumeResponse.DetailDTO3(resume, jobsId, apply.getIsPass(), resume.getUser(), sessionComp.getRole(), skills);
-
-            return resumeDetailDTO;
-        }
-
-        return null;
+        return ResumeResponse.CompResumeDetailDTO.builder()
+                .resume(apply.getResume())
+                .user(apply.getResume().getUser())
+                .apply(apply)
+                .skills(apply.getResume().getSkillList()).build();
     }
 
 
@@ -156,52 +149,25 @@ public class ResumeService {
     }
 
 
-
     @Transactional
-    public ResumeResponse.ResumeUpdateDTO update(Integer id, Integer sessionUserId, ResumeRequest.UpdateDTO reqDTO) {
-        // 1. 조회 및 예외처리
-        // 주어진 resumeId로 이력서를 찾습니다.
-        Resume resume = resumeRepo.findById(id)
-                .orElseThrow(() -> new Exception404("해당 이력서를 찾을 수 없습니다"));
-        // 2. 권한 처리
+    public ResumeResponse.UpdatedDTO update(Integer resumeId, Integer sessionUserId, ResumeRequest.UpdateDTO reqDTO) {
+        Resume resume = resumeRepo.findByResumeIdJoinUserWithSkills(resumeId);
+
         if (sessionUserId != resume.getUser().getId()) {
-            throw new Exception403("이력서를 수정할 권한이 없습니다");
+            throw new Exception403("권한이 없습니다");
         }
 
-        // 3. 이력서 수정하기
-        resume.setId(reqDTO.getId());
-        resume.setTitle(reqDTO.getTitle());
-        resume.setArea(reqDTO.getArea());
-        resume.setEdu(reqDTO.getEdu());
-        resume.setCareer(reqDTO.getCareer());
-        resume.setIntroduce(reqDTO.getIntroduce());
-        resume.setPortLink(reqDTO.getPortLink());
+        resume.updateResume(reqDTO, reqDTO.getSkills());
 
-
-        skillRepo.deleteByResumeId(id);
-
-        // 스킬뿌리기
-        reqDTO.getSkill().stream()
-                .map((skill) -> {
-                    return skill.toEntity(resume);
-                })
-                .forEach((skill) -> {
-                    skillRepo.save(skill);
-                });
-
-
-        System.out.println("수정된 데이터 : " + reqDTO);
-
-        List<Skill> skills = skillRepo.findByResumeId(resume.getId());
-
-        return new ResumeResponse.ResumeUpdateDTO(resume, skills);
+        System.out.println(resume.getSkillList());
+        return new ResumeResponse.UpdatedDTO(resume);
 
     } // 더티체킹
 
 
     //이력서 저장
     @Transactional
-    public ResumeResponse.SaveDTO save(User sessionUser ,ResumeRequest.SaveDTO reqDTO) {
+    public ResumeResponse.SaveDTO save(User sessionUser, ResumeRequest.SaveDTO reqDTO) {
         Resume resume = reqDTO.toEntity(sessionUser);
         Resume savedResume = resumeRepo.save(resume);
         for (Skill skill : reqDTO.getSkillList()) {

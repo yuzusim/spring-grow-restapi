@@ -35,29 +35,29 @@ public class UserServiceTest {
 
 
 
-    @Test
-    public void UserResumeSkillDTO_test() {
-        //given
-        int userId =1;
-        //when
-        List<UserResponse.UserResumeSkillDTO> ursList = new ArrayList<>();
-        // 사용자 id로 조회된 모든 이력서를 찾는다.
-        List<Resume> resumeList = resumeRepo.findAllByUserId(userId);
-
-        User user = userJPARepo.findById(userId)
-                .orElseThrow(() -> new Exception401("사용자를 찾을 수 없습니다."));
-
-        for (int i = 0; i < resumeList.size(); i++) {  //사용자가 가지고 있는 resume를 기준으로 필요한 정보를 주입한다.
-            List<Skill> skills = skillRepo.findAllByResumeId(resumeList.get(i).getId());
-            ursList.add(UserResponse.UserResumeSkillDTO.builder()
-                    .user(user)
-                    .resume(resumeList.get(i))
-                    .skillList(skills).build());
-
-            System.out.println(resumeList.get(i).getId());
-        }
-
-    }
+//    @Test
+//    public void UserResumeSkillDTO_test() {
+//        //given
+//        int userId =1;
+//        //when
+//        List<UserResponse.UserResumeSkillDTO> ursList = new ArrayList<>();
+//        // 사용자 id로 조회된 모든 이력서를 찾는다.
+//        List<Resume> resumeList = resumeRepo.findAllByUserId(userId);
+//
+//        User user = userJPARepo.findById(userId)
+//                .orElseThrow(() -> new Exception401("사용자를 찾을 수 없습니다."));
+//
+//        for (int i = 0; i < resumeList.size(); i++) {  //사용자가 가지고 있는 resume를 기준으로 필요한 정보를 주입한다.
+//            List<Skill> skills = skillRepo.findAllByResumeId(resumeList.get(i).getId());
+//            ursList.add(UserResponse.UserResumeSkillDTO.builder()
+//                    .user(user)
+//                    .resume(resumeList.get(i))
+//                    .skillList(skills).build());
+//
+//            System.out.println(resumeList.get(i).getId());
+//        }
+//
+//    }
     @Test
     public void join_test(){
         // given

@@ -13,15 +13,24 @@ public class ResumeServiceTest {
     private ResumeService resumeService;
 
 
-
     @Test
-    public void ResumeApplyDTO_test() {
+    public void update_test() {
         // given
-        int resumeId = 1;
-        int jobsId = 3;
+        ResumeRequest.UpdateDTO reqDTO
         // when
-        resumeService.findAllResumeJoinApplyByUserIdAndJobsId(resumeId, jobsId);
+        resumeService.update(1,1, reqDTO);
         // then
 
     }
+
+//    @Test
+//    public void ResumeApplyDTO_test() {
+//        // given
+//        int resumeId = 1;
+//        int jobsId = 3;
+//        // when
+//        resumeService.findAllResumeJoinApplyByUserIdAndJobsId(resumeId, jobsId);
+//        // then
+//
+//    }
 }

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog._core.util.JwtUtil;
 import shop.mtcoding.blog._core.util.JwtVO;
+import shop.mtcoding.blog.domain.comp.CompRequest;
+import shop.mtcoding.blog.domain.comp.CompResponse;
 import shop.mtcoding.blog.domain.jobs.JobsRequest;
 import shop.mtcoding.blog.domain.jobs.JobsResponse;
 import shop.mtcoding.blog.domain.jobs.JobsService;
@@ -32,14 +34,14 @@ public class UserApiController {
         return ResponseEntity.ok(new ApiUtil<>(updatedUser));
     }
 
+
     // 기업 회원 정보수정
-    @PutMapping("/api/comp-users")
+    @PutMapping("/api/users/comps")
     public ResponseEntity<?> updateComp(@Valid @RequestBody UserRequest.UpdateCompDTO reqDTO, Errors errors) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
-        User user = userService.findById(sessionUser.getId());
 
-        UserResponse.UpdatedCompDTO updatedUser = userService.updateByCompId(user, reqDTO);
-        return ResponseEntity.ok(new ApiUtil<>(updatedUser));
+        UserResponse.UpdatedCompDTO respDTO = userService.updateByCompId(sessionUser.getId(), reqDTO);
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
     // 개인 사용자 정보 수정 페이지

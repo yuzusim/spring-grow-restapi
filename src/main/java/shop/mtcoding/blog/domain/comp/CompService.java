@@ -127,12 +127,11 @@ public class CompService {
 
     // 기업 회원가입
     @Transactional
-    public CompResponse.CompJoinDTO join(CompRequest.CompJoinDTO reqDTO) {
+    public User join(CompRequest.CompJoinDTO reqDTO) {
         // 회원가입 할 때마다 이미지 못가져와서 터지니까 디폴트 이미지 하나 추가함
-        User comp = compJPARepo.save(reqDTO.toEntity(2));
-
-        return new CompResponse.CompJoinDTO(comp);
+        return compJPARepo.save(reqDTO.toEntity(2));
     }
+
 
     public List<JobsResponse.ApplyResumeListDTO> findAllByJobsId(Integer jobsId) {
         List<Apply> applyList = applyJPARepo.findAllByJobsId(jobsId);
@@ -152,23 +151,20 @@ public class CompService {
         return listDTOS;
     }
 
-    public List<CompResponse.CompHomeDTO> findAllByUserId(User sessionComp) {
-        List<Jobs> jobsList = jobsJPARepo.findAllByUserId(sessionComp.getId());
-        List<CompResponse.CompHomeDTO> listDTOS = new ArrayList<>();
+    public List<CompResponse.CompHomeDTO> compHomeDTOS(Integer sessionUserId) {
+        List<Jobs> jobsList = jobsJPARepo.findAllByUserIdWithSkill(sessionUserId);
+        List<CompResponse.CompHomeDTO> respList = new ArrayList<>();
 
-        for (int i = 0; i < jobsList.size(); i++) {
-            List<Skill> skills = skillJPARepo.findByJobsId(jobsList.get(i).getId());
-            listDTOS.add(CompResponse.CompHomeDTO.builder()
-                    .jobs(jobsList.get(i))
-                    .skillList(skills)
-                    .build());
+        jobsList.stream().map(jobs ->
+                respList.add(CompResponse.CompHomeDTO.builder()
+                        .jobs(jobs)
+                        .skillList(jobs.getSkillList()).build())).toList();
+
+        for (int i = 0; i < respList.size(); i++) {
+            respList.get(i).setId(i + 1);
         }
 
-        for (int i = 0; i < listDTOS.size(); i++) {
-            listDTOS.get(i).setId(i + 1);
-        }
-
-        return listDTOS;
+        return respList;
     }
 
     //기업 로그인 시 보여줄 채용 공고
@@ -199,30 +195,24 @@ public class CompService {
 //    }
 
     // 기업 로그인하면 보여줄 이력서 목록들
-    public List<CompResponse.ResumeUserSkillDTO> findAllRusList() {
+    public List<CompResponse.ResumeUserSkillDTO> readResume() {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
-
-        List<Resume> resumeList = resumeJPARepo.findAll(sort);
+        List<Resume> resumeList = resumeJPARepo.findAllJoinUserWithSkills(sort);
 
         List<CompResponse.ResumeUserSkillDTO> rusList = new ArrayList<>();
 
-        for (int i = 0; i < resumeList.size(); i++) {
-            User user = userJPARepo.findById(resumeList.get(i).getUser().getId())
-                    .orElseThrow(() -> new Exception401("사용자를 찾을 수 없습니다."));
-            List<Skill> skills = skillJPARepo.findAllByResumeId(resumeList.get(i).getId());
-            rusList.add(CompResponse.ResumeUserSkillDTO.builder()
-                    .resume(resumeList.get(i))
-                    .user(user)
-                    .skills(skills)
-                    .build());
-        }
+        resumeList.stream().map(resume ->
+                rusList.add(CompResponse.ResumeUserSkillDTO.builder()
+                        .resume(resume)
+                        .user(resume.getUser())
+                        .skills(resume.getSkillList()).build())).toList();
 
         return rusList;
     }
 
     @Transactional
-    public User updateById(User sessionUser, CompRequest.UpdateDTO requestDTO) {
-        User user = compJPARepo.findById(sessionUser.getId())
+    public User updateById(Integer sessionUserId, CompRequest.UpdateDTO requestDTO) {
+        User user = compJPARepo.findById(sessionUserId)
                 .orElseThrow(() -> new Exception401("로그인이 필요한 서비스입니다."));
 
         if (requestDTO.getMyName() != null) {

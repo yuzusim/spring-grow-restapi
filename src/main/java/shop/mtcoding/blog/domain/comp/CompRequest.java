@@ -49,7 +49,7 @@ public class CompRequest {
     }
 
     @Data
-    public static class  UpdateDTO{
+    public static class UpdateDTO {
         @Size(max = 10, message = "이름은 10글자를 넘길 수 없습니다.")
         @NotEmpty(message = "이름을 작성하여 주십시오.")
         private String myName;
@@ -84,43 +84,32 @@ public class CompRequest {
     @Data
     public static class CompJoinDTO {
         private Integer id;
-
         @Size(max = 30, message = "이메일은 30글자를 넘길 수 없습니다.")
         @NotEmpty(message = "이메일을 작성하여 주십시오.")
         private String email;
-
         @Size(max = 10, message = "이름은 10글자를 넘길 수 없습니다.")
         @NotEmpty(message = "이름을 작성하여 주십시오.")
         private String myName;
-
         @Size(max = 20, message = "비밀번호는 30글자를 넘길 수 없습니다.")
         @NotEmpty(message = "비밀번호를 작성하여 주십시오.")
         private String password;
-
         @Size(max = 20, message = "전화번호는 20글자를 넘길 수 없습니다.")
         @NotEmpty(message = "전화번호를 작성하여 주십시오.")
         private String phone;
-
         @Size(max = 100, message = "주소는 100글자를 넘길 수 없습니다.")
         @NotEmpty(message = "주소를 작성하여 주십시오.")
         private String address;
-
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         private LocalDate birth;
-
-        @Size(max = 12, message = "사업자 등록 번호는 12글자를 넘길 수 없습니다.")
+        @Size(max = 15, message = "사업자 등록 번호는 12글자를 넘길 수 없습니다.")
         @NotEmpty(message = "사업자 등록 번호를 작성하여 주십시오.")
         private String businessNumber;
-
-        @Size(max = 12, message = "사업자 등록 번호는 12글자를 넘길 수 없습니다.")
-        @NotEmpty(message = "사업자 등록 번호를 작성하여 주십시오.")
+        @Size(max = 12, message = "회사명은 12자를 초과할 수 없습니다.")
+        @NotEmpty(message = "회사명을 입력하여 주십시오.")
         private String compName;
-
         @Size(max = 50, message = "홈페이지 주소는 50글자를 넘길 수 없습니다.")
         private String homepage;
-
-        private String imgFileName;
-
+        private String imgFileName = "default.jpg";
         private LocalDate createdAt;
 
         public User toEntity(Integer role) {
@@ -139,5 +128,10 @@ public class CompRequest {
                     .createdAt(createdAt)
                     .build();
         }
+    }
+
+    @Data
+    public static class JobsIdDTO {
+        private Integer jobsId;
     }
 }

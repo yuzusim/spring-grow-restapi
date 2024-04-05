@@ -80,7 +80,6 @@ public class UserService {
                         .user(resume.getUser())
                         .resume(resume)
                         .skillList(resume.getSkillList()).build())).toList();
-
         for (int i = 0; i < respList.size(); i++) {
             respList.get(i).setId(i + 1);
         }

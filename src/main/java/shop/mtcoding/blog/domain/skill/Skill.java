@@ -27,32 +27,28 @@ public class Skill {
 
     @Column(nullable = false)
     private String name;
-    private String color;
 
     @Builder
-    public Skill(Integer id, Resume resume, Jobs jobs, String name, String color) {
+    public Skill(Integer id, Resume resume, Jobs jobs, String name) {
         this.id = id;
         this.resume = resume;
         this.jobs = jobs;
         this.name = name;
-        this.color = color;
     }
 
     public Skill.DTO toDTO(Skill skill){
-        return DTO.builder()
-                .skill(skill).build();
+        return DTO.builder().skill(skill).build();
     }
 
     @Data
-    public class DTO{
+    public static class DTO{
         private Integer id;
         private String name;
 
         @Builder
-        public DTO(Skill skill) {
+        public DTO (Skill skill) {
             this.id = skill.getId();
             this.name = skill.getName();
         }
     }
-
 }

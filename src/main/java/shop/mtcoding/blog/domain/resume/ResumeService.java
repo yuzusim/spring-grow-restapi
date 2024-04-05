@@ -16,7 +16,6 @@ import shop.mtcoding.blog.domain.user.SessionUser;
 import shop.mtcoding.blog.domain.user.User;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -110,65 +109,6 @@ public class ResumeService {
         return resumeDetailDTO;
     }
 
-
-//    public ResumeResponse.ResumeStateDTO findAllResumeJoinApplyByUserIdAndJobsId(Integer userId, Integer jobsId) {
-//        List<Resume> resumeList = resumeJPARepo.findAllByUserId(userId);
-//        List<Apply> applies = applyJPARepo.findAll();
-//
-//        //sessionUser 의 지원한 공고 리스트
-//        List<ApplyResponse.ApplyUserViewDTO> listDTO = applies.stream()
-//                .filter(apply -> apply.getResume().getUser().getId() == sessionUserId)
-//                .map(apply -> ApplyResponse.ApplyUserViewDTO.builder()
-//                        .id(apply.getId())
-//                        .user(apply.getResume().getUser())
-//                        .isPass(apply.getIsPass())
-//                        .resume(apply.getResume())
-//                        .jobs(apply.getJobs())
-//                        .build())
-//                .collect(Collectors.toList());
-//
-//
-//        // 내가 지원안한 이력서만 나오도록 출력
-//        List<ResumeResponse.ResumeApplyDTO> resumeApplyDTOList = resumeList.stream()
-//                .map(resume -> {
-//                    Apply apply = applyJPARepo.findByResumeIdAndJobsId(resume.getId(), jobsId)
-//                            .orElse(Apply.builder().isPass("1").build());
-//
-//                    if ("1".equals(apply.getIsPass())) {
-//                        return ResumeResponse.ResumeApplyDTO.builder()
-//                                .apply(apply)
-//                                .resume(resume)
-//                                .build();
-//                    }
-//                    return null;
-//                })
-//                .filter(Objects::nonNull) // 필터링하여 null이 아닌 요소만 남깁니다.
-//                .collect(Collectors.toList());
-//
-//        // 지원할 이력서가 있으면 isApply false
-//        Boolean isApply = false;
-//
-//        //지원한 이력서가 있고 작성한이력서 리스트가 비었으면 isApply true
-//        if (resumeApplyDTOList.size() < 1 && listDTO.size() > 1) {
-//            isApply = true;
-//        }
-//
-//        ResumeResponse.ResumeStateDTO resumeStateDTO = new ResumeResponse.ResumeStateDTO();
-//
-//        resumeStateDTO.setIsApply(isApply);
-//        resumeStateDTO.setApplys(resumeApplyDTOList);
-//
-//
-//        return resumeStateDTO;
-//    }
-
-    //이력서 뿌리기
-    public List<ResumeResponse.ResumeDTO> findAll() {
-        List<Resume> resumes = resumeJPARepo.findAll();
-
-        return resumes.stream().map(resume -> resume.toDTO()).collect(Collectors.toList());
-    }
-
     // 이력서 수정
     public ResumeResponse.UpdateDTO updateForm(Integer id) {
         Resume resume = resumeJPARepo.findById(id)
@@ -206,7 +146,7 @@ public class ResumeService {
         resume.setPortLink(reqDTO.getPortLink());
 
 
-        skillJPARepo.deleteByresumeId(id);
+        skillJPARepo.deleteByResumeId(id);
 
         // 스킬뿌리기
         reqDTO.getSkill().stream()
@@ -227,10 +167,9 @@ public class ResumeService {
     } // 더티체킹
 
 
-    //이력서 신청
+    //이력서 저장
     @Transactional
     public ResumeResponse.SaveDTO save(User sessionUser ,ResumeRequest.SaveDTO reqDTO) {
-
         Resume resume = reqDTO.toEntity(sessionUser);
         Resume savedResume = resumeJPARepo.save(resume);
         for (Skill skill : reqDTO.getSkillList()) {
@@ -243,23 +182,19 @@ public class ResumeService {
         return new ResumeResponse.SaveDTO(savedResume);
     }
 
-    //이력서 삭제
+    // 이력서 삭제
     @Transactional
-    public void delete(Integer boardId) {
-        //1. 인증처리
-        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
-
+    public void delete(Integer resumeId, SessionUser sessionUser) {
         if (sessionUser.getId() == null) {
-            throw new Exception401("서비스가 필요한 서비스입니다.");
+            throw new Exception401("로그인이 필요한 서비스입니다.");
         }
-        Resume resume = resumeJPARepo.findById(boardId)
+        Resume resume = resumeJPARepo.findById(resumeId)
                 .orElseThrow(() -> new Exception404("해당 게시글을 찾을 수 없습니다"));
-        //2.권한처리
+
         if (sessionUser.getId() != resume.getUser().getId()) {
             throw new Exception403("해당 게시글을 삭제할 권한이 없습니다");
         }
 
-        //3. 삭제하기
-        resumeJPARepo.deleteById(resume.getId());
+        resumeJPARepo.deleteById(resumeId);
     }
 }

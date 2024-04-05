@@ -89,9 +89,8 @@ public class UserService {
 
     // user 회원가입 메소드
     @Transactional
-    public UserResponse.JoinDTO join(UserRequest.JoinDTO reqDTO, Integer role) {
-        User user = userRepo.save(reqDTO.toEntity(role));
-        return new UserResponse.JoinDTO(user);
+    public User join(UserRequest.JoinDTO reqDTO, Integer role) {
+        return userRepo.save(reqDTO.toEntity(role));
     }
 
     // 로그인

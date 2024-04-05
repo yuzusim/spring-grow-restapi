@@ -15,36 +15,48 @@ import shop.mtcoding.blog.domain.user.UserService;
 @RestController
 public class ResumeApiController {
     private final ResumeService resumeService;
-    private final HttpSession session;
     private final UserService userService;
+    private final HttpSession session;
 
+    // 이력서 삭제
     @DeleteMapping("/api/resumes/{resumeId}")
     public ResponseEntity<?> delete(@PathVariable Integer resumeId) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         resumeService.delete(resumeId, sessionUser);
 
         return ResponseEntity.ok(new ApiUtil<>(null));
-
     }
 
+    // 이력서 수정 페이지 요청
     @GetMapping("/api/resume/{resumeId}/update-form")
     public ResponseEntity<?> updateFrom(@PathVariable Integer resumeId) {
-
         ResumeResponse.UpdateDTO respDTO = resumeService.updateForm(resumeId);
+
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
-    @GetMapping("/api/resume/resume-detail/{resumeId}")
-    public ResponseEntity<?> resumeDetail(@PathVariable Integer resumeId, @RequestParam Integer jobsId) {
+    // 이력서 상세보기 페이지 요청 (개인로그인)
+    @GetMapping("/api/resumes/resume-detail/{resumeId}")
+    public ResponseEntity<?> resumeDetail(@PathVariable Integer resumeId) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         User user = userService.findById(sessionUser.getId());
-        SessionUser sessionComp = (SessionUser) session.getAttribute("sessionComp");
-        User comp = userService.findById(sessionComp.getId());
-        ResumeResponse.DetailDTO respDTO = resumeService.resumeDetail(resumeId, jobsId, user, comp);
+        ResumeResponse.DetailDTO respDTO = resumeService.resumeDetail(resumeId,user);
 
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
+    // 이력서 상세보기 페이지 요청 (기업로그인)
+    @GetMapping("/api/resumes/resume-detail2/{id}")
+    public ResponseEntity<?> compResumeDetail(@PathVariable Integer id) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
+        User newSessionUser = userService.findById(sessionUser.getId());
+
+        ResumeResponse.DetailDTO2 respDTO = resumeService.resumeDetail2(id, newSessionUser);
+
+        return ResponseEntity.ok(new ApiUtil<>(respDTO));
+    }
+
+    // 이력서 작성
     @PostMapping("/api/resumes")
     public ResponseEntity<?> save(@Valid @RequestBody ResumeRequest.SaveDTO reqDTO, Errors errors) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
@@ -54,25 +66,7 @@ public class ResumeApiController {
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
-    @GetMapping("/api/resumes/resume-detail2/{id}")
-    public ResponseEntity<?> resumeDetail2(@PathVariable Integer id) {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
-        User newSessionUser = userService.findById(sessionUser.getId());
 
-        ResumeResponse.DetailDTO2 respDTO = resumeService.resumeDetail2(id, newSessionUser);
-
-        return ResponseEntity.ok(new ApiUtil<>(respDTO));
-    }
-
-    @GetMapping("/api/comps/comp-resume-detail/{id}")
-    public ResponseEntity<?> compResumeDetail(@PathVariable Integer id) {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
-        User newSessionUser = userService.findById(sessionUser.getId());
-
-        ResumeResponse.CompDetailDTO2 respDTO = resumeService.CompResumeDetail2(id, newSessionUser);
-
-        return ResponseEntity.ok(new ApiUtil<>(respDTO));
-    }
 
     @PutMapping("/api/resumes/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody ResumeRequest.UpdateDTO reqDTO, Errors errors) {

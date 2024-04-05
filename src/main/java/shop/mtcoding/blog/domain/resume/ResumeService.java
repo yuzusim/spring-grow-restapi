@@ -1,6 +1,5 @@
 package shop.mtcoding.blog.domain.resume;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,27 +19,25 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class ResumeService {
-    private final ResumeJPARepository resumeJPARepo;
-    private final ApplyJPARepository applyJPARepo;
-    private final SkillJPARepository skillJPARepo;
-    private final HttpSession session;
+    private final ResumeJPARepository resumeRepo;
+    private final ApplyJPARepository applyRepo;
+    private final SkillJPARepository skillRepo;
 
-    //이력서 상세보기
-    public ResumeResponse.DetailDTO resumeDetail(Integer resumeId, Integer jobsId, User sessionUser, User sessionComp) {
-        Resume resume = resumeJPARepo.findByIdJoinUser(resumeId);
+    public ResumeResponse.DetailDTO3 compResumeDetail(Integer resumeId, Integer jobsId, User sessionUser, User sessionComp) {
+        Resume resume = resumeRepo.findByIdJoinUser(resumeId);
 
         boolean isOwner = resume.getUser().equals(sessionUser);
         resume.setOwner(isOwner);
 
-        List<Skill> skills = skillJPARepo.findAllByResumeId(resume.getId());
-        Apply apply = applyJPARepo.findByResumeIdAndJobsId(resumeId, jobsId)
+        List<Skill> skills = skillRepo.findAllByResumeId(resume.getId());
+        Apply apply = applyRepo.findByResumeIdAndJobsId(resumeId, jobsId)
                 .orElseThrow(() -> new Exception400("잘못된 요청입니다."));
         if (sessionUser != null) {
-            ResumeResponse.DetailDTO resumeDetailDTO = new ResumeResponse.DetailDTO(resume, jobsId, apply.getIsPass(), resume.getUser(), sessionUser.getRole(), skills);
+            ResumeResponse.DetailDTO3 resumeDetailDTO = new ResumeResponse.DetailDTO3(resume, jobsId, apply.getIsPass(), resume.getUser(), sessionUser.getRole(), skills);
 
             return resumeDetailDTO;
         } else if (sessionComp != null) {
-            ResumeResponse.DetailDTO resumeDetailDTO = new ResumeResponse.DetailDTO(resume, jobsId, apply.getIsPass(), resume.getUser(), sessionComp.getRole(), skills);
+            ResumeResponse.DetailDTO3 resumeDetailDTO = new ResumeResponse.DetailDTO3(resume, jobsId, apply.getIsPass(), resume.getUser(), sessionComp.getRole(), skills);
 
             return resumeDetailDTO;
         }
@@ -48,12 +45,61 @@ public class ResumeService {
         return null;
     }
 
+
+    // 이력서 수정
+    public ResumeResponse.UpdateDTO updateForm(Integer resumeId) {
+        Resume resume = resumeRepo.findByIdWithSkills(resumeId)
+                .orElseThrow(() -> new Exception404("이력서를 찾을 수 없습니다"));
+
+        return ResumeResponse.UpdateDTO.builder()
+                .resume(resume)
+                .skills(resume.getSkillList())
+                .build();
+    }
+
+    // 개인 이력서 상세보기 페이지
+    public ResumeResponse.DetailDTO resumeDetail(Integer resumeId, User sessionUser) {
+        Resume resume = resumeRepo.findByResumeIdJoinUserWithSkills(resumeId);
+        boolean isOwner = resume.getUser().equals(sessionUser);
+
+        return ResumeResponse.DetailDTO.builder()
+                .resume(resume)
+                .user(resume.getUser())
+                .skills(resume.getSkillList())
+                .isOwner(isOwner)
+                .build();
+    }
+
+
+    //이력서 상세보기 -- 로직 변환중 sessionComp없어도 될거 같아서
+//    public ResumeResponse.DetailDTO2 resumeDetail(Integer resumeId, Integer jobsId, User sessionUser, User sessionComp) {
+//        Resume resume = resumeRepo.findByIdJoinUser(resumeId);
+//
+//        boolean isOwner = resume.getUser().equals(sessionUser);
+//        resume.setOwner(isOwner);
+//
+//        List<Skill> skills = skillRepo.findAllByResumeId(resume.getId());
+//        Apply apply = applyRepo.findByResumeIdAndJobsId(resumeId, jobsId)
+//                .orElseThrow(() -> new Exception400("잘못된 요청입니다."));
+//        if (sessionUser != null) {
+//            ResumeResponse.DetailDTO2 resumeDetailDTO = new ResumeResponse.DetailDTO(resume, jobsId, apply.getIsPass(), resume.getUser(), sessionUser.getRole(), skills);
+//
+//            return resumeDetailDTO;
+//        } else if (sessionComp != null) {
+//            ResumeResponse.DetailDTO2 resumeDetailDTO = new ResumeResponse.DetailDTO(resume, jobsId, apply.getIsPass(), resume.getUser(), sessionComp.getRole(), skills);
+//
+//            return resumeDetailDTO;
+//        }
+//
+//        return null;
+//    }
+
     public ResumeResponse.DetailDTO2 resumeDetail2(Integer resumeId, User sessionUser) {
-        Resume resume = resumeJPARepo.findByIdJoinUser(resumeId);
+        Resume resume = resumeRepo.findByIdJoinUser(resumeId);
         boolean isOwner = resume.getUser().equals(sessionUser);
         resume.setOwner(isOwner);
 
-        List<Skill> skills = skillJPARepo.findAllByResumeId(resume.getId());
+        List<Skill> skills = skillRepo.findAllByResumeId(resume.getId());
 
 
         ResumeResponse.DetailDTO2 resumeDetailDTO = ResumeResponse.DetailDTO2.builder()
@@ -80,11 +126,11 @@ public class ResumeService {
 
 
     public ResumeResponse.CompDetailDTO2 CompResumeDetail2(Integer resumeId, User sessionUser) {
-        Resume resume = resumeJPARepo.findByIdJoinUser(resumeId);
+        Resume resume = resumeRepo.findByIdJoinUser(resumeId);
         boolean isOwner = resume.getUser().equals(sessionUser);
         resume.setOwner(isOwner);
 
-        List<Skill> skills = skillJPARepo.findAllByResumeId(resume.getId());
+        List<Skill> skills = skillRepo.findAllByResumeId(resume.getId());
 
 
         ResumeResponse.CompDetailDTO2 resumeDetailDTO = ResumeResponse.CompDetailDTO2.builder()
@@ -109,27 +155,13 @@ public class ResumeService {
         return resumeDetailDTO;
     }
 
-    // 이력서 수정
-    public ResumeResponse.UpdateDTO updateForm(Integer id) {
-        Resume resume = resumeJPARepo.findById(id)
-                .orElseThrow(() -> new Exception404("이력서를 찾을 수 없습니다"));
 
-        List<Skill> skill = skillJPARepo.findAllByResumeId(id);
-
-        ResumeResponse.UpdateDTO respDTO = ResumeResponse.UpdateDTO.builder()
-                .resume(resume)
-                .skills(skill)
-                .build();
-
-        return respDTO;
-
-    }
 
     @Transactional
     public ResumeResponse.ResumeUpdateDTO update(Integer id, Integer sessionUserId, ResumeRequest.UpdateDTO reqDTO) {
         // 1. 조회 및 예외처리
         // 주어진 resumeId로 이력서를 찾습니다.
-        Resume resume = resumeJPARepo.findById(id)
+        Resume resume = resumeRepo.findById(id)
                 .orElseThrow(() -> new Exception404("해당 이력서를 찾을 수 없습니다"));
         // 2. 권한 처리
         if (sessionUserId != resume.getUser().getId()) {
@@ -146,7 +178,7 @@ public class ResumeService {
         resume.setPortLink(reqDTO.getPortLink());
 
 
-        skillJPARepo.deleteByResumeId(id);
+        skillRepo.deleteByResumeId(id);
 
         // 스킬뿌리기
         reqDTO.getSkill().stream()
@@ -154,13 +186,13 @@ public class ResumeService {
                     return skill.toEntity(resume);
                 })
                 .forEach((skill) -> {
-                    skillJPARepo.save(skill);
+                    skillRepo.save(skill);
                 });
 
 
         System.out.println("수정된 데이터 : " + reqDTO);
 
-        List<Skill> skills = skillJPARepo.findByResumeId(resume.getId());
+        List<Skill> skills = skillRepo.findByResumeId(resume.getId());
 
         return new ResumeResponse.ResumeUpdateDTO(resume, skills);
 
@@ -171,9 +203,9 @@ public class ResumeService {
     @Transactional
     public ResumeResponse.SaveDTO save(User sessionUser ,ResumeRequest.SaveDTO reqDTO) {
         Resume resume = reqDTO.toEntity(sessionUser);
-        Resume savedResume = resumeJPARepo.save(resume);
+        Resume savedResume = resumeRepo.save(resume);
         for (Skill skill : reqDTO.getSkillList()) {
-            skillJPARepo.save(Skill.builder()
+            skillRepo.save(Skill.builder()
                     .resume(savedResume)
                     .name(skill.getName())
                     .build());
@@ -188,13 +220,15 @@ public class ResumeService {
         if (sessionUser.getId() == null) {
             throw new Exception401("로그인이 필요한 서비스입니다.");
         }
-        Resume resume = resumeJPARepo.findById(resumeId)
+        Resume resume = resumeRepo.findById(resumeId)
                 .orElseThrow(() -> new Exception404("해당 게시글을 찾을 수 없습니다"));
 
         if (sessionUser.getId() != resume.getUser().getId()) {
             throw new Exception403("해당 게시글을 삭제할 권한이 없습니다");
         }
 
-        resumeJPARepo.deleteById(resumeId);
+        resumeRepo.deleteById(resumeId);
     }
+
+
 }

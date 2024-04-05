@@ -1,5 +1,4 @@
-{{> layout/header}}
-
+{{> layout/compheader}}
 <style>
     #photo {
 
@@ -38,7 +37,7 @@
 
 
 <div class="new-flex-wrapper">
-    <div class="my-5 py-5 pt-80" style="width: 1400px; margin: 0 auto; display: flex; justify-content: center">
+    <div class="new-container my-5 py-5 pt-80">
         {{#resume}}
             <div style="width:calc(100% - 270px);">
                     <div class="new-head">
@@ -124,6 +123,56 @@
                     </div>
             </div>
         {{/resume}}
+        {{#resume.isComp}}
+        <div class="side-button-container">
+            <div class="side-button">
+                <div id="rButton">
+                    <br>
+                        <div class="row p-1">
+                            <div>
+                                <div id="scrap-${rDto.resumeId}-render">
+                                    <div id="scrap-${rDto.resumeId}-remove">
+                                        {{#resume.isWaiting}}
+                                        <form id="pass" action="/apply/pass/update/{{resume.id}}" method="post">
+                                            <input type="hidden" name="resumeId" value="{{resume.id}}">
+                                            <input type="hidden" name="jobsId" value="{{resume.jobsId}}">
+                                            <button type="submit" class="btn btn-mint w-100 mb-10">합격
+                                            </button>
+                                        </form>
+                                        <form id="fail" action="/apply/fail/update/{{resume.id}}" method="post">
+                                            <input type="hidden" name="resumeId" value="{{resume.id}}">
+                                            <input type="hidden" name="jobsId" value="{{resume.jobsId}}">
+                                            <button type="submit" class="btn btn-mint w-100">불합격
+                                            </button>
+                                        </form>
+                                        {{/resume.isWaiting}}
+                                        {{#resume.isPass}}
+                                            <div class="btn btn-outline-mint w-100 mb-10">합격 시켯습니다.</div>
+                                            <form id="fail" action="/apply/fail/update/{{resume.id}}" method="post">
+                                                <input type="hidden" name="resumeId" value="{{resume.id}}">
+                                                <input type="hidden" name="jobsId" value="{{resume.jobsId}}">
+                                                <button type="submit" class="btn btn-mint w-100">불합격
+                                                </button>
+                                            </form>
+                                        {{/resume.isPass}}
+                                        {{#resume.isFail}}
+                                            <form id="pass" action="/apply/pass/update/{{resume.id}}" method="post">
+                                                <input type="hidden" name="resumeId" value="{{resume.id}}">
+                                                <input type="hidden" name="jobsId" value="{{resume.jobsId}}">
+                                                <button type="submit" class="btn btn-mint w-100 mb-10">합격
+                                                </button>
+                                            </form>
+                                            <div class="btn btn-outline-mint w-100">불합격 시켯습니다.</div>
+                                        {{/resume.isFail}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                </div>
+            </div>
+        </div>
+        {{/resume.isComp}}
     </div>
 </div>
 {{> layout/footer}}

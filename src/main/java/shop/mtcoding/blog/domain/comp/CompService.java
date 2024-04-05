@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.blog._core.errors.exception.Exception401;
+import shop.mtcoding.blog._core.util.JwtUtil;
 import shop.mtcoding.blog.domain.apply.Apply;
 import shop.mtcoding.blog.domain.apply.ApplyJPARepository;
 import shop.mtcoding.blog.domain.jobs.Jobs;
@@ -46,14 +47,15 @@ public class CompService {
 
     }
 
-    public List<ResumeResponse.CmrDTO> findAllAppli(Integer userId) {
+    public List<ResumeResponse.CompManageDTO> findAllAppli(Integer userId) {
         List<Apply> applyList = applyJPARepo.findAllByUidN1(userId);
 
-        List<ResumeResponse.CmrDTO> cmrDTOList = new ArrayList<>();
+        List<ResumeResponse.CompManageDTO> cmrDTOList = new ArrayList<>();
         applyList.stream().map(apply -> {
-            return cmrDTOList.add(ResumeResponse.CmrDTO.builder()
+            return cmrDTOList.add(ResumeResponse.CompManageDTO.builder()
                     .resume(apply.getResume())
                     .apply(apply)
+                    .jobs(apply.getJobs())
                     .skillList(apply.getResume().getSkillList()).build());
         }).collect(Collectors.toList());
         for (int i = 0; i < cmrDTOList.size(); i++) {
@@ -62,15 +64,16 @@ public class CompService {
         return cmrDTOList;
     }
 
-    public List<ResumeResponse.CmrDTO> findNoResp(Integer userId) {
+    public List<ResumeResponse.CompManageDTO> findNoResp(Integer userId) {
         List<Apply> applyList = applyJPARepo.findAllByUidI2(userId);
 
-        List<ResumeResponse.CmrDTO> cmrDTOList = new ArrayList<>();
+        List<ResumeResponse.CompManageDTO> cmrDTOList = new ArrayList<>();
 
         applyList.stream().map(apply -> {
-            return cmrDTOList.add(ResumeResponse.CmrDTO.builder()
+            return cmrDTOList.add(ResumeResponse.CompManageDTO.builder()
                     .resume(apply.getResume())
                     .apply(apply)
+                    .jobs(apply.getJobs())
                     .skillList(apply.getResume().getSkillList()).build());
         }).collect(Collectors.toList());
         for (int i = 0; i < cmrDTOList.size(); i++) {
@@ -125,12 +128,8 @@ public class CompService {
     // 기업 회원가입
     @Transactional
     public CompResponse.CompJoinDTO join(CompRequest.CompJoinDTO reqDTO) {
-
         // 회원가입 할 때마다 이미지 못가져와서 터지니까 디폴트 이미지 하나 추가함
         User comp = compJPARepo.save(reqDTO.toEntity(2));
-
-//        // 전에거에 있던 이메일 찾아서 그걸로 세션저장해서 회원가입 직후 바로 로그인 되는거 구현하려고 만듬
-//        compJPARepo.findByEmail(reqDTO.getEmail());
 
         return new CompResponse.CompJoinDTO(comp);
     }

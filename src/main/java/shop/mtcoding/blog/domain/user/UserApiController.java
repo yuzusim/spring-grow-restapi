@@ -1,12 +1,10 @@
 package shop.mtcoding.blog.domain.user;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.util.ApiUtil;
 import shop.mtcoding.blog._core.util.JwtUtil;
@@ -65,9 +63,13 @@ public class UserApiController {
     // 회원가입
     @PostMapping("/users/join")
     public ResponseEntity<?> join(@Valid @RequestBody UserRequest.JoinDTO reqDTO, Errors errors) {
-        UserResponse.JoinDTO respDTO = userService.join(reqDTO, reqDTO.getRole());
+        User user = userService.join(reqDTO, reqDTO.getRole());
+        String jwt = JwtUtil.create(user);
+        UserResponse.JoinDTO respDTO = new UserResponse.JoinDTO(user);
 
-        return ResponseEntity.ok(new ApiUtil<>(respDTO));
+        return ResponseEntity.ok()
+                .header(JwtVO.HEADER, JwtVO.PREFIX + jwt)
+                .body(new ApiUtil<>(respDTO));
     }
 
     // 로그인

@@ -2,10 +2,11 @@ package shop.mtcoding.blog.domain.skill;
 
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import shop.mtcoding.blog.domain.jobs.Jobs;
 import shop.mtcoding.blog.domain.resume.Resume;
-import shop.mtcoding.blog.domain.resume.ResumeResponse;
 
 @NoArgsConstructor
 @Table(name = "skill_tb")
@@ -37,48 +38,21 @@ public class Skill {
         this.color = color;
     }
 
-    public ResumeResponse.SkillDTO toDTO(){
-
-        String colorClass = "";
-        if (name.equals("Jquery")){
-            colorClass = "badge bg-primary";
-        }
-        else if(name.equals("JavaScript")){
-            colorClass = "badge bg-secondary";
-        }
-        else if(name.equals("Spring")){
-            colorClass = "badge bg-success";
-        }
-        else if(name.equals("HTML/CSS")){
-            colorClass = "badge bg-danger";
-        }
-        else if(name.equals("JSP")){
-            colorClass = "badge bg-warning";
-        }
-        else if(name.equals("Java")){
-            colorClass = "badge bg-info";
-        }
-        else if(name.equals("React")){
-            colorClass = "badge bg-dark";
-        }
-        else if(name.equals("Oracle")){
-            colorClass = "badge bg-info";
-        }
-        else if(name.equals("Vue.js")){
-            colorClass = "badge bg-info";
-        }
-        else if(name.equals("MySql")){
-            colorClass = "badge bg-info";
-        }
-
-        return ResumeResponse.SkillDTO.builder()
-            .id(this.id)
-            .name(this.name)
-            .color(colorClass)
-            .build();
+    public Skill.DTO toDTO(Skill skill){
+        return DTO.builder()
+                .skill(skill).build();
     }
 
+    @Data
+    public class DTO{
+        private Integer id;
+        private String name;
 
-
+        @Builder
+        public DTO(Skill skill) {
+            this.id = skill.getId();
+            this.name = skill.getName();
+        }
+    }
 
 }

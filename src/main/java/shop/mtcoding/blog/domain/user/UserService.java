@@ -9,18 +9,11 @@ import shop.mtcoding.blog._core.errors.exception.Exception401;
 import shop.mtcoding.blog._core.errors.exception.Exception404;
 import shop.mtcoding.blog.domain.apply.Apply;
 import shop.mtcoding.blog.domain.apply.ApplyJPARepository;
-import shop.mtcoding.blog.domain.comp.CompRequest;
-import shop.mtcoding.blog.domain.jobs.Jobs;
-import shop.mtcoding.blog.domain.jobs.JobsJPARepository;
 import shop.mtcoding.blog.domain.resume.Resume;
 import shop.mtcoding.blog.domain.resume.ResumeJPARepository;
-import shop.mtcoding.blog.domain.skill.Skill;
-import shop.mtcoding.blog.domain.skill.SkillJPARepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -28,8 +21,6 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserJPARepository userRepo;
     private final ResumeJPARepository resumeRepo;
-    private final SkillJPARepository skillRepo;
-    private final JobsJPARepository jobsRepo;
     private final ApplyJPARepository applyRepo;
 
     @Transactional
@@ -77,7 +68,6 @@ public class UserService {
             respList.get(i).setId(i + 1);
         }
         return respList;
-
     }
 
     //사용자 정보와 이력서에 들어간 스킬을 구해다 주는 DTO
@@ -98,18 +88,18 @@ public class UserService {
     }
 
 
-    //user 회원가입 메소드
+    // user 회원가입 메소드
     @Transactional
     public UserResponse.JoinDTO join(UserRequest.JoinDTO reqDTO, Integer role) {
         User user = userRepo.save(reqDTO.toEntity(role));
         return new UserResponse.JoinDTO(user);
     }
 
-
+    // 로그인
     public User login(UserRequest.LoginDTO reqDTO) {
         try {
             return userRepo.findByIdAndPassword(reqDTO.getEmail(), reqDTO.getPassword())
-                    .orElseThrow(() -> new Exception401("회원 정보가 없습니다."));
+                    .orElseThrow(() -> new Exception404("회원 정보가 없습니다."));
         } catch (EmptyResultDataAccessException e) {
             throw new Exception401("아이디,비밀번호가 틀렸어요");
         }
@@ -120,11 +110,10 @@ public class UserService {
         return userRepo.findByEmail(email);
     }
 
-    //유저 회원 정보 업데이트용 조회
+    // 유저 회원 정보 업데이트용 조회
     public User findById(Integer sessionUserId) {
-        User user = userRepo.findById(sessionUserId)
+        return userRepo.findById(sessionUserId)
                 .orElseThrow(() -> new Exception401("로그인이 필요한 서비스입니다."));
-        return user;
     }
 
     public UserResponse.UpdateUserFormDTO updateUserForm(Integer sessionUserId) {

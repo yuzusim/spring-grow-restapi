@@ -320,8 +320,6 @@ public class ResumeResponse {
     public static class SkillDTO {
         private Integer id;
         private String name;
-        private Integer role;
-        private String color;
     }
 
 

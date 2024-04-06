@@ -255,16 +255,15 @@ public class CompResponse {
         private Boolean isApply;
 
         @Builder
-        public RusaDTO(Integer id, User user, Resume resume, Apply apply) {
+        public RusaDTO(Integer id, User user, Resume resume, Apply apply, List<Skill> skills) {
             this.id = id;
             this.myName = user.getMyName();
             this.resumeId = resume.getId();
             this.title = resume.getTitle();
             this.career = resume.getCareer();
             this.jobsId = apply.getJobs().getId();
-            this.skillList = resume.getSkillList().stream()
-                    .map(SkillDTO::new)
-                    .collect(Collectors.toList());
+            this.skillList = skills.stream()
+                    .map(SkillDTO::new).toList();
 
             // 1. 지원x 2.지원중 3.합격 4.불합격
             if (apply.getIsPass().equals("1")) {

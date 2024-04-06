@@ -48,20 +48,21 @@ public class CompService {
     }
 
     public List<ResumeResponse.CompManageDTO> findAllAppli(Integer userId) {
-        List<Apply> applyList = applyJPARepo.findAllByUidN1(userId);
+        List<Apply> applyList = applyJPARepo.findAllByUidJoinResumeJobsSkills(userId);
 
-        List<ResumeResponse.CompManageDTO> cmrDTOList = new ArrayList<>();
-        applyList.stream().map(apply -> {
-            return cmrDTOList.add(ResumeResponse.CompManageDTO.builder()
-                    .resume(apply.getResume())
-                    .apply(apply)
-                    .jobs(apply.getJobs())
-                    .skillList(apply.getResume().getSkillList()).build());
-        }).collect(Collectors.toList());
-        for (int i = 0; i < cmrDTOList.size(); i++) {
-            cmrDTOList.get(i).setId(i + 1);
+        List<ResumeResponse.CompManageDTO> respList = new ArrayList<>();
+
+        applyList.stream().map(apply ->
+                respList.add(ResumeResponse.CompManageDTO.builder()
+                        .apply(apply)
+                        .jobs(apply.getJobs())
+                        .resume(apply.getResume())
+                        .skillList(apply.getResume().getSkillList()).build())).toList();
+
+        for (int i = 0; i < respList.size(); i++) {
+            respList.get(i).setId(i + 1);
         }
-        return cmrDTOList;
+        return respList;
     }
 
     public List<ResumeResponse.CompManageDTO> findNoResp(Integer userId) {
@@ -95,33 +96,19 @@ public class CompService {
 
 
     public List<CompResponse.RusaDTO> findApplicants(Integer jobsId) {
-        //공고에 지원한 이력서를 전부 찾는데, 그 중 지원안한 상태는 제외해서 조회
-        List<Apply> applyList = applyJPARepo.findAllByJidAn1(jobsId);
-        // DTO를 받을 그릇 준비
-        List<CompResponse.RusaDTO> rusaDTOList = new ArrayList<>();
+        List<Apply> applyList = applyJPARepo.findAllByJIdJoinRJoinJN1(jobsId);
+        System.out.println("어플라이 갯수 : " + applyList.get(0).getResume().getArea());
+        List<CompResponse.RusaDTO> respList = new ArrayList<>();
 
-        /*
-         * 원래 for문으로 조회해서 주입하였으나 그 방식은 서버에 부담이 크다.
-         * 쿼리를 for문으로 날린다는게...
-         */
-        applyList.stream().map(apply -> {
-            // apply에 Resume가 매핑되어있어서 가져옴
-            Resume resume = apply.getResume();
-            /*
-             * 근데 apply안에 resume안에 user는 잘 가져올수있을까??
-             * 그래서 sout찍어보기 테스트
-             */
-            User user = apply.getResume().getUser();
-            System.out.println(resume.getUser().toString());
-
-            return rusaDTOList.add(CompResponse.RusaDTO.builder()
-                    .user(user).resume(resume).apply(apply).build());
-        }).collect(Collectors.toList());
-
-        for (int i = 0; i < rusaDTOList.size(); i++) {
-            rusaDTOList.get(i).setId(i + 1);
+        respList = applyList.stream().map(apply -> CompResponse.RusaDTO.builder()
+                .apply(apply)
+                .resume(apply.getResume())
+                .user(apply.getResume().getUser())
+                .skills(apply.getResume().getSkillList()).build()).toList();
+        for (int i = 0; i < respList.size(); i++) {
+            respList.get(i).setId(i + 1);
         }
-        return rusaDTOList;
+        return respList;
     }
 
 

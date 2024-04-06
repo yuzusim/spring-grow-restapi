@@ -89,20 +89,22 @@ public class CompApiController {
 
     // 기업의 모든 공고 조회 요청
     @PostMapping("/api/find-all-jobs")
-    public CompResponse.CompManageDTO compManageDTO(@RequestBody CompRequest.UserIdDTO reqDTO) {
-        return compService.compManage(reqDTO.getUserId());
+    public ResponseEntity<?> compManageDTO(@RequestBody CompRequest.UserIdDTO reqDTO) {
+        return ResponseEntity.ok(new ApiUtil<>(compService.compManage(reqDTO.getUserId())));
     }
 
-    // 기업의 공고에 지원한 모든 지원자 조회 요청
+    // 기업의 모든 공고에 지원한 모든 지원자 조회 요청
     @PostMapping("/api/find-all-applicants")
-    public List<ResumeResponse.CompManageDTO> findAllApplicants(@RequestBody CompRequest.UserIdDTO reqDTO) {
-        return compService.findAllAppli(reqDTO.getUserId());
+    public ResponseEntity<?> findAllApplicants(@RequestBody CompRequest.UserIdDTO reqDTO) {
+        return ResponseEntity.ok(new ApiUtil<>(compService.findAllAppli(reqDTO.getUserId())));
     }
 
+    // 기업 특정 공고에 지원한 지원자 조회 요청
     @PostMapping("/api/find-applicants")
-    public List<CompResponse.RusaDTO> findApplicants(@RequestParam(name = "jobsId") Integer jId) {
-        return compService.findApplicants(jId);
+    public ResponseEntity<?> findApplicants(@RequestBody CompRequest.JobsIdDTO reqDTO) {
+        return ResponseEntity.ok(new ApiUtil<>(compService.findApplicants(reqDTO.getJobsId())));
     }
+
 
     @PostMapping("/api/find-no-resp")
     public List<ResumeResponse.CompManageDTO> findNoResp(@RequestParam(name = "userId") Integer uId) {

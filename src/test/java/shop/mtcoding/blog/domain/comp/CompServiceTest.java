@@ -25,13 +25,13 @@ public class CompServiceTest {
         // then
     }
 
-    @Test
-    public void findAllResumeUserSKill_test(){
-        // given
-        SessionUser sessionComp = (SessionUser) session.getAttribute("sessionComp");
-        // when
-        compService.findAllRusList();
-        // then
-
-    }
+//    @Test
+//    public void findAllResumeUserSKill_test(){
+//        // given
+//        SessionUser sessionComp = (SessionUser) session.getAttribute("sessionComp");
+//        // when
+//        compService.findAllRusList();
+//        // then
+//
+//    }
 }

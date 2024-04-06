@@ -15,7 +15,7 @@ public class ResumeResponse {
 
 
     @Data  // comp-resume-detail 페이지 요청
-    public static class CompResumeDetailDTO {
+    public static class CompDetailDTO {
         private Integer resumeId;
         private String imgFileName;
         private String myName;
@@ -37,7 +37,7 @@ public class ResumeResponse {
         private Boolean isWaiting = false;
 
         @Builder
-        public CompResumeDetailDTO(Resume resume, User user, Apply apply, List<Skill> skills) {
+        public CompDetailDTO(Resume resume, User user, Apply apply, List<Skill> skills) {
             this.resumeId = resume.getId();
             this.imgFileName = user.getImgFileName();
             this.myName = user.getMyName();

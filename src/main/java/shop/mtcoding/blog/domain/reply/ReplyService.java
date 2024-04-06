@@ -26,7 +26,6 @@ public class ReplyService {
 
         }
         replyJPARepo.deleteById(replyId);
-
     }
 
     // 댓글쓰기 완료

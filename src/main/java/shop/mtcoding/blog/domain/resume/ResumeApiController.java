@@ -74,11 +74,4 @@ public class ResumeApiController {
 
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
-
-//    @DeleteMapping("/resume/{id}/delete")
-//    public ResponseEntity<?> delete(@PathVariable Integer id) {
-//        resumeService.delete(id);
-//
-//        return ResponseEntity.ok(new ApiUtil<>(null));
-//    }
 }

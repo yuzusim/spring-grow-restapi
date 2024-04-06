@@ -30,7 +30,7 @@ public class JobsService {
     private final ResumeJPARepository resumeRepo;
     private final ApplyJPARepository applyRepo;
 
-    public List<JobsResponse.InfoDTO> jobsInfo(){
+    public List<JobsResponse.InfoDTO> jobsInfo() {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         List<Jobs> jobsList = jobsRepo.findAllJoinUserWithSkills(sort);
 
@@ -38,6 +38,7 @@ public class JobsService {
 
         jobsList.stream().map(jobs ->
                 respList.add(JobsResponse.InfoDTO.builder()
+                        .jobs(jobs)
                         .user(jobs.getUser())
                         .skills(jobs.getSkillList())
                         .build())).toList();
@@ -51,11 +52,11 @@ public class JobsService {
         List<JobsResponse.IndexSearchDTO> indexSearchDTOList = new ArrayList<>();
 
         jobsList.stream().map(jobs ->
-                indexSearchDTOList.add(JobsResponse.IndexSearchDTO.builder()
-                    .jobs(jobs)
-                    .user(jobs.getUser())
-                    .skillList(jobs.getSkillList()).build()))
-                    .toList();
+                        indexSearchDTOList.add(JobsResponse.IndexSearchDTO.builder()
+                                .jobs(jobs)
+                                .user(jobs.getUser())
+                                .skillList(jobs.getSkillList()).build()))
+                .toList();
 
         return indexSearchDTOList;
 
@@ -89,7 +90,7 @@ public class JobsService {
 
         boolean isApply = false;
 
-        if(notApplyResumeList.size() < 1 &&  applyList.size() > 1){
+        if (notApplyResumeList.size() < 1 && applyList.size() > 1) {
             isApply = true;
         }
 
@@ -113,16 +114,15 @@ public class JobsService {
         return infoDTOList;
     }
 
-    @Transactional
-    public JobsResponse.JonsSaveDTO save(User sessionComp, JobsRequest.JobsSaveDTO reqDTO) {
-        // 공고작성 하기
+    @Transactional // 공고작성
+    public JobsResponse.JobsSaveDTO save(User sessionComp, JobsRequest.JobsSaveDTO reqDTO) {
         Jobs jobs = jobsRepo.save(reqDTO.toEntity(reqDTO, sessionComp));
 
-        return new JobsResponse.JonsSaveDTO(jobs, reqDTO.getSkillList());
+        return new JobsResponse.JobsSaveDTO(jobs, reqDTO.getSkillList());
     }
 
-    public JobsResponse.WriteJobsFormDTO writeJobsForm(User sessionComp) {
 
+    public JobsResponse.WriteJobsFormDTO writeJobsForm(User sessionComp) {
         return new JobsResponse.WriteJobsFormDTO(sessionComp);
     }
 
@@ -161,31 +161,17 @@ public class JobsService {
         return new JobsResponse.UpdateDTO(jobs, skill);
     }
 
-    public JobsResponse.JobUpdateDTO updateForm(Integer id, Integer SessionCompId) {
-        Jobs jobs = jobsRepo.findById(id)
+    public JobsResponse.JobUpdateDTO updateForm(Integer jobsId, Integer SessionCompId) {
+        Jobs jobs = jobsRepo.findByJobsIdJoinUserWithSkills(jobsId)
                 .orElseThrow(() -> new Exception404("이력서를 찾을 수 없습니다."));
-
-
         // 여기 바뀜
         if (SessionCompId != jobs.getUser().getId()) {
             throw new Exception403("이력서를 수정할 권한이 없습니다");
         }
-
-
-        // 찾아오게 바꿈
-        User user = userRepo.findById(jobs.getUser().getId())
-                .orElseThrow(() -> new Exception404("사용자를 찾을 수 없습니다."));
-
-        // 찾아오게 바꿈
-        List<Skill> skillList = skillRepo.findByJobsId(id);
-
-        JobsResponse.JobUpdateDTO reqDTO = JobsResponse.JobUpdateDTO.builder()
+        return JobsResponse.JobUpdateDTO.builder()
                 .jobs(jobs)
-                .user(user)
-                .skillChecked(new JobsResponse.JobUpdateDTO.SkillCheckedDTO(skillList))
-                .build();
-
-        return reqDTO;
+                .user(jobs.getUser())
+                .skillChecked(new JobsResponse.JobUpdateDTO.SkillCheckedDTO(jobs.getSkillList())).build();
     }
 }
 

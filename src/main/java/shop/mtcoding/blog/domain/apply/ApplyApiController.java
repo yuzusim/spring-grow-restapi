@@ -24,8 +24,6 @@ public class ApplyApiController {
     @PostMapping("/api/jobs/apply")
     public ResponseEntity<?> applySave(@RequestParam(name = "jobsId") Integer jobsId, @RequestParam(name = "resumeId") Integer resumeId, ApplyRequest.SaveDTO reqDTO) {
         ApplyResponse.NewApplyDTO respDTO = applyService.newApply(jobsId, resumeId, reqDTO);
-
-
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 

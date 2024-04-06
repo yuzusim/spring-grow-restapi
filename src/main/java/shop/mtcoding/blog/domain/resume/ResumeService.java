@@ -24,14 +24,14 @@ public class ResumeService {
     private final ApplyJPARepository applyRepo;
     private final SkillJPARepository skillRepo;
 
-    public ResumeResponse.CompResumeDetailDTO compResumeDetail(Integer resumeId, Integer jobsId, User sessionUser) {
+    public ResumeResponse.CompDetailDTO compResumeDetail(Integer resumeId, Integer jobsId, User sessionUser) {
         Apply apply = applyRepo.findByRIdJIdUserSkills(resumeId, jobsId)
                 .orElseThrow(() -> new Exception404("정보를 찾을 수 없습니다."));
 
         boolean isOwner = apply.getResume().getUser().equals(sessionUser);
         apply.getResume().setOwner(isOwner);
 
-        return ResumeResponse.CompResumeDetailDTO.builder()
+        return ResumeResponse.CompDetailDTO.builder()
                 .resume(apply.getResume())
                 .user(apply.getResume().getUser())
                 .apply(apply)

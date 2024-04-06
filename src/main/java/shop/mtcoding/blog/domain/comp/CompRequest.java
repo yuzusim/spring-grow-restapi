@@ -134,4 +134,9 @@ public class CompRequest {
     public static class JobsIdDTO {
         private Integer jobsId;
     }
+
+    @Data
+    public static class UserIdDTO {
+        private Integer userId;
+    }
 }

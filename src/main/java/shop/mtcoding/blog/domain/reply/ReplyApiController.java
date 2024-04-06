@@ -22,11 +22,6 @@ public class ReplyApiController {
     @DeleteMapping("/api/replies/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
-        if (sessionUser == null) {
-            // sessionUser가 null인 경우에 대한 처리
-            // 예를 들어, 예외를 발생시키거나 적절한 응답을 반환할 수 있습니다.
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiUtil("User not authenticated"));
-        }
         replyService.deleteById(id, sessionUser.getId());
         return ResponseEntity.ok(new ApiUtil(null));
     }
@@ -39,6 +34,4 @@ public class ReplyApiController {
         ReplyResponse.ReplyDTO respDTO = replyService.save(reqDTO, user);
         return ResponseEntity.ok(new ApiUtil(respDTO));
     }
-
-
 }

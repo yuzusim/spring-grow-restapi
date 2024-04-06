@@ -56,7 +56,7 @@ public class CompApiController {
     public ResponseEntity<?> resumeDetail(@PathVariable Integer resumeId, @RequestBody CompRequest.JobsIdDTO reqDTO) {
         SessionUser sessionComp = (SessionUser) session.getAttribute("sessionComp");
         User user = userService.findById(sessionComp.getId());
-        ResumeResponse.CompResumeDetailDTO respDTO =
+        ResumeResponse.CompDetailDTO respDTO =
                 resumeService.compResumeDetail(resumeId, reqDTO.getJobsId(), user);
 
         return ResponseEntity.ok(new ApiUtil(respDTO));
@@ -72,10 +72,6 @@ public class CompApiController {
         return ResponseEntity.ok(new ApiUtil<>(respList));
     }
 
-
-
-
-
     // 기업 공개 이력서 열람 페이지 요청
     @GetMapping("/api/comps/read-resume")
     public ResponseEntity<?> readResume() {
@@ -83,32 +79,24 @@ public class CompApiController {
         return ResponseEntity.ok(new ApiUtil<>(rusList));
     }
 
-
-
-
-    //update-form
-    @GetMapping("/api/comps/{id}")
-    public ResponseEntity<?> updateForm(@PathVariable int id) {
-        SessionUser sessionComp = (SessionUser) session.getAttribute("sessionComp");
-        CompResponse.CompUpdateDTO respDTO = compService.findByIdUpdate(sessionComp.getId());
-        return ResponseEntity.ok(new ApiUtil<>(respDTO));
-    }
-
+    // 기업 지원 내역 페이지 요청
     @GetMapping("/api/comps/comp-manage")
     public ResponseEntity<?> compManage() {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
+        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionComp");
         CompResponse.CompManageDTO compManageDTO = compService.compManage(sessionUser.getId());
         return ResponseEntity.ok(new ApiUtil<>(compManageDTO));
     }
 
+    // 기업의 모든 공고 조회 요청
     @PostMapping("/api/find-all-jobs")
-    public CompResponse.CompManageDTO compManageDTO(@RequestParam(name = "userId") Integer userId) {
-        return compService.compManage(userId);
+    public CompResponse.CompManageDTO compManageDTO(@RequestBody CompRequest.UserIdDTO reqDTO) {
+        return compService.compManage(reqDTO.getUserId());
     }
 
+    // 기업의 공고에 지원한 모든 지원자 조회 요청
     @PostMapping("/api/find-all-applicants")
-    public List<ResumeResponse.CompManageDTO> findAllApplicants(@RequestParam(name = "userId") Integer userId) {
-        return compService.findAllAppli(userId);
+    public List<ResumeResponse.CompManageDTO> findAllApplicants(@RequestBody CompRequest.UserIdDTO reqDTO) {
+        return compService.findAllAppli(reqDTO.getUserId());
     }
 
     @PostMapping("/api/find-applicants")

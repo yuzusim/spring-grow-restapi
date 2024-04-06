@@ -35,18 +35,18 @@ public class BoardResponse {
         private boolean isOwner;
         private List<ReplyDTO> replies = new ArrayList<>();
 
-        public DetailDTO(Board board, User sessionUserId, List<Reply> repliesList) {
+        public DetailDTO(Board board, User sessionUser, List<Reply> repliesList) {
             this.id = board.getId();
             this.title = board.getTitle();
             this.content = board.getContent();
             this.userId = board.getUser().getId();
             this.username = board.getUser().getMyName(); // join 해서 가져왔음
             this.isOwner = false;
-            if (sessionUserId != null) {
-                if (sessionUserId.getId() == userId) isOwner = true;
+            if (sessionUser != null) {
+                if (sessionUser.getId() == userId) isOwner = true;
             }
 
-            this.replies = repliesList.stream().map(reply -> new ReplyDTO(reply, sessionUserId.getId())).toList();
+            this.replies = repliesList.stream().map(reply -> new ReplyDTO(reply, sessionUser.getId())).toList();
         }
 
         @Data
@@ -86,11 +86,11 @@ public class BoardResponse {
 
     // 글목록조회 완료
     @Data
-    public static class BoardHomeDTO {
+    public static class HomeDTO {
         private int id;
         private String title;
 
-        public BoardHomeDTO(Board board) {
+        public HomeDTO(Board board) {
             this.id = board.getId();
             this.title = board.getTitle();
         }

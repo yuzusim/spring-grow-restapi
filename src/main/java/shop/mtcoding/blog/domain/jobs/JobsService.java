@@ -63,11 +63,12 @@ public class JobsService {
     }
 
     @Transactional
-    public JobsResponse.JobResumeDetailDTO jobsDetailDTO(Integer userJobsId, User sessionUser) {
-        Jobs jobs = jobsRepo.findByIdJoinUserWithSkill(userJobsId);
+    public JobsResponse.JobResumeDetailDTO jobsDetailDTO(Integer jobsId, User sessionUser) {
+        Jobs jobs = jobsRepo.findByIdJoinUserWithSkill(jobsId);
         jobs.setIsOwner(jobs.getUser().getId() == sessionUser.getId());
+
         List<Resume> notApplyResumeList = resumeRepo.findAllDetailResumeByUserId(sessionUser.getId());  // 공고에 지원하지않은 이력서리스트
-        List<Apply> applyList = applyRepo.findAllUserByApply(sessionUser.getId()); // 세션유저가 지원한 시청리스트
+        List<Apply> applyList = applyRepo.findAllByUserIdN1(sessionUser.getId()); // 세션유저가 지원한 시청리스트
 
 
         JobsResponse.JobDetailDTO2.UserDTO user = new JobsResponse.JobDetailDTO2.UserDTO(jobs.getUser());
@@ -81,7 +82,7 @@ public class JobsService {
         for (int i = 0; i < notApplyResumeList.size(); i++) {
             boolean yetApply = false;
 
-            if (applyRepo.findApplyByResumeId(notApplyResumeList.get(i).getId(), userJobsId) == null) {
+            if (applyRepo.findApplyByResumeId(notApplyResumeList.get(i).getId(), jobsId) == null) {
                 yetApply = true;
             }
 
@@ -98,6 +99,7 @@ public class JobsService {
 
         return new JobsResponse.JobResumeDetailDTO(job, resumeDetailDTO);
     }
+
 
 
     public List<JobsResponse.InfoDTO> indexDTOs() {

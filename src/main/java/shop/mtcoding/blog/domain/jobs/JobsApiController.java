@@ -74,11 +74,6 @@ public class JobsApiController {
     public ResponseEntity<?> jobsDetail(@PathVariable Integer jobsId) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionComp");
         User user = userService.findById(sessionUser.getId());
-
-        if (sessionUser == null) {
-            throw new Exception401("인증되지 않았습니다.");
-        }
-
         //사용자 이력서 보유내역과 지원상태를 가져오는 ResumeApplyDTO
         JobsResponse.JobResumeDetailDTO resumeApplyDTOList = jobsService.jobsDetailDTO(jobsId, user);
 
@@ -91,6 +86,7 @@ public class JobsApiController {
         return ResponseEntity.ok(new ApiUtil(respDTO));
     }
 
+    // 이력서 수정 페이지 요청
     @GetMapping("/api/resumes/{resumeId}/update-form")
     public ResponseEntity<?> updateFrom(@PathVariable Integer resumeId){
 

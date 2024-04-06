@@ -12,6 +12,7 @@ import shop.mtcoding.blog._core.util.ApiUtil;
 public class FileApiController {
     private final FileService fileService;
 
+    // 이미지 업로드
     @PostMapping("/api/upload")
     public ResponseEntity<?> upload(@RequestBody FileInfoRequest.UploadDTO reqDTO){
         FileResponse.UploadSuccessDTO respDTO = fileService.upload(reqDTO);

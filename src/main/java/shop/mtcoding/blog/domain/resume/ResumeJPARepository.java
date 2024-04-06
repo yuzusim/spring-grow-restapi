@@ -25,7 +25,7 @@ public interface ResumeJPARepository extends JpaRepository<Resume, Integer> {
     @Query("select r from Resume r join fetch r.user u join fetch r.skillList s where r.id = :resumeId")
     Resume findByResumeIdJoinUserWithSkills (@Param("resumeId") Integer resumeId);
 
-    @Query("select r from Resume r join fetch Apply a on a.resume.id = r.id join fetch User u on r.user.id = u.id where a.isPass in ('1') and r.user.id = :userId")
+    @Query("select r from Resume r join fetch Apply a join fetch User u on r.user.id = u.id where a.isPass in ('1') and r.user.id = :userId")
     List<Resume> findAllDetailResumeByUserId(@Param("userId") Integer userId);
 
     @Query("select r from Resume r join fetch r.user u left join fetch r.skillList s")

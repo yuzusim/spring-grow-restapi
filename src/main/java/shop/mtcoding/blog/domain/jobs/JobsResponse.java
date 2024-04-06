@@ -524,6 +524,8 @@ public class JobsResponse {
         }
     }
 
+
+
     // API jobDetail 04.02//
     @Data
     public static class JobResumeDetailDTO {

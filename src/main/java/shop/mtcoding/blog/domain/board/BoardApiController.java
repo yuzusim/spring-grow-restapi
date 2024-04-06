@@ -58,7 +58,7 @@ public class BoardApiController {
     // 글 목록보기 완료
     @GetMapping("/api/boards/board-home")
     public ResponseEntity<?> boardHome() {
-        List<BoardResponse.BoardHomeDTO> respDTO = boardService.findAll();
+        List<BoardResponse.HomeDTO> respDTO = boardService.findAll();
         return ResponseEntity.ok(new ApiUtil(respDTO));
     }
 

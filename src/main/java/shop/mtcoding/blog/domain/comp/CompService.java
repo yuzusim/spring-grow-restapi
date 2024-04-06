@@ -67,21 +67,20 @@ public class CompService {
 
     public List<ResumeResponse.CompManageDTO> findNoResp(Integer userId) {
         List<Apply> applyList = applyJPARepo.findAllByUidI2(userId);
-
-        List<ResumeResponse.CompManageDTO> cmrDTOList = new ArrayList<>();
+        List<ResumeResponse.CompManageDTO> respList = new ArrayList<>();
 
         applyList.stream().map(apply -> {
-            return cmrDTOList.add(ResumeResponse.CompManageDTO.builder()
+            return respList.add(ResumeResponse.CompManageDTO.builder()
                     .resume(apply.getResume())
-                    .apply(apply)
                     .jobs(apply.getJobs())
+                    .apply(apply)
                     .skillList(apply.getResume().getSkillList()).build());
-        }).collect(Collectors.toList());
-        for (int i = 0; i < cmrDTOList.size(); i++) {
-            cmrDTOList.get(i).setId(i + 1);
-        }
+        }).toList();
 
-        return cmrDTOList;
+        for (int i = 0; i < respList.size(); i++) {
+            respList.get(i).setId(i + 1);
+        }
+        return respList;
 
     }
 

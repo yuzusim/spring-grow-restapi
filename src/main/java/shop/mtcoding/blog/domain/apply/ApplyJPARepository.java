@@ -65,8 +65,9 @@ public interface ApplyJPARepository extends JpaRepository<Apply, Integer> {
             where a.isPass not in ('1') and a.jobs.user.id= :userId""")
     List<Apply> findAllByUidJoinResumeJobsSkills(@Param("userId") Integer userId);
 
+    // (Resume resume, Apply apply, Jobs jobs, List<Skill> skillList) {
     // 기업사용자의 모든 공고 지원한 모든 지원자 - 미응답 현황 구하기
-    @Query("select a from Apply a where a.isPass in ('2') and a.jobs.user.id= :userId")
+    @Query("select a from Apply a join fetch a.jobs j join fetch a.resume r  join fetch r.skillList s where a.isPass in ('2') and a.jobs.user.id= :userId")
     List<Apply> findAllByUidI2(@Param("userId") Integer userId);
 
     // 세션유저가 지원한 신청리스트

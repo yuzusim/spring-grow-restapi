@@ -105,11 +105,10 @@ public class CompApiController {
         return ResponseEntity.ok(new ApiUtil<>(compService.findApplicants(reqDTO.getJobsId())));
     }
 
-
+    // 기업 지원자 이력서에 합격/불합격 응답안한 이력서 조회
     @PostMapping("/api/find-no-resp")
-    public List<ResumeResponse.CompManageDTO> findNoResp(@RequestParam(name = "userId") Integer uId) {
-        return compService.findNoResp(uId);
+    public ResponseEntity<?> findNoResp(@RequestBody CompRequest.UserIdDTO reqDTO) {
+        return ResponseEntity.ok(new ApiUtil<>(compService.findNoResp(reqDTO.getUserId())));
     }
-
 }
 

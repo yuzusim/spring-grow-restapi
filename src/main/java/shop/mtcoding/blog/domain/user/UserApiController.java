@@ -29,8 +29,8 @@ public class UserApiController {
     public ResponseEntity<?> updateUser(@Valid @RequestBody UserRequest.UpdateUserDTO reqDTO, Errors errors) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         User user = userService.findById(sessionUser.getId());
-
         UserResponse.UserUpdateDTO updatedUser = userService.updateByUserId(user, reqDTO);
+
         return ResponseEntity.ok(new ApiUtil<>(updatedUser));
     }
 

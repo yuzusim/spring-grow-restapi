@@ -467,7 +467,6 @@ public class ResumeResponse {
         private String career;
         private String introduce;
         private String portLink;
-        private List<SkillDTO> skill;
 
         public UpdatedDTO(Resume resume) {
             this.id = resume.getId();

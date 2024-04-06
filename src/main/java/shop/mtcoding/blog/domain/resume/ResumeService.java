@@ -152,14 +152,10 @@ public class ResumeService {
     @Transactional
     public ResumeResponse.UpdatedDTO update(Integer resumeId, Integer sessionUserId, ResumeRequest.UpdateDTO reqDTO) {
         Resume resume = resumeRepo.findByResumeIdJoinUserWithSkills(resumeId);
-
         if (sessionUserId != resume.getUser().getId()) {
             throw new Exception403("권한이 없습니다");
         }
-
-        resume.updateResume(reqDTO, reqDTO.getSkills());
-
-        System.out.println(resume.getSkillList());
+        resume.updateResume(reqDTO);
         return new ResumeResponse.UpdatedDTO(resume);
 
     } // 더티체킹

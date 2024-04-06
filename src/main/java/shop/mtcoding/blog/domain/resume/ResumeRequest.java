@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import shop.mtcoding.blog.domain.skill.Skill;
 import shop.mtcoding.blog.domain.user.User;
 
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 public class ResumeRequest {
 
+    @NoArgsConstructor
     @Data
     public static class UpdateDTO {
         private Integer resumeId;
@@ -34,30 +36,9 @@ public class ResumeRequest {
         @NotEmpty(message = "주소를 작성하여 주십시오.")
         private String portLink;
         @NotEmpty(message = "필요기술을 선택하여 주십시오.")
-        private List<SkillDTO> skills;
-
-        public UpdateDTO(Resume resume, List<Skill> skills) {
-            this.resumeId = resume.getId();
-            this.title = resume.getTitle();
-            this.area = resume.getArea();
-            this.edu = resume.getEdu();
-            this.career = resume.getCareer();
-            this.introduce = resume.getIntroduce();
-            this.portLink = resume.getPortLink();
-            this.skills = skills.stream().map(SkillDTO::new).toList();
-        }
-
-        @Data
-        public class SkillDTO {
-            private Integer id;
-            private String name;
-
-            public SkillDTO(Skill skill) {
-                this.id = id;
-                this.name = name;
-            }
-        }
+        private List<Skill> skills;
     }
+
 
     @Data
     public static class SaveDTO {
@@ -111,7 +92,7 @@ public class ResumeRequest {
                 this.role = role;
             }
 
-            public Skill toEntity(Resume resume, Integer role) {
+            public Skill toEntity(Resume resume) {
                 return Skill.builder()
                         .id(id)
                         .name(name)

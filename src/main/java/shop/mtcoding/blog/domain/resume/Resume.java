@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import shop.mtcoding.blog.domain.apply.Apply;
+import shop.mtcoding.blog.domain.jobs.Jobs;
+import shop.mtcoding.blog.domain.jobs.JobsRequest;
 import shop.mtcoding.blog.domain.skill.Skill;
 import shop.mtcoding.blog.domain.user.User;
 
@@ -32,7 +34,7 @@ public class Resume {
     @Transient
     private boolean isOwner;
 
-    @OneToMany(mappedBy = "resume", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "resume", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Skill> skillList = new ArrayList<>();
 
     @OneToMany(mappedBy = "resume", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -57,25 +59,19 @@ public class Resume {
         this.createdAt = createdAt;
     }
 
-    public void updateResume(ResumeRequest.UpdateDTO reqDTO, List<SkillDTO> skills) {
+    public void updateResume(ResumeRequest.UpdateDTO reqDTO) {
         this.title = reqDTO.getTitle();
         this.area = reqDTO.getArea();
         this.edu = reqDTO.getEdu();
         this.career = reqDTO.getCareer();
         this.introduce = reqDTO.getIntroduce();
         this.portLink = reqDTO.getPortLink();
-        this.skillList = skills.stream().map(skill -> SkillDTO.toEntity(skill));
-
-    }
-    @Data
-    public class SkillDTO {
-        private Integer id;
-        private String name;
-
-        public Skill toEntity(SkillDTO skillDTO) {
-            this.id = skillDTO.getId();
-            this.name = skillDTO.getName();
-        }
-
+        this.skillList.clear();
+        reqDTO.getSkills().forEach(skill -> skill.setResume(this));
+        this.skillList.addAll(reqDTO.getSkills());
     }
 }
+
+
+
+

@@ -66,12 +66,11 @@ public class ResumeApiController {
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
-
-
+    // 이력서 수정
     @PutMapping("/api/resumes/{resumeId}")
     public ResponseEntity<?> update(@PathVariable Integer resumeId, @Valid @RequestBody ResumeRequest.UpdateDTO reqDTO, Errors errors) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
-        ResumeResponse.ResumeUpdateDTO respDTO = resumeService.update(resumeId, sessionUser.getId(), reqDTO);
+        ResumeResponse.UpdatedDTO respDTO = resumeService.update(resumeId, sessionUser.getId(), reqDTO);
 
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }

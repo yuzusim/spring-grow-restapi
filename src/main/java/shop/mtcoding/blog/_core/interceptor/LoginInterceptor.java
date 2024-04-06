@@ -23,7 +23,6 @@ public class LoginInterceptor implements HandlerInterceptor{
         // 검증
         try {
             SessionUser sessionUser = JwtUtil.verify(jwt);
-            System.out.println(jwt);
             if (sessionUser.getRole() == 1){
                 HttpSession session = request.getSession();
                 session.setAttribute("sessionUser", sessionUser);

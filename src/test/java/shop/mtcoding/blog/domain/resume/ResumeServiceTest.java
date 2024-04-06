@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import shop.mtcoding.blog.domain.user.UserRequest;
 
 @Import(ResumeService.class)
 @DataJpaTest
@@ -13,15 +14,6 @@ public class ResumeServiceTest {
     private ResumeService resumeService;
 
 
-    @Test
-    public void update_test() {
-        // given
-        ResumeRequest.UpdateDTO reqDTO
-        // when
-        resumeService.update(1,1, reqDTO);
-        // then
-
-    }
 
 //    @Test
 //    public void ResumeApplyDTO_test() {

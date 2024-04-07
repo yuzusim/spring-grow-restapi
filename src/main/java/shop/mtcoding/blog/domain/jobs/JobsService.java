@@ -36,12 +36,9 @@ public class JobsService {
 
         List<JobsResponse.InfoDTO> respList = new ArrayList<>();
 
-        jobsList.stream().map(jobs ->
-                respList.add(JobsResponse.InfoDTO.builder()
-                        .jobs(jobs)
-                        .user(jobs.getUser())
-                        .skills(jobs.getSkillList())
-                        .build())).toList();
+        respList = jobsList.stream().map(jobs -> {
+            return new JobsResponse.InfoDTO(jobs, jobs.getUser(), jobs.getSkillList());
+        }).toList();
         return respList;
     }
 
@@ -101,7 +98,6 @@ public class JobsService {
     }
 
 
-
     public List<JobsResponse.InfoDTO> indexDTOs() {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         List<Jobs> jobsList = jobsRepo.findAllJoinUserWithSkills(sort);
@@ -110,6 +106,7 @@ public class JobsService {
 
         jobsList.stream().map(jobs ->
                 infoDTOList.add(JobsResponse.InfoDTO.builder()
+                        .jobs(jobs)
                         .user(jobs.getUser())
                         .skills(jobs.getSkillList())
                         .build())).toList();

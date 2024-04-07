@@ -69,7 +69,7 @@ public class JobsApiController {
         return ResponseEntity.ok(new ApiUtil(job));
     }
 
-
+    // TODO 리팩토링 필요
     @GetMapping("/api/jobs/{jobsId}/detail")
     public ResponseEntity<?> jobsDetail(@PathVariable Integer jobsId) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionComp");
@@ -80,6 +80,7 @@ public class JobsApiController {
         return ResponseEntity.ok(new ApiUtil(resumeApplyDTOList));
     }
 
+    // TODO 공고수정 : 리팩토링 필요
     @PutMapping("/api/jobs/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody JobsRequest.UpdateDTO reqDTO, Errors errors) {
         JobsResponse.UpdateDTO respDTO = jobsService.update(id, reqDTO);

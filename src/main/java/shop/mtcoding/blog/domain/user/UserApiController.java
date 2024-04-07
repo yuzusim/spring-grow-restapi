@@ -53,7 +53,7 @@ public class UserApiController {
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
-    // 기업 사용자 정보 수정 페이지
+    // 기업 사용자 정보 수정 페이지 요청
     @GetMapping("/api/comp-users")
     public ResponseEntity<?> updateCompForm() {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
@@ -100,15 +100,15 @@ public class UserApiController {
     }
 
     // 이력서 관리 페이지 정보
-    @GetMapping("/api/users/{id}/home")
-    public ResponseEntity<?> userHome(@PathVariable Integer id) {
+    @GetMapping("/api/users/home")
+    public ResponseEntity<?> userHome() {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         UserResponse.HomeDTO userHomeDTO = userService.userHome(sessionUser.getId());
         return ResponseEntity.ok(new ApiUtil<>(userHomeDTO));
     }
 
     // 회원가입시 username 중복 체크
-    @GetMapping("/api/users/username-same-check")
+    @PostMapping("/users/username-same-check")
     public ResponseEntity<?> usernameSameCheck(@RequestBody UserRequest.EmailDTO email) {
         User user = userService.findByEmail(email.getEmail());
         if (user == null) {

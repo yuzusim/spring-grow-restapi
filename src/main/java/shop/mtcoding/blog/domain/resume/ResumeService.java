@@ -63,30 +63,6 @@ public class ResumeService {
                 .build();
     }
 
-
-    //이력서 상세보기 -- 로직 변환중 sessionComp없어도 될거 같아서
-//    public ResumeResponse.DetailDTO2 resumeDetail(Integer resumeId, Integer jobsId, User sessionUser, User sessionComp) {
-//        Resume resume = resumeRepo.findByIdJoinUser(resumeId);
-//
-//        boolean isOwner = resume.getUser().equals(sessionUser);
-//        resume.setOwner(isOwner);
-//
-//        List<Skill> skills = skillRepo.findAllByResumeId(resume.getId());
-//        Apply apply = applyRepo.findByResumeIdAndJobsId(resumeId, jobsId)
-//                .orElseThrow(() -> new Exception400("잘못된 요청입니다."));
-//        if (sessionUser != null) {
-//            ResumeResponse.DetailDTO2 resumeDetailDTO = new ResumeResponse.DetailDTO(resume, jobsId, apply.getIsPass(), resume.getUser(), sessionUser.getRole(), skills);
-//
-//            return resumeDetailDTO;
-//        } else if (sessionComp != null) {
-//            ResumeResponse.DetailDTO2 resumeDetailDTO = new ResumeResponse.DetailDTO(resume, jobsId, apply.getIsPass(), resume.getUser(), sessionComp.getRole(), skills);
-//
-//            return resumeDetailDTO;
-//        }
-//
-//        return null;
-//    }
-
     public ResumeResponse.DetailDTO2 resumeDetail2(Integer resumeId, User sessionUser) {
         Resume resume = resumeRepo.findByIdJoinUser(resumeId);
         boolean isOwner = resume.getUser().equals(sessionUser);

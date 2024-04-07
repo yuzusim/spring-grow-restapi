@@ -104,12 +104,8 @@ public class JobsService {
 
         List<JobsResponse.InfoDTO> infoDTOList = new ArrayList<>();
 
-        jobsList.stream().map(jobs ->
-                infoDTOList.add(JobsResponse.InfoDTO.builder()
-                        .jobs(jobs)
-                        .user(jobs.getUser())
-                        .skills(jobs.getSkillList())
-                        .build())).toList();
+        infoDTOList = jobsList.stream().map(jobs ->{
+        return new JobsResponse.InfoDTO(jobs, jobs.getUser(), jobs.getSkillList());}).toList();
         return infoDTOList;
     }
 

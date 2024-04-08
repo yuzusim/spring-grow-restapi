@@ -28,7 +28,6 @@ public class BoardJPARepositoryTest {
         List<Board> boardList = boardJPARepo.findAll(sort);
 
         //then
-        System.out.println("findAll_test : " + boardList);
 
     }
 

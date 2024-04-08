@@ -19,7 +19,6 @@ public class ApplyJPARepositoryTest {
         List<Apply> applyList = applyJPARepo.findAppliesByNot1ByResumeId(resumeId);
         // then
 
-        System.out.println(applyList.size());
 
     }
 }

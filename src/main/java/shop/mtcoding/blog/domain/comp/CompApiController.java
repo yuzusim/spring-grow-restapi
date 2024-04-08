@@ -51,7 +51,6 @@ public class CompApiController {
         User sessionUser = (User) session.getAttribute("sessionUser");
         User sessionComp = (User) session.getAttribute("sessionComp");
         User newSessionUser = userService.findById(sessionUser.getId());
-        System.out.println(111111);
         ResumeResponse.DetailDTO3 resume = resumeService.compResumeDetail(resumeId, jobsId, newSessionUser, sessionComp);
         request.setAttribute("resume", resume);
 

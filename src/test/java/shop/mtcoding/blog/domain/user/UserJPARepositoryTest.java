@@ -22,7 +22,6 @@ public class UserJPARepositoryTest {
         List<Jobs> jobsList = jobsJPARepository.findAllKeyword(keyword);
         // then
         for (int i = 0; i < jobsList.size(); i++) {
-            System.out.println(jobsList.get(i).getTitle());
         }
     }
 }

@@ -15,13 +15,11 @@ public class LoginInterceptor implements HandlerInterceptor{
 
         // Bearer jwt 토큰 으로 들어오는 것이 프로토콜이다.
         String jwt = request.getHeader("Authorization");
-        System.out.println(jwt);
         jwt = jwt.replace("Bearer ", "");
 
         // 검증
         try {
             SessionUser sessionUser = JwtUtil.verify(jwt);
-            System.out.println(jwt);
             if (sessionUser.getRole() == 1){
                 HttpSession session = request.getSession();
                 session.setAttribute("sessionUser", sessionUser);

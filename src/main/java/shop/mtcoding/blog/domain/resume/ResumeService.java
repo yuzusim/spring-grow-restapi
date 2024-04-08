@@ -190,7 +190,6 @@ public class ResumeService {
                 });
 
 
-        System.out.println("수정된 데이터 : " + reqDTO);
 
         List<Skill> skills = skillRepo.findByResumeId(resume.getId());
 

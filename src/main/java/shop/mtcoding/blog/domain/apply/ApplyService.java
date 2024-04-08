@@ -86,7 +86,6 @@ public class ApplyService {
                         .build())
                 .collect(Collectors.toList());
 
-        System.out.println(listDTO);
 
         stateDTO.setApplyCount(applyCount);
         stateDTO.setWaitCount(waitCount);

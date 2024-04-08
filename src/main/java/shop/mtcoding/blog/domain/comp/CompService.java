@@ -112,7 +112,6 @@ public class CompService {
              * 그래서 sout찍어보기 테스트
              */
             User user = apply.getResume().getUser();
-            System.out.println(resume.getUser().toString());
 
             return rusaDTOList.add(CompResponse.RusaDTO.builder()
                     .user(user).resume(resume).apply(apply).build());

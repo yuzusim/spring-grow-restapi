@@ -144,7 +144,6 @@ public class JobsService {
         jobs.setDeadline(reqDTO.getDeadLine());
         jobs.setTask(reqDTO.getTask());
 
-        System.out.println(reqDTO.getArea());
 
         skillRepo.deleteByJobsId(jobsId);
 

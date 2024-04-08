@@ -19,6 +19,15 @@ public interface ApplyJPARepository extends JpaRepository<Apply, Integer> {
     @Query("select a from Apply a where a.resume.id = :resumeId and a.jobs.id = :jobsId")
     Optional<Apply> findByResumeIdAndJobsId(@Param("resumeId") Integer resumeId, @Param("jobsId") Integer jobsId);
 
+    @Query("""
+            select a from Apply a 
+            join fetch a.resume r
+            join fetch a.jobs j
+            join fetch r.skillList s
+            join fetch r.user u 
+            where a.resume.id = :resumeId and a.jobs.id = :jobsId""")
+    Optional<Apply> findByRIdJIdUserSkills (@Param("resumeId") Integer resumeId, @Param("jobsId") Integer jobsId);
+
     //현재 이력서로 공고에 지원 중인 이력서를 모두 조회
     @Query("""
             select a 
@@ -40,17 +49,30 @@ public interface ApplyJPARepository extends JpaRepository<Apply, Integer> {
     @Query("select a from Apply a where a.isPass not in ('1') and a.jobs.id = :jobsId")
     List<Apply> findAllByJidAn1(@Param("jobsId") Integer jobsId);
 
+    @Query("select a from Apply a join fetch a.resume r join fetch r.user u join fetch r.skillList where a.isPass not in ('1') and a. jobs.id = :jobsId")
+    List<Apply> findAllByJIdJoinRJoinJN1(@Param("jobsId") Integer jobsId);
+
     // 기업사용자의 모든 공고 지원한 모든 지원자 - 총 지원자 현황 구하기 - 중복도 제거
     @Query("select a from Apply a where a.isPass not in ('1') and a.jobs.user.id= :userId")
     List<Apply> findAllByUidN1(@Param("userId") Integer userId);
 
+    // 기업사용자의 모든 공고 지원한 모든 지원자 - 총 지원자 현황 구하기 - 중복도 제거
+    @Query("""
+            select a from Apply a 
+            join fetch a.resume r
+            join fetch a.jobs j
+            join fetch r.skillList s 
+            where a.isPass not in ('1') and a.jobs.user.id= :userId""")
+    List<Apply> findAllByUidJoinResumeJobsSkills(@Param("userId") Integer userId);
+
+    // (Resume resume, Apply apply, Jobs jobs, List<Skill> skillList) {
     // 기업사용자의 모든 공고 지원한 모든 지원자 - 미응답 현황 구하기
-    @Query("select a from Apply a where a.isPass in ('2') and a.jobs.user.id= :userId")
+    @Query("select a from Apply a join fetch a.jobs j join fetch a.resume r  join fetch r.skillList s where a.isPass in ('2') and a.jobs.user.id= :userId")
     List<Apply> findAllByUidI2(@Param("userId") Integer userId);
 
     // 세션유저가 지원한 신청리스트
     @Query("select a from Apply a where a.isPass not in ('1') and a.resume.user.id = :userId")
-    List<Apply> findAllUserByApply(@Param("userId") Integer userId);
+    List<Apply> findAllByUserIdN1(@Param("userId") Integer userId);
 
     //세션유저가 이력서로 신청한 적 있는지 확인하기 위해서
     @Query("select a from Apply a join fetch Resume r on a.resume.id = r.id join fetch Jobs j on a.jobs.id = j.id where r.id = :resumeId and j.id = :jobsId")

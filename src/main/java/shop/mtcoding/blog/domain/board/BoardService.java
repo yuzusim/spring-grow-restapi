@@ -38,7 +38,7 @@ public class BoardService {
     public BoardResponse.UpdateDTO update(int boardId, int sessionUserId, BoardRequest.UpdateDTO reqDTO) {
         // 1. 더티체킹 하기 위해 조회 및 예외처리
         Board board = boardJPARepo.findById(boardId)
-                .orElseThrow(() -> new Exception404("{게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new Exception404("게시글을 찾을 수 없습니다."));
 
         // 2. 권한처리
         if (sessionUserId != board.getUser().getId()) {
@@ -53,10 +53,10 @@ public class BoardService {
     } // 더티체킹
 
     // 글목록조회 완료
-    public List<BoardResponse.BoardHomeDTO> findAll() {
+    public List<BoardResponse.HomeDTO> findAll() {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         List<Board> boardList = boardJPARepo.findAll(sort);
-        return boardList.stream().map(board -> new BoardResponse.BoardHomeDTO(board)).toList();
+        return boardList.stream().map(board -> new BoardResponse.HomeDTO(board)).toList();
     }
 
     // 글쓰기 완료
@@ -66,10 +66,10 @@ public class BoardService {
     }
 
     // 글상세보기 완료
-    public BoardResponse.DetailDTO findByIdJoinUser(int boardId, User sessionUserId) {
+    public BoardResponse.DetailDTO findByIdJoinUser(int boardId, User sessionUser) {
         Board board = boardJPARepo.findByIdJoinUser(boardId)
                 .orElseThrow(() -> new Exception404("게시글을 찾을 수 없습니다"));
-        List<Reply> replyList = replyJPARepo.findByUserId(boardId);
-        return new BoardResponse.DetailDTO(board, sessionUserId, replyList);
+
+        return new BoardResponse.DetailDTO(board, sessionUser, board.getReplies());
     }
 }

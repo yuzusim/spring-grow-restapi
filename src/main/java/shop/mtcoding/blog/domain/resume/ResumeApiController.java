@@ -66,21 +66,12 @@ public class ResumeApiController {
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
 
-
-
-    @PutMapping("/api/resumes/{id}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody ResumeRequest.UpdateDTO reqDTO, Errors errors) {
+    // 이력서 수정
+    @PutMapping("/api/resumes/{resumeId}")
+    public ResponseEntity<?> update(@PathVariable Integer resumeId, @Valid @RequestBody ResumeRequest.UpdateDTO reqDTO, Errors errors) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
-        //해당 부분 redirect 해보고 틀렸으면 본인이 수정
-        ResumeResponse.ResumeUpdateDTO respDTO = resumeService.update(id, sessionUser.getId(), reqDTO);
+        ResumeResponse.UpdatedDTO respDTO = resumeService.update(resumeId, sessionUser.getId(), reqDTO);
 
         return ResponseEntity.ok(new ApiUtil<>(respDTO));
     }
-
-//    @DeleteMapping("/resume/{id}/delete")
-//    public ResponseEntity<?> delete(@PathVariable Integer id) {
-//        resumeService.delete(id);
-//
-//        return ResponseEntity.ok(new ApiUtil<>(null));
-//    }
 }

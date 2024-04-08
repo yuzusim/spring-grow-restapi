@@ -35,6 +35,7 @@ public class UserServiceTest {
 
 
 
+<<<<<<< HEAD
     @Test
     public void UserResumeSkillDTO_test() {
         //given

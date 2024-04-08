@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.util.ApiUtil;
+import shop.mtcoding.blog._core.util.JwtUtil;
+import shop.mtcoding.blog._core.util.JwtVO;
 import shop.mtcoding.blog.domain.resume.ResumeResponse;
 import shop.mtcoding.blog.domain.resume.ResumeService;
 import shop.mtcoding.blog.domain.user.SessionUser;
@@ -25,11 +27,14 @@ public class CompApiController {
     private final UserService userService;
     private final ResumeService resumeService;
 
-
+    // 기업 회원 가입
     @PostMapping("/comp/join")
     public ResponseEntity<?> compJoin(@Valid @RequestBody CompRequest.CompJoinDTO reqDTO, Errors errors) {
-        CompResponse.CompJoinDTO respDTO = compService.join(reqDTO);
-        return ResponseEntity.ok(new ApiUtil<>(respDTO));
+        User user = compService.join(reqDTO);
+        String jwt = JwtUtil.create(user);
+        return ResponseEntity.ok()
+                .header(JwtVO.HEADER,JwtVO.PREFIX + jwt)
+                .body(new ApiUtil<>(new CompResponse.CompJoinDTO(user)));
     }
 
     //기업 채용정보 (공고 뿌리기)
@@ -46,77 +51,64 @@ public class CompApiController {
         return ResponseEntity.ok(new ApiUtil<>(reqsDTO));
     }
 
-    @GetMapping("/api/comp/resume-detail/{resumeId}?jobsId={jobsId}")  // 기업이 이력서를 조회했을때 필요한 로직
-    public String resumeDetail(@PathVariable Integer resumeId, @PathVariable(name = "jobsId") Integer jobsId, HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        User sessionComp = (User) session.getAttribute("sessionComp");
-        User newSessionUser = userService.findById(sessionUser.getId());
-        ResumeResponse.DetailDTO3 resume = resumeService.compResumeDetail(resumeId, jobsId, newSessionUser, sessionComp);
-        request.setAttribute("resume", resume);
+    // 기업이 지원받은 이력서 상세보기 페이지 요청
+    @PostMapping("/api/comp/resume-detail/{resumeId}")
+    public ResponseEntity<?> resumeDetail(@PathVariable Integer resumeId, @RequestBody CompRequest.JobsIdDTO reqDTO) {
+        SessionUser sessionComp = (SessionUser) session.getAttribute("sessionComp");
+        User user = userService.findById(sessionComp.getId());
+        ResumeResponse.CompDetailDTO respDTO =
+                resumeService.compResumeDetail(resumeId, reqDTO.getJobsId(), user);
 
-        return "/comp/comp-resume-detail";
+        return ResponseEntity.ok(new ApiUtil(respDTO));
     }
 
-    @GetMapping("/api/comps/{id}/comp-home")
-    public ResponseEntity<?> compHome(@PathVariable Integer id) {
+    // 기업 사용자 공고 관리 페이지 요청
+    @GetMapping("/api/comps/comp-home")
+    public ResponseEntity<?> compHome() {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionComp");
-        User sessionComp = userService.findById(sessionUser.getId());
-        List<CompResponse.CompHomeDTO> comphomeDTOList = compService.findAllByUserId(sessionComp);
+        System.out.println(sessionUser.getId());
+        List<CompResponse.CompHomeDTO> respList = compService.compHomeDTOS(sessionUser.getId());
 
-        return ResponseEntity.ok(new ApiUtil<>(comphomeDTOList));
+        return ResponseEntity.ok(new ApiUtil<>(respList));
     }
 
+    // 기업 공개 이력서 열람 페이지 요청
     @GetMapping("/api/comps/read-resume")
-    public ResponseEntity<?> readResume(HttpServletRequest request) {
-        List<CompResponse.ResumeUserSkillDTO> rusList = compService.findAllRusList();
-        request.setAttribute("rusList", rusList);
+    public ResponseEntity<?> readResume() {
+        List<CompResponse.ResumeUserSkillDTO> rusList = compService.readResume();
         return ResponseEntity.ok(new ApiUtil<>(rusList));
     }
 
-    //update
-    @PutMapping("/api/comps/{id}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody CompRequest.UpdateDTO requestDTO, Errors errors) {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionComp");
-        User sessionComp = userService.findById(sessionUser.getId());
-        User user = compService.updateById(sessionComp, requestDTO);
-        session.setAttribute("sessionComp", user);
-        return ResponseEntity.ok(new ApiUtil<>(requestDTO));
-    }
-
-    //update-form
-    @GetMapping("/api/comps/{id}")
-    public ResponseEntity<?> updateForm(@PathVariable int id) {
-        SessionUser sessionComp = (SessionUser) session.getAttribute("sessionComp");
-        CompResponse.CompUpdateDTO respDTO = compService.findByIdUpdate(sessionComp.getId());
-        return ResponseEntity.ok(new ApiUtil<>(respDTO));
-    }
-
+    // 기업 지원 내역 페이지 요청
     @GetMapping("/api/comps/comp-manage")
     public ResponseEntity<?> compManage() {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
+        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionComp");
         CompResponse.CompManageDTO compManageDTO = compService.compManage(sessionUser.getId());
         return ResponseEntity.ok(new ApiUtil<>(compManageDTO));
     }
 
+    // 기업의 모든 공고 조회 요청
     @PostMapping("/api/find-all-jobs")
-    public CompResponse.CompManageDTO compManageDTO(@RequestParam(name = "userId") Integer userId) {
-        return compService.compManage(userId);
+    public ResponseEntity<?> compManageDTO(@RequestBody CompRequest.UserIdDTO reqDTO) {
+        return ResponseEntity.ok(new ApiUtil<>(compService.compManage(reqDTO.getUserId())));
     }
 
+    // 기업의 모든 공고에 지원한 모든 지원자 조회 요청
     @PostMapping("/api/find-all-applicants")
-    public List<ResumeResponse.CompManageDTO> findAllApplicants(@RequestParam(name = "userId") Integer userId) {
-        return compService.findAllAppli(userId);
+    public ResponseEntity<?> findAllApplicants(@RequestBody CompRequest.UserIdDTO reqDTO) {
+        return ResponseEntity.ok(new ApiUtil<>(compService.findAllAppli(reqDTO.getUserId())));
     }
 
+    // 기업 특정 공고에 지원한 지원자 조회 요청
     @PostMapping("/api/find-applicants")
-    public List<CompResponse.RusaDTO> findApplicants(@RequestParam(name = "jobsId") Integer jId) {
-        return compService.findApplicants(jId);
+    public ResponseEntity<?> findApplicants(@RequestBody CompRequest.JobsIdDTO reqDTO) {
+        return ResponseEntity.ok(new ApiUtil<>(compService.findApplicants(reqDTO.getJobsId())));
     }
 
+    // 기업 지원자 이력서에 합격/불합격 응답안한 이력서 조회
     @PostMapping("/api/find-no-resp")
-    public List<ResumeResponse.CompManageDTO> findNoResp(@RequestParam(name = "userId") Integer uId) {
-        return compService.findNoResp(uId);
+    public ResponseEntity<?> findNoResp(@RequestBody CompRequest.UserIdDTO reqDTO) {
+        return ResponseEntity.ok(new ApiUtil<>(compService.findNoResp(reqDTO.getUserId())));
     }
-
 }
 

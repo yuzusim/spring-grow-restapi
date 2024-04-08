@@ -21,11 +21,9 @@ public class BoardRequest {
 
     @Data
     public static class SaveDTO{
-
         @Size(max = 20, message = "제목이 작성되지 않았거나 20자 이상입니다.")
         @NotEmpty(message = "제목을 작성하여 주십시오.")
         private String title;
-
         @Size(max = 100, message = "내용이 작성되지 않았거나 100자 이상입니다.")
         @NotEmpty(message = "내용을 작성하여 주십시오.")
         private String content;

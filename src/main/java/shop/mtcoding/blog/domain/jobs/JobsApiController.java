@@ -28,37 +28,40 @@ public class JobsApiController {
     private final UserService userService;
 
 
+    // 기업 공고 작성 폼 페이지 요청
     @GetMapping("/api/jobs/write-jobs-form")
     public ResponseEntity<?> writeJobsForm() {
         SessionUser sessionUser = (SessionUser)session.getAttribute("sessionComp");
         User sessionComp = userService.findById(sessionUser.getId());
-
         JobsResponse.WriteJobsFormDTO writeJobsFormDTO = jobsService.writeJobsForm(sessionComp);
 
         return ResponseEntity.ok(new ApiUtil<>(writeJobsFormDTO));
     }
 
+    // 기업 공고 목록 페이지 요청
     @GetMapping("/api/jobs/info")
     public ResponseEntity<?> jobsInfo () {
         List<JobsResponse.InfoDTO> respList = jobsService.jobsInfo();
         return ResponseEntity.ok(new ApiUtil<>(respList));
     }
 
+    // 기업 공고 작성
     @PostMapping("/api/jobs/save")
     public @ResponseBody ResponseEntity<?> save (@Valid @RequestBody JobsRequest.JobsSaveDTO reqDTO, Errors errors) {
         SessionUser sessionUser = (SessionUser)session.getAttribute("sessionComp");
         User sessionComp = userService.findById(sessionUser.getId());
-        JobsResponse.JonsSaveDTO jobs = jobsService.save(sessionComp, reqDTO);
+        JobsResponse.JobsSaveDTO jobs = jobsService.save(sessionComp, reqDTO);
         return ResponseEntity.ok(new ApiUtil(jobs));
     }
 
+    // 기업 공고 삭제
     @DeleteMapping("/api/jobs/{id}/delete")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         jobsService.delete(id);
         return ResponseEntity.ok(new ApiUtil(null));
     }
 
-
+    // 기업 공고 수정 페이지 요청
     @GetMapping("/api/jobs/{jobsId}/update-jobs-form")
     public  ResponseEntity<?> updateForm (@PathVariable Integer jobsId) {
         SessionUser sessionComp = (SessionUser)session.getAttribute("sessionComp");
@@ -66,28 +69,25 @@ public class JobsApiController {
         return ResponseEntity.ok(new ApiUtil(job));
     }
 
-
+    // TODO 리팩토링 필요
     @GetMapping("/api/jobs/{jobsId}/detail")
-    public ResponseEntity<?> jobsDetail(@PathVariable Integer jobsId, HttpServletRequest request) {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
+    public ResponseEntity<?> jobsDetail(@PathVariable Integer jobsId) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionComp");
         User user = userService.findById(sessionUser.getId());
-
-        if (sessionUser == null) {
-            throw new Exception401("인증되지 않았습니다.");
-        }
-
         //사용자 이력서 보유내역과 지원상태를 가져오는 ResumeApplyDTO
         JobsResponse.JobResumeDetailDTO resumeApplyDTOList = jobsService.jobsDetailDTO(jobsId, user);
 
         return ResponseEntity.ok(new ApiUtil(resumeApplyDTOList));
     }
 
+    // TODO 공고수정 : 리팩토링 필요
     @PutMapping("/api/jobs/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody JobsRequest.UpdateDTO reqDTO, Errors errors) {
         JobsResponse.UpdateDTO respDTO = jobsService.update(id, reqDTO);
         return ResponseEntity.ok(new ApiUtil(respDTO));
     }
 
+    // 이력서 수정 페이지 요청
     @GetMapping("/api/resumes/{resumeId}/update-form")
     public ResponseEntity<?> updateFrom(@PathVariable Integer resumeId){
 

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface JobsJPARepository extends JpaRepository <Jobs, Integer> {
 
@@ -20,8 +21,8 @@ public interface JobsJPARepository extends JpaRepository <Jobs, Integer> {
     Integer countByUserId(@Param("userId") Integer userId);
 
 
-    @Query("select j from Jobs j join fetch j.user u join fetch j.skillList s where j.id = :jobsUserId")
-    Jobs findByIdJoinUserWithSkill(Integer jobsUserId);
+    @Query("select j from Jobs j join fetch j.user u join fetch j.skillList s where j.id = :jobsId")
+    Jobs findByIdJoinUserWithSkill(Integer jobsId);
 
     @Query("select j from Jobs j join fetch j.user u left join fetch j.skillList s")
     List<Jobs> findAllJobsList();
@@ -31,4 +32,7 @@ public interface JobsJPARepository extends JpaRepository <Jobs, Integer> {
 
     @Query("select j from Jobs j join fetch j.user u join fetch j.skillList s ")
     List<Jobs> findAllJoinUserWithSkills(Sort sort);
+
+    @Query("select j from Jobs j join fetch j.user u join fetch j.skillList s where j.id = :jobsId")
+    Optional<Jobs> findByJobsIdJoinUserWithSkills(@Param("jobsId") Integer jobsId);
 }

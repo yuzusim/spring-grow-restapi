@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import shop.mtcoding.blog.domain.jobs.Jobs;
 import shop.mtcoding.blog.domain.resume.Resume;
+import shop.mtcoding.blog.domain.resume.ResumeRequest;
 
 @NoArgsConstructor
 @Table(name = "skill_tb")
@@ -36,9 +37,35 @@ public class Skill {
         this.name = name;
     }
 
+
+    public Skill nameToEntity(String name){
+        this.name = name;
+        return this;
+    }
+
     public Skill.DTO toDTO(Skill skill){
+
         return DTO.builder().skill(skill).build();
     }
+
+
+    public Skill toEntity(SkillDTO updateResumeDTO){
+        this.id = updateResumeDTO.getId();
+        this.name = updateResumeDTO.getName();
+        return this;
+    }
+
+    @Data
+    public class SkillDTO extends Skill {
+        private Integer id;
+        private String name;
+
+        public SkillDTO(Skill skill) {
+            this.id = id;
+            this.name = name;
+        }
+    }
+
 
     @Data
     public static class DTO{

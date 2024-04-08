@@ -15,24 +15,39 @@ import java.util.stream.Collectors;
 
 public class CompResponse {
 
+
+    @Data
+    public static class UpdateDTO{
+        private Integer id;
+        private String myName;
+        private String compName;
+        private String phone;
+        private String homepage;
+        private LocalDate birth;
+        private String address;
+
+        @Builder
+        public UpdateDTO(User user) {
+            this.id = user.getId();
+            this.myName = user.getMyName();
+            this.compName = user.getCompName();
+            this.phone = user.getPhone();
+            this.homepage = user.getHomepage();
+            this.birth = user.getBirth();
+            this.address = user.getAddress();
+        }
+    }
+
     @Data
     public static class CompJoinDTO {
         private String email;
         private String myName;
-        private String phone;
-        private String address;
-        private LocalDate birth;
-        private String businessNumber;
         private String compName;
         private String homepage;
 
         public CompJoinDTO(User user) {
             this.email = user.getEmail();
             this.myName = user.getMyName();
-            this.phone = user.getPhone();
-            this.address = user.getAddress();
-            this.birth = user.getBirth();
-            this.businessNumber = user.getBusinessNumber();
             this.compName = user.getCompName();
             this.homepage = user.getHomepage();
         }
@@ -240,16 +255,15 @@ public class CompResponse {
         private Boolean isApply;
 
         @Builder
-        public RusaDTO(Integer id, User user, Resume resume, Apply apply) {
+        public RusaDTO(Integer id, User user, Resume resume, Apply apply, List<Skill> skills) {
             this.id = id;
             this.myName = user.getMyName();
             this.resumeId = resume.getId();
             this.title = resume.getTitle();
             this.career = resume.getCareer();
             this.jobsId = apply.getJobs().getId();
-            this.skillList = resume.getSkillList().stream()
-                    .map(SkillDTO::new)
-                    .collect(Collectors.toList());
+            this.skillList = skills.stream()
+                    .map(SkillDTO::new).toList();
 
             // 1. 지원x 2.지원중 3.합격 4.불합격
             if (apply.getIsPass().equals("1")) {

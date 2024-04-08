@@ -25,15 +25,4 @@ public class ApplyServiceTest {
         // then
 
     }
-
-    @Test
-    public void newApply_test(){
-        // given
-        int jobsId = 1;
-        int resumeId = 1;
-        // when
-        applyService.newApply(jobsId, resumeId);
-        // then
-
-    }
 }

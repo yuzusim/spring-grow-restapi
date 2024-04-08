@@ -41,7 +41,7 @@ public class JobsResponse {
 
 
     @Data
-    public static class JonsSaveDTO {
+    public static class JobsSaveDTO {
         private String title;
         private String area;
         private String edu;
@@ -52,7 +52,7 @@ public class JobsResponse {
         private List<SkillDTO> skillList;
 
         @Builder
-        public JonsSaveDTO(Jobs jobs, List<Skill> skillList) {
+        public JobsSaveDTO(Jobs jobs, List<Skill> skillList) {
             this.title = jobs.getTitle();
             this.area = jobs.getArea();
             this.edu = jobs.getEdu();
@@ -523,6 +523,8 @@ public class JobsResponse {
             }
         }
     }
+
+
 
     // API jobDetail 04.02//
     @Data

@@ -7,7 +7,7 @@
 <br>
 
 # 👉 발표 자료 PDF
-[미니 1차 휴먼 클라우드 PPT.pdf](https://github.com/chugue/grow-ssr-deploy/files/15454109/1.PPT.pdf)
+[미니2차 프로젝트 RestfulAPI PPT](https://github.com/chugue/spring-grow-restapi/files/15462375/2.RestAPI.PPT.pdf)
 
 <br>
 <br>
@@ -86,35 +86,16 @@
 <br>
 
 # 👉 주요 기능 정리
-> ### 1단계   (🟦: 기업, 🟨:개인)
-* #### 🟦🟨 화면 구축
-* #### 🟦🟨 테이블 설계
-* #### 🟦🟨 회원가입 / 로그인
-* #### 🟦🟨 헤더 / 푸터 / 사이드바 구현
-* #### 🟦🟨 기업 / 개인 정보수정
-* #### 🟦 기업 메인 / 공개이력서 / 채용시장 목록보기 구현
-* #### 🟨 공고 / 문의 목록 보기 구현
+> ### < 🟦: 기업, 🟨:개인 >
+* #### 🟦🟨 RestAPI를 위한 모든 메소드 DTO 작업
+* #### 🟦🟨 JWT 인증 구현
+* #### 🟦🟨 AOP Validation 구현
   
 <br>
-
-> ### 2단계   (🟦: 기업, 🟨:개인)
-* #### 🟦 공고 CRUD 구현
-* #### 🟨 이력서 CRUD 구현
-* #### 🟨 문의 CRUD구현
-* #### 🟨 검색 기능 구현
-* #### 🟨 다중 키워드 정렬 구현
-* #### 🟨 이력서별 지원한 공고 확인 기능
-* #### 🟦 공고별 지원자 확인 기능
-
 <br>
 
-> ### 3단계   (🟦: 기업, 🟨:개인)
-* #### 🟦🟨 아이디 중복 확인
-* #### 🟦🟨 Exepction Handler 구현
-* #### 🟦🟨 Login Interceptor 구현
-* #### 🟨 도로명 주소 API
-* #### 🟨 프로필 사진 CRUD 구현
-* #### 🟦 기업 사진 CRUD 구현
+#  👉 API 문서 
+[API문서 링크](https://stephenkiim.notion.site/API-77ff6d3167a14aec96a31c6d690833f7?pvs=4)
 
 
 <br>

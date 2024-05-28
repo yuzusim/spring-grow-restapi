@@ -85,17 +85,19 @@
 <br>
 <br>
 
+#  👉 API 문서 
+[API문서 링크](https://stephenkiim.notion.site/API-77ff6d3167a14aec96a31c6d690833f7?pvs=4)
+
+<br>
+<br>
+
 # 👉 주요 기능 정리
 > ### < 🟦: 기업, 🟨:개인 >
 * #### 🟦🟨 RestAPI를 위한 모든 메소드 DTO 작업
 * #### 🟦🟨 JWT 인증 구현
 * #### 🟦🟨 AOP Validation 구현
   
-<br>
-<br>
 
-#  👉 API 문서 
-[API문서 링크](https://stephenkiim.notion.site/API-77ff6d3167a14aec96a31c6d690833f7?pvs=4)
 
 
 <br>

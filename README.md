@@ -35,7 +35,7 @@
   </tr>
   <tr>
     <td style="text-align:center; vertical-align:middle;"><img width="160px" src="https://avatars.githubusercontent.com/u/30003848?v=4" /></td>
-    <td style="text-align:center; vertical-align:middle;"><img width="160px" src="https://avatars.githubusercontent.com/u/153582415?v=4" /></td>
+    <td style="text-align:center; vertical-align:middle;"><img width="160px" src="https://github.com/yuzusim" /></td>
     <td style="text-align:center; vertical-align:middle;"><img width="160px" src="https://avatars.githubusercontent.com/u/153585866?v=4"/></td>
     <td style="text-align:center; vertical-align:middle;"><img width="160px" src="https://avatars.githubusercontent.com/u/126733434?v=4" /></td>
     <td style="text-align:center; vertical-align:middle;"><img width="160px" src="https://avatars.githubusercontent.com/u/78337301?v=4" /></td>

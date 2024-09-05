@@ -42,7 +42,7 @@
   </tr>
   <tr>
     <td style="text-align:center; vertical-align:middle;"><a href="https://github.com/chugue">@chugue</a></td>
-    <td style="text-align:center; vertical-align:middle;"><a href="https://github.com/kjh5848">@yuzusim</a></td>
+    <td style="text-align:center; vertical-align:middle;"><a href="https://github.com/yuzusim">@yuzusim</a></td>
     <td style="text-align:center; vertical-align:middle;"><a href="https://github.com/LifeIsOne">@codingbb</a></td>
     <td style="text-align:center; vertical-align:middle;"><a href="https://github.com/tkffkels93">@HaSenugJin</a></td>
     <td style="text-align:center; vertical-align:middle;"><a href="https://github.com/p4rksk">@greenpig4b</a></td>
